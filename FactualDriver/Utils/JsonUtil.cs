@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using FactualDriver.Filters;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ namespace FactualDriver.Utils
              foreach (var filter in filters)
              {
 
-                 parameters.Add(string.Format("{0}={1}", filter.ParameterName, filter.IsText ? filter.ToString() : JsonConvert.SerializeObject(filter)));
+                 parameters.Add(string.Format("{0}={1}", filter.ParameterName, filter.IsText ? filter.ToString() : HttpUtility.UrlEncode(JsonConvert.SerializeObject(filter))));
              }
              return string.Join("&", parameters);
          }
