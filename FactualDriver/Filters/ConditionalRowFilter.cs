@@ -9,15 +9,13 @@ namespace FactualDriver.Filters
     {
         #region Implementation of IFilter
 
-        private string _parameterName = "filters";
+        private string _name = "filters";
 
-        public string ParameterName
+        public string Name
         {
-            get { return _parameterName; }
-            set { _parameterName = value; }
+            get { return _name; }
+            set { _name = value; }
         }
-
-        public bool IsText { get; set; }
 
         #endregion
 

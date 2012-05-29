@@ -70,7 +70,7 @@ namespace FactualDriver.Tests
         public void QueryWithGeoFilter()
         {
             // Arrange
-            var filter = new GeoFilter(34.06018m, -118.41835m, 500);
+            var filter = new GeoFilter(34.06018, -118.41835, 500);
 
             // Act
             string result = Factual.Query("t/global", filter);
@@ -115,7 +115,7 @@ namespace FactualDriver.Tests
         {
             // Arrange
             var filter = new RowFilter("name", "Stand");
-            var filter2 = new GeoFilter(34.06018m, -118.41835m, 5000);
+            var filter2 = new GeoFilter(34.06018, -118.41835, 5000);
 
             // Act
             string result = Factual.Query("t/restaurants-us", filter, filter2);

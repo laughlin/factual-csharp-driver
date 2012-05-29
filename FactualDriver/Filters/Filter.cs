@@ -1,35 +1,28 @@
-﻿namespace FactualDriver.Filters
+﻿using FactualDriver.JsonConverters;
+using Newtonsoft.Json;
+
+namespace FactualDriver.Filters
 {
+    [JsonConverter(typeof(FilterConverter))]
     public class Filter: IFilter
     {
         #region Implementation of IFilter
 
-        public string ParameterName { get; set; }
-        private bool _isText = true;
-        public bool IsText
-        {
-            get { return _isText; }
-            set { _isText = value; }
-        }
+        public string Name { get; set; }
 
         #endregion
 
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         /// <summary>
         /// Create an instance of a generic filter with key and value
         /// </summary>
         /// <param name="name">Name or key of the filter</param>
         /// <param name="value">Value of the filter</param>
-        public Filter(string name, string value)
+        public Filter(string name, object value)
         {
-            ParameterName = name;
+            Name = name;
             Value = value;
-        }
-
-        public override string ToString()
-        {
-            return Value;
         }
     }
 }

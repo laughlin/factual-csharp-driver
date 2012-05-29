@@ -2,18 +2,11 @@
 {
     public class SearchFilter : IFilter
     {
-        private string _parameterName = "q";
-        public string ParameterName
+        private string _name = Constants.SEARCH;
+        public string Name
         {
-            get { return _parameterName; }
-            set { _parameterName = value; }
-        }
-
-        private bool _isText = true;
-        public bool IsText
-        {
-            get { return _isText; }
-            set { _isText = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         public string SearchText { get; set; }

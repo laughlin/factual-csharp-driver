@@ -6,7 +6,7 @@ namespace FactualDriver.Filters
     [JsonConverter(typeof(RowFilterConverter))]
     public class RowFilter : IFilter
     {
-        private string _parameterName = "filters";
+        private string _name = Constants.FILTERS;
         public string FieldName { get; set; }
         public string Operator { get; set; }
         public object Value { get; set; }
@@ -37,13 +37,11 @@ namespace FactualDriver.Filters
 
         #region Implementation of IFilter
 
-        public string ParameterName
+        public string Name
         {
-            get { return _parameterName; }
-            set { _parameterName = value; }
+            get { return _name; }
+            set { _name = value; }
         }
-
-        public bool IsText { get; set; }
 
         #endregion
     }

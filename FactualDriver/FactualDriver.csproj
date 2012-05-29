@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,11 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Factual.cs" />
+    <Compile Include="Filters\Circle.cs" />
     <Compile Include="Filters\ConditionalRowFilter.cs" />
     <Compile Include="JsonConverters\ConditionalRowFilterConverter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\GeoFilter.cs" />
+    <Compile Include="JsonConverters\FilterConverter.cs" />
     <Compile Include="JsonConverters\GeoFilterConverter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="Filters\RowFilter.cs" />
@@ -60,6 +65,7 @@
     <Compile Include="Filters\SearchFilter.cs" />
     <Compile Include="OAuth\OAuth2LeggedAuthenticator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="Utils\JsonUtil.cs" />
   </ItemGroup>
   <ItemGroup>

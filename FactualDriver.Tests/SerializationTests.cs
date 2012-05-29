@@ -87,13 +87,39 @@ namespace FactualDriver.Tests
         public void GetFilterSerializationTest()
         {
             // Arrange
-            var filter = new GeoFilter(34.06021m, -118.41828m,5000);
+            var filter = new GeoFilter(34.06021, -118.41828,5000);
 
             // Act
             var result = JsonConvert.SerializeObject(filter);
 
             // Assert
             Assert.AreEqual("{\"$circle\":{\"$center\":[34.06021,-118.41828],\"$meters\":5000}}", result);
+        }
+
+        [Test]
+        public void SimpleFilterIntegerValueSerializationTest()
+        {
+            //Arrange 
+            var filter = new Filter("limit", 24);
+
+            //Act
+            var result = JsonConvert.SerializeObject(filter);
+
+            //Assert
+            Assert.AreEqual("24", result);
+        }
+
+        [Test]
+        public void SimpleFilterStringValueSerializationTest()
+        {
+            //Arrange 
+            var filter = new Filter("search", "Sushi Santa Monica");
+
+            //Act
+            var result = JsonConvert.SerializeObject(filter);
+
+            //Assert
+            Assert.AreEqual("Sushi Santa Monica", result);
         }
 
     }

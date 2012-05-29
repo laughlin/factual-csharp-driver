@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Web;
 using FactualDriver.Filters;
@@ -8,22 +10,10 @@ namespace FactualDriver.Utils
 {
     public class JsonUtil
     {
-        public static string ToQueryString(IFilter filter)
-        {
-            return string.Format("{0}={1}", filter.ParameterName, filter.IsText ? filter.ToString() : JsonConvert.SerializeObject(filter));
-        }
-
-         public static string ToQueryString(IEnumerable<IFilter> filters)
+         public static string ToQueryString(params IFilter[] filters)
          {
-             var parameters = new List<string>();
-             foreach (var filter in filters)
-             {
-
-                 parameters.Add(string.Format("{0}={1}", filter.ParameterName, filter.IsText ? filter.ToString() : HttpUtility.UrlEncode(JsonConvert.SerializeObject(filter))));
-             }
+             var parameters = filters.Select(filter => string.Format("{0}={1}", filter.Name, HttpUtility.UrlEncode(JsonConvert.SerializeObject(filter)))).ToList();
              return string.Join("&", parameters);
          }
-
-       
     }
 }
