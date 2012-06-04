@@ -38,8 +38,7 @@ namespace FactualDriver.Tests
         public void OperatorWithTwoRowFiltersTest()
         {
             // Arrange
-            var filter = new ConditionalRowFilter("$and",
-                                                  new[]
+            var filter = new FilterGroup(new List<IFilter>
                                                       {
                                                           new RowFilter("last_name", "$eq", "Smith"),
                                                           new RowFilter("first_name", "$eq", "John")

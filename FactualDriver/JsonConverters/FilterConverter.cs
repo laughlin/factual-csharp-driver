@@ -9,7 +9,15 @@ namespace FactualDriver.JsonConverters
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var filter = value as Filter;
-            writer.WriteRaw(filter.Value.ToString());
+            if(filter.Value is bool) //lowercase boolean values
+            {
+                writer.WriteRaw(filter.Value.ToString().ToLower());
+            }
+            else
+            {
+                writer.WriteRaw(filter.Value.ToString());
+            }
+            
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

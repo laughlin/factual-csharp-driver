@@ -1,13 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using FactualDriver.Filters;
 using FactualDriver.Utils;
 
 namespace FactualDriver
 {
-    public class Query
+    public class Query : IFilterable
     {
-        private readonly List<IFilter> _filters = new List<IFilter>();
+        private List<IFilter> _filters = new List<IFilter>();
+        public List<IFilter> Filters { get { return _filters; } set { _filters = value; } } 
 
         public Query Limit(long limit)
         {
@@ -17,7 +19,7 @@ namespace FactualDriver
 
         public Query Search(string term)
         {
-            _filters.Add(new Filter(Constants.SEARCH, term));
+            AddCommaSeparatedFilter(Constants.SEARCH, term);
             return this;
         }
 
@@ -39,6 +41,38 @@ namespace FactualDriver
             return this;
         }
 
+        public Query Only(params string[] fields)
+        {
+            foreach (var field in fields)
+            {
+                AddCommaSeparatedFilter(Constants.QUERY_SELECT, field);
+            }
+            return this;
+        }
+
+        public Query Offset(int offset)
+        {
+            AddFilter(Constants.QUERY_OFFSET, offset);
+            return this;
+        }
+
+        public Query IncludeRowCount(bool includeRowCount)
+        {
+            AddFilter(Constants.INCLUDE_COUNT, includeRowCount);
+            return this;
+        }
+
+        public QueryBuilder<Query> Field(string fieldName)
+        {
+            return new QueryBuilder<Query>(this, fieldName);
+        }
+
+        private void AddFilter(string filterName, object value)
+        {
+            _filters.Add(new Filter(filterName, value));
+        }
+
+
         private void AddCommaSeparatedFilter(string filterName, string value)
         {
             var filter = _filters.FirstOrDefault(p => p.Name == filterName);
@@ -55,17 +89,88 @@ namespace FactualDriver
 
 
         /// <summary>
-        /// Builds and returns the query string to represent this Query when talking to
+        /// Converts a query object into a uri query string for communication with
         /// Factual's API. Provides proper URL encoding and escaping.
-        /// Example output:
-        /// filters=%7B%22%24and%22%3A%5B%7B%22region%22%3A%7B%22%24in%22%3A%5B%22MA%22%2C%22VT%22%2C%22NH%22%5D%7D%7D%2C%7B%22%24or%22%3A%5B%7B%22first_name%22%3A%7B%22%24eq%22%3A%22Chun%22%7D%7D%2C%7B%22last_name%22%3A%7B%22%24eq%22%3A%22Kok%22%7D%7D%5D%7D%5D%7D
-        /// (After decoding, the above example would be used by the server as:)
-        /// filters={"$and":[{"region":{"$in":["MA","VT","NH"]}},{"$or":[{"first_name":{"$eq":"Chun"}},{"last_name":{"$eq":"Kok"}}]}]}
         /// </summary>
         /// <returns>Returns the query string to represent this Query when talking to Factual's API.</returns>
-        public string ToUrlQuery()
+        public string ToQueryString()
         {
             return JsonUtil.ToQueryString(_filters.ToArray());
+        }
+
+
+        public void Add(IFilter filter)
+        {
+            if (filter is RowFilter)
+            {
+                var existingFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(RowFilter));
+                if (existingFilter != null)
+                {
+                    _filters.Remove(existingFilter);
+                    _filters.Add(new FilterGroup(new List<IFilter> { existingFilter, filter }));
+                    return;
+                }
+
+                var existingGroupFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(FilterGroup));
+                if (existingGroupFilter != null)
+                {
+                    ((FilterGroup)existingGroupFilter).RowFilters.Add(filter);
+                    return;
+                }
+            }
+
+            if (filter is FilterGroup)
+            {
+                var existingGroupFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(FilterGroup));
+                if (existingGroupFilter != null)
+                {
+                    ((FilterGroup)existingGroupFilter).RowFilters.Add(filter);
+                    return;
+                }
+            }
+
+            _filters.Add(filter);
+
+            
+        }
+
+
+        public Query And(params Query[] queries)
+        {
+            PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
+            return this;
+        }
+
+        public Query Or(params Query[] queries)
+        {
+            PopRowFiltersIntoNewGroup(Constants.FILTER_OR,queries);
+            return this;
+        }
+
+        public void PopRowFiltersIntoNewGroup(string operation, Query[] queries)
+        {
+            SplitGroup((FilterGroup) queries.Last().Filters.FirstOrDefault(p => p.GetType() == typeof (FilterGroup)),
+                       queries.Count(), operation);
+
+        }
+
+
+        public static void SplitGroup(FilterGroup group, int itemsToPopSplit, string newGroupOperator)
+        {
+            if (group.RowFilters.Count == itemsToPopSplit)
+            {
+                group.Operator = newGroupOperator;
+                return;
+            }
+
+            var newGroup =
+                new FilterGroup(
+                    group.RowFilters.Skip(Math.Max(0, group.RowFilters.Count - itemsToPopSplit)).Take(itemsToPopSplit).
+                        ToList(), newGroupOperator);
+
+            group.RowFilters.RemoveRange(group.RowFilters.Count - itemsToPopSplit, itemsToPopSplit);
+            group.RowFilters.Add(newGroup);
+
         }
     }
 }

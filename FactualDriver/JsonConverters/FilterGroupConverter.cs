@@ -4,13 +4,13 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.JsonConverters
 {
-    public class ConditionalRowFilterConverter : JsonConverter
+    public class FilterGroupConverter : JsonConverter
     {
         #region Overrides of JsonConverter
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var filter = value as ConditionalRowFilter;
+            var filter = value as FilterGroup;
 
             writer.WriteStartObject();
             writer.WritePropertyName(filter.Operator);

@@ -71,5 +71,21 @@
 	    public const string CONTRIBUTE_VALUES = "values";
 	    public const string CONTRIBUTE_FACTUAL_ID = "factual_id";
 	    public const string CONTRIBUTE_NEW_ENTITY = "new_entity";
+
+        //Operators
+        public const string OPERATOR_EQUAL = "$eq";
+        public const string OPERATOR_NOT_EQUAL = "$neq";
+        public const string OPERATOR_EQUALS_ANY = "$in";
+        public const string OPERATOR_NOT_EQUALS_ANY = "$nin";
+        public const string OPERATOR_BEGINS_WITH = "$bw";
+        public const string OPERATOR_NOT_BEGINS_WITH = "$nbw";
+        public const string OPERATOR_BEGINS_WITH_ANY = "$bwin";
+        public const string OPERATOR_NOT_BEGINS_WITH_ANY = "$nbwin";
+        public const string OPERATOR_BLANK = "$blank";
+        public const string OPERATOR_GREATER_THAN = "$gt";
+        public const string OPERATOR_GREATER_THAN_OR_EQUAL = "$gte";
+        public const string OPERATOR_LESS_THAN = "$lt";
+        public const string OPERATOR_LESS_THAN_OR_EQUAL = "$lte";
+        public const string OPERATOR_SEARCH = "$search";
     }
 }

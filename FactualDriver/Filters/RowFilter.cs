@@ -26,13 +26,13 @@ namespace FactualDriver.Filters
         /// Row filter wrapper which will get serialized into proper json object filter when calling factual api
         /// </summary>
         /// <param name="fieldName">Field name on which this filter is performed</param>
-        /// <param name="comparisonOperator">Comparison operator key</param>
-        /// <param name="compareToValue">Value</param>
-        public RowFilter(string fieldName, string comparisonOperator, object compareToValue)
+        /// <param name="compareOperator">Comparison operator key</param>
+        /// <param name="compareValue">Value</param>
+        public RowFilter(string fieldName, string compareOperator, object compareValue)
         {
             FieldName = fieldName;
-            Operator = comparisonOperator;
-            Value = compareToValue;
+            Operator = compareOperator;
+            Value = compareValue;
         }
 
         #region Implementation of IFilter

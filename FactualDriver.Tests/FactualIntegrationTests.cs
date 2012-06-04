@@ -130,7 +130,7 @@ namespace FactualDriver.Tests
         public void ParametersWithConditionalOperators()
         {
             // Arrange
-            var filter = new ConditionalRowFilter("$and", new[]
+            var filter = new FilterGroup(new List<IFilter>
                                                               {
                                                                   new RowFilter("name", "$search", "McDonald's"),
                                                                   new RowFilter("category", "$bw", "Food & Beverage")
