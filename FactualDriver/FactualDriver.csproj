@@ -54,11 +54,13 @@
     <Compile Include="Factual.cs" />
     <Compile Include="Filters\Circle.cs" />
     <Compile Include="Filters\FilterGroup.cs" />
+    <Compile Include="Filters\FilterList.cs" />
     <Compile Include="IFilterable.cs" />
     <Compile Include="JsonConverters\FilterGroupConverter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\GeoFilter.cs" />
     <Compile Include="JsonConverters\FilterConverter.cs" />
+    <Compile Include="JsonConverters\FilterListConverter.cs" />
     <Compile Include="JsonConverters\GeoFilterConverter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="Filters\RowFilter.cs" />

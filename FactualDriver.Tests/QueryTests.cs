@@ -263,20 +263,6 @@ namespace FactualDriver.Tests
         }
 
         //Logical operators tests
-        [Test]
-        public void QueryTwoRowFiltersGetGroupedIntoFilterGroup()
-        {
-            //Arrange
-            var query = new Query()
-                .Field("first_name").Equal("Bradley")
-                .Field("region").Equal("CA");
-
-            //Assert
-            Assert.AreEqual(1,query.Filters.Count(p => p.GetType() == typeof(FilterGroup)));
-            Assert.IsFalse(query.Filters.Any(p => p.GetType() == typeof(RowFilter)));
-        }
-
-
 
         [Test]
         public void QueryToFindEntriesWhereNameBeginsWithCoffeeANDTelephoneIsBlank()
@@ -322,13 +308,13 @@ namespace FactualDriver.Tests
             //Arrange
             Query query = new Query();
             query.Or(
-                query.Or(
-                    query.Field("first_name").Equal("Chun"),
-                    query.Field("last_name").Equal("Kok")
-                ),
                 query.And(
-                    query.Field("score").Equal("38"),
-                    query.Field("city").Equal("Los Angeles")
+                    query.Field("city").Equal("Los Angeles"),
+                    query.Field("score").Equal("38")
+                ),
+                query.Or(
+                    query.Field("last_name").Equal("Kok"),
+                    query.Field("first_name").Equal("Chun")
                 )
             );
 
@@ -336,58 +322,7 @@ namespace FactualDriver.Tests
             AreEqualQueries("filters={\"$or\":[{\"$and\":[{\"city\":{\"$eq\":\"Los Angeles\"}},{\"score\":{\"$eq\":\"38\"}}]},{\"$or\":[{\"last_name\":{\"$eq\":\"Kok\"}},{\"first_name\":{\"$eq\":\"Chun\"}}]}]}",query);
         }
 
-        [Test]
-        public void FilterGroupOf3ItemsInto1And2WithDifferenceOperator()
-        {
-            //Arrange
-            var group = new FilterGroup("$and");
-            group.RowFilters = new List<IFilter> { new RowFilter("first", "test"), new RowFilter("second", "test"), new RowFilter("third", "test") };
-
-            //Act
-            Query.SplitGroup(group, 2, "$or");
-
-            //Assert 
-            var secondFilter = ((FilterGroup) group.RowFilters[1]);
-
-            Assert.AreEqual(2, group.RowFilters.Count);
-            Assert.AreEqual(typeof(FilterGroup), group.RowFilters[1].GetType());
-            Assert.AreEqual(2, secondFilter.RowFilters.Count);
-            Assert.AreEqual("$and", group.Operator);
-            Assert.AreEqual("$or", secondFilter.Operator);
-            Assert.AreEqual("second", ((RowFilter)secondFilter.RowFilters[0]).FieldName);
-            Assert.AreEqual("third", ((RowFilter)secondFilter.RowFilters[1]).FieldName);
-        }
-
-        [Test]
-        public void FilterGroupOf3ItemsInto3WithSameOperator()
-        {
-            //Arrange
-            var group = new FilterGroup("$and");
-            group.RowFilters = new List<IFilter> { new RowFilter("first", "test"), new RowFilter("second", "test"), new RowFilter("third", "test") };
-
-            //Act
-            Query.SplitGroup(group, 3, "$and");
-
-            //Assert 
-            Assert.AreEqual(3, group.RowFilters.Count);
-            Assert.AreEqual("$and", group.Operator);
-        }
-
-        [Test]
-        public void FilterGroupOf3ItemsInto3WithSameDifferentOperator()
-        {
-            //Arrange
-            var group = new FilterGroup("$and");
-            group.RowFilters = new List<IFilter> { new RowFilter("first", "test"), new RowFilter("second", "test"), new RowFilter("third", "test") };
-
-            //Act
-            Query.SplitGroup(group, 3, "$or");
-
-            //Assert 
-            Assert.AreEqual(3, group.RowFilters.Count);
-            Assert.AreEqual("$or", group.Operator);
-        }
-
+ 
         public void AreEqualQueries(string decodedQueryString, Query query)
         {
             Assert.AreEqual(decodedQueryString, DecodeQueryString(query.ToQueryString()));

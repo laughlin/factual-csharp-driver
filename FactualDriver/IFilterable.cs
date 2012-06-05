@@ -4,6 +4,6 @@ namespace FactualDriver
 {
     public interface IFilterable
     {
-        void Add(IFilter filter);
+        void AddRowFilter(IFilter filter);
     }
 }

@@ -99,41 +99,24 @@ namespace FactualDriver
         }
 
 
-        public void Add(IFilter filter)
+        public void AddRowFilter(IFilter filter)
         {
-            if (filter is RowFilter)
+            if (filter is RowFilter || filter is FilterGroup)
             {
-                var existingFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(RowFilter));
-                if (existingFilter != null)
+                if(_filters.All(p => p.GetType() != typeof(FilterList)))
                 {
-                    _filters.Remove(existingFilter);
-                    _filters.Add(new FilterGroup(new List<IFilter> { existingFilter, filter }));
-                    return;
+                    _filters.Add(new FilterList());
                 }
 
-                var existingGroupFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(FilterGroup));
-                if (existingGroupFilter != null)
-                {
-                    ((FilterGroup)existingGroupFilter).RowFilters.Add(filter);
-                    return;
-                }
+                var list = GetRowFilterList();
+                list.Add(filter);
             }
-
-            if (filter is FilterGroup)
-            {
-                var existingGroupFilter = _filters.FirstOrDefault(p => p.GetType() == typeof(FilterGroup));
-                if (existingGroupFilter != null)
-                {
-                    ((FilterGroup)existingGroupFilter).RowFilters.Add(filter);
-                    return;
-                }
-            }
-
-            _filters.Add(filter);
-
-            
         }
 
+        public List<IFilter> GetRowFilterList()
+        {
+            return ((FilterList)_filters.Single(p => p.GetType() == typeof(FilterList))).Data;
+        }
 
         public Query And(params Query[] queries)
         {
@@ -149,28 +132,13 @@ namespace FactualDriver
 
         public void PopRowFiltersIntoNewGroup(string operation, Query[] queries)
         {
-            SplitGroup((FilterGroup) queries.Last().Filters.FirstOrDefault(p => p.GetType() == typeof (FilterGroup)),
-                       queries.Count(), operation);
+            var filterCount = queries.Count();
+            var filterGroup = new FilterGroup(operation);
+            var filterList = GetRowFilterList();
+            filterGroup.RowFilters = filterList.Skip(Math.Max(0, filterList.Count - filterCount)).Take(filterCount).ToList();
+            filterList.RemoveRange(filterList.Count - filterCount, filterCount);
 
-        }
-
-
-        public static void SplitGroup(FilterGroup group, int itemsToPopSplit, string newGroupOperator)
-        {
-            if (group.RowFilters.Count == itemsToPopSplit)
-            {
-                group.Operator = newGroupOperator;
-                return;
-            }
-
-            var newGroup =
-                new FilterGroup(
-                    group.RowFilters.Skip(Math.Max(0, group.RowFilters.Count - itemsToPopSplit)).Take(itemsToPopSplit).
-                        ToList(), newGroupOperator);
-
-            group.RowFilters.RemoveRange(group.RowFilters.Count - itemsToPopSplit, itemsToPopSplit);
-            group.RowFilters.Add(newGroup);
-
+            AddRowFilter(filterGroup);
         }
     }
 }

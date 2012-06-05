@@ -15,7 +15,7 @@ namespace FactualDriver
 
         public void AddFilter(string compareOperator,object compareValue)
         {
-            _query.Add(new RowFilter(_fieldName,compareOperator,compareValue));
+            _query.AddRowFilter(new RowFilter(_fieldName,compareOperator,compareValue));
         }
         
         	public T Search(object searchValue)
