@@ -6,38 +6,37 @@ using FactualDriver.Utils;
 
 namespace FactualDriver
 {
-    public class Query : IFilterable
+    public class Query : IQuery
     {
-        private List<IFilter> _filters = new List<IFilter>();
-        public List<IFilter> Filters { get { return _filters; } set { _filters = value; } } 
+        private Parameters _parameters = new Parameters();
 
         public Query Limit(long limit)
         {
-             _filters.Add(new Filter(Constants.QUERY_LIMIT, limit));
+            Add(new Filter(Constants.QUERY_LIMIT, limit));
             return this;
         }
 
         public Query Search(string term)
         {
-            AddCommaSeparatedFilter(Constants.SEARCH, term);
+            _parameters.AddCommaSeparatedFilter(Constants.SEARCH, term);
             return this;
         }
 
         public Query WithIn(Circle circle)
         {
-            _filters.Add(circle.GetFilter());
+            Add(circle.GetFilter());
             return this;
         }
 
         public Query SortAsc(string field)
         {
-            AddCommaSeparatedFilter(Constants.QUERY_SORT, field + ":asc");
+            _parameters.AddCommaSeparatedFilter(Constants.QUERY_SORT, field + ":asc");
             return this;
         }
 
         public Query SortDesc(string field)
         {
-            AddCommaSeparatedFilter(Constants.QUERY_SORT, field + ":desc");
+            _parameters.AddCommaSeparatedFilter(Constants.QUERY_SORT, field + ":desc");
             return this;
         }
 
@@ -45,20 +44,20 @@ namespace FactualDriver
         {
             foreach (var field in fields)
             {
-                AddCommaSeparatedFilter(Constants.QUERY_SELECT, field);
+                _parameters.AddCommaSeparatedFilter(Constants.QUERY_SELECT, field);
             }
             return this;
         }
 
         public Query Offset(int offset)
         {
-            AddFilter(Constants.QUERY_OFFSET, offset);
+            _parameters.Add(Constants.QUERY_OFFSET, offset);
             return this;
         }
 
         public Query IncludeRowCount(bool includeRowCount)
         {
-            AddFilter(Constants.INCLUDE_COUNT, includeRowCount);
+            _parameters.Add(Constants.INCLUDE_COUNT, includeRowCount);
             return this;
         }
 
@@ -67,78 +66,32 @@ namespace FactualDriver
             return new QueryBuilder<Query>(this, fieldName);
         }
 
-        private void AddFilter(string filterName, object value)
-        {
-            _filters.Add(new Filter(filterName, value));
-        }
-
-
-        private void AddCommaSeparatedFilter(string filterName, string value)
-        {
-            var filter = _filters.FirstOrDefault(p => p.Name == filterName);
-            if(filter != null && filter is Filter)
-            {
-                var existingFilter = (Filter) filter;
-                existingFilter.Value = string.Format("{0},{1}", existingFilter.Value, value);
-            }
-            else
-            {
-                _filters.Add(new Filter(filterName,value));
-            }
-        }
-
-
         /// <summary>
-        /// Converts a query object into a uri query string for communication with
+        /// Converts a path object into a uri path string for communication with
         /// Factual's API. Provides proper URL encoding and escaping.
         /// </summary>
-        /// <returns>Returns the query string to represent this Query when talking to Factual's API.</returns>
-        public string ToQueryString()
+        /// <returns>Returns the path string to represent this Query when talking to Factual's API.</returns>
+        public string ToUrlQuery()
         {
-            return JsonUtil.ToQueryString(_filters.ToArray());
+            return JsonUtil.ToQueryString(_parameters.ToFilterArray());
         }
 
-
-        public void AddRowFilter(IFilter filter)
+        public void Add(IFilter filter)
         {
-            if (filter is RowFilter || filter is FilterGroup)
-            {
-                if(_filters.All(p => p.GetType() != typeof(FilterList)))
-                {
-                    _filters.Add(new FilterList());
-                }
-
-                var list = GetRowFilterList();
-                list.Add(filter);
-            }
+            _parameters.Add(filter);
         }
 
-        public List<IFilter> GetRowFilterList()
-        {
-            return ((FilterList)_filters.Single(p => p.GetType() == typeof(FilterList))).Data;
-        }
 
         public Query And(params Query[] queries)
         {
-            PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
+            _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
             return this;
         }
 
         public Query Or(params Query[] queries)
         {
-            PopRowFiltersIntoNewGroup(Constants.FILTER_OR,queries);
+            _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_OR, queries);
             return this;
-        }
-
-        public void PopRowFiltersIntoNewGroup(string operation, Query[] queries)
-        {
-            var filterCount = queries.Count();
-            var filterGroup = new FilterGroup(operation);
-            var filterList = GetRowFilterList();
-            filterGroup.RowFilters = filterList.Skip(Math.Max(0, filterList.Count - filterCount)).Take(filterCount).ToList();
-            filterList.RemoveRange(filterList.Count - filterCount, filterCount);
-
-            AddRowFilter(filterGroup);
         }
     }
 }

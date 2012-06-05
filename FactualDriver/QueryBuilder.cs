@@ -2,7 +2,7 @@
 
 namespace FactualDriver
 {
-    public class QueryBuilder<T> where T : IFilterable 
+    public class QueryBuilder<T> where T : IQuery 
     {
         private readonly T _query;
         private readonly string _fieldName;
@@ -15,7 +15,7 @@ namespace FactualDriver
 
         public void AddFilter(string compareOperator,object compareValue)
         {
-            _query.AddRowFilter(new RowFilter(_fieldName,compareOperator,compareValue));
+            _query.Add(new RowFilter(_fieldName,compareOperator,compareValue));
         }
         
         	public T Search(object searchValue)

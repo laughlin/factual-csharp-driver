@@ -12,6 +12,7 @@ namespace FactualDriver
     {
         private const string FactualApiUrl = "http://api.v3.factual.com";
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
+        private const string DriverHeaderTag = "factual-dotnet-driver-v1.0.1";
 
         /// <summary>
         /// Create an instance of Factual .NET driver
@@ -26,7 +27,7 @@ namespace FactualDriver
         /// <summary>
         /// Create a new Factual HTTP GET WebRequest for granual control  
         /// </summary>
-        /// <param name="query">Relative query string with factual parameters</param>
+        /// <param name="query">Relative path string with factual parameters</param>
         /// <returns></returns>
         public HttpWebRequest CreateWebRequest(string query)
         {
@@ -37,18 +38,18 @@ namespace FactualDriver
         /// Create a new Factual WebRequest for granual control  
         /// </summary>
         /// <param name="httpMethod">Http method name, GET, POST, etc</param>
-        /// <param name="query">Relative query string with factual parameters</param>
+        /// <param name="query">Relative path string with factual parameters</param>
         /// <returns></returns>
         public HttpWebRequest CreateWebRequest(string httpMethod, string query)
         {
             var requestUrl = new Uri(new Uri(FactualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
-            request.Headers.Add("X-Factual-Lib", "factual-dotnet-driver-v0.0.1");
+            request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
             return request;
         }
 
         /// <summary>
-        /// Execute a query against a factual api with Filter Parameters and return a json string
+        /// Execute a path against a factual api with Filter Parameters and return a json string
         /// </summary>
         /// <param name="query">Api address of the request</param>
         /// <param name="filters">List of parameter filters against the api</param>
@@ -58,15 +59,55 @@ namespace FactualDriver
             return RawQuery(query, JsonUtil.ToQueryString(filters));
         }
 
-        /// <summary>
-        /// Execute a query against a factual api with raw parameters and return a json string
-        /// </summary>
-        /// <param name="query">Api address of the request</param>
-        /// <param name="parameters">Raw query string parameters</param>
-        /// <returns></returns>
-        public string RawQuery(string query, string parameters)
+        public string Fetch(string tableName, Query query)
         {
-            var request = CreateWebRequest(string.Format("{0}?{1}", query,parameters));
+            return RawQuery(UrlForFetch(tableName),query.ToUrlQuery());
+        }
+
+        public string Fetch(string tableName, CrosswalkQuery query)
+        {
+            return RawQuery(UrlForCrosswalk(tableName), query.ToUrlQuery());
+        }
+
+        protected static String UrlForCrosswalk(String tableName)
+        {
+            return tableName + "/crosswalk";
+        }
+
+        protected static String UrlForResolve(String tableName)
+        {
+            return tableName + "/resolve";
+        }
+
+        protected static String UrlForFetch(String tableName)
+        {
+            return "t/" + tableName;
+        }
+
+        protected static String UrlForFacets(String tableName)
+        {
+            return "t/" + tableName + "/facets";
+        }
+
+        protected static String UrlForGeocode()
+        {
+            return "places/geocode";
+        }
+
+        protected static String UrlForGeopulse()
+        {
+            return "places/geopulse";
+        }
+
+        /// <summary>
+        /// Execute a path against a factual api with raw parameters and return a json string
+        /// </summary>
+        /// <param name="path">Api address of the request</param>
+        /// <param name="queryParameters">Raw path string parameters</param>
+        /// <returns></returns>
+        public string RawQuery(string path, string queryParameters)
+        {
+            var request = CreateWebRequest(string.Format("{0}?{1}", path,queryParameters));
 
             try
             {

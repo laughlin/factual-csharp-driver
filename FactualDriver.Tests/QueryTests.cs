@@ -325,7 +325,7 @@ namespace FactualDriver.Tests
  
         public void AreEqualQueries(string decodedQueryString, Query query)
         {
-            Assert.AreEqual(decodedQueryString, DecodeQueryString(query.ToQueryString()));
+            Assert.AreEqual(decodedQueryString, DecodeQueryString(query.ToUrlQuery()));
         }
 
         /// <summary>
