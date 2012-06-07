@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace FactualDriver.Tests
 {
     [TestFixture]
-    public class QueryTests
+    public class QueryTests : QueryBase
     {
         [Test]
         public void LimitTest()
@@ -322,26 +322,7 @@ namespace FactualDriver.Tests
             AreEqualQueries("filters={\"$or\":[{\"$and\":[{\"city\":{\"$eq\":\"Los Angeles\"}},{\"score\":{\"$eq\":\"38\"}}]},{\"$or\":[{\"last_name\":{\"$eq\":\"Kok\"}},{\"first_name\":{\"$eq\":\"Chun\"}}]}]}",query);
         }
 
+
  
-        public void AreEqualQueries(string decodedQueryString, Query query)
-        {
-            Assert.AreEqual(decodedQueryString, DecodeQueryString(query.ToUrlQuery()));
-        }
-
-        /// <summary>
-        /// Encodes everything except = and &
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string DecodeQueryString(string path)
-        {
-            var decodedQueries = new List<string>();
-            foreach (var query in path.Split('&'))
-            {
-                decodedQueries.Add(string.Join("=", query.Split('=').Select(HttpUtility.UrlDecode)));
-            }
-
-            return string.Join("&", decodedQueries);
-        }
     }
 }

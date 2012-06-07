@@ -50,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrosswalkQueryTests.cs" />
+    <Compile Include="FacetQueryTests.cs" />
     <Compile Include="FactualIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryBase.cs" />
     <Compile Include="QueryTests.cs" />
+    <Compile Include="ResoleQueryTests.cs" />
     <Compile Include="SerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>

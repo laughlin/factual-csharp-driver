@@ -57,7 +57,7 @@ namespace FactualDriver
             return ((FilterList)_filters.Single(p => p.GetType() == typeof(FilterList))).Data;
         }
 
-        public void PopRowFiltersIntoNewGroup(string operation, Query[] queries)
+        public void PopRowFiltersIntoNewGroup(string operation, IQuery[] queries)
         {
             var filterCount = queries.Count();
             var filterGroup = new FilterGroup(operation);

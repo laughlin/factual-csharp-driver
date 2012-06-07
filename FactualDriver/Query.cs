@@ -81,13 +81,22 @@ namespace FactualDriver
             _parameters.Add(filter);
         }
 
-
+        /// <summary>
+        /// Used to nest AND'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
         public Query And(params Query[] queries)
         {
             _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
             return this;
         }
 
+        /// <summary>
+        /// Used to nest OR'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
         public Query Or(params Query[] queries)
         {
             _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_OR, queries);
