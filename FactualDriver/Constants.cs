@@ -7,6 +7,9 @@
 	    public const string CENTER = "$center";
 	    public const string METERS = "$meters";
 
+        // PointKey
+        public const string POINT = "$point";
+
 	    // Response
 	    public const string RESPONSE = "response";
 	    public const string TOTAL_ROW_COUNT = "total_row_count";

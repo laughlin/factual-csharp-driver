@@ -58,6 +58,8 @@
     <Compile Include="Filters\Circle.cs" />
     <Compile Include="Filters\FilterGroup.cs" />
     <Compile Include="Filters\FilterList.cs" />
+    <Compile Include="Filters\Point.cs" />
+    <Compile Include="Geopulse.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="JsonConverters\FilterGroupConverter.cs" />
     <Compile Include="Filters\Filter.cs" />
@@ -67,8 +69,10 @@
     <Compile Include="JsonConverters\GeoFilterConverter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="Filters\RowFilter.cs" />
+    <Compile Include="JsonConverters\PointConverter.cs" />
     <Compile Include="JsonConverters\RowFilterConverter.cs" />
     <Compile Include="Filters\SearchFilter.cs" />
+    <Compile Include="MultiQuery.cs" />
     <Compile Include="OAuth\OAuth2LeggedAuthenticator.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

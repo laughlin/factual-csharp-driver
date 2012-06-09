@@ -21,6 +21,53 @@ namespace FactualDriver.Tests
                 throw new ConfigurationException("please specify oauth keys");
 
             Factual = new Factual(OAuthKey, OAuthSecret);
+            Factual.Debug = true;
+        }
+
+        [Test]
+        public void TestSchema()
+        {
+            //Arrange
+            var result = Factual.Schema("restaurants-us");
+            dynamic json = JsonConvert.DeserializeObject(result);
+            //Assert
+            Assert.AreEqual("ok", (string)json.status);
+        }
+
+        [Test]
+        public void GeopulseTest()
+        {
+            //Arrange
+            var result =
+                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("commercial_density",
+                                                                                    "commercial_profile"));
+            dynamic json = JsonConvert.DeserializeObject(result);
+            //Assert
+            Assert.AreEqual("ok", (string)json.status);
+        }
+
+        [Test]
+        public void TestReverseGeocode()
+        {
+            //Arrange
+            var result = Factual.ReverseGeocode(new Point(34.06021, -118.41828));
+
+            //Assert
+            AssertReceivedOkResponse(result);
+        }
+
+        [Test]
+        public void TestMultiQuery()
+        {
+            //Arrange
+            Factual.QueueFetch("places", new Query().Field("region").Equal("CA"));
+            Factual.QueueFetch("places", new Query().Limit(1));
+            //Act
+            var result = Factual.SendQueueRequests();
+            //Assert
+            dynamic json = JsonConvert.DeserializeObject(result);
+            //Assert
+            Assert.AreEqual("ok", (string)json.query1.status);
         }
 
         [Test]
@@ -147,6 +194,11 @@ namespace FactualDriver.Tests
         }
 
  
-
+        public void  AssertReceivedOkResponse(string result)
+        {
+            dynamic json = JsonConvert.DeserializeObject(result);
+            //Assert
+            Assert.AreEqual("ok", (string)json.status);
+        }
     }
 }
