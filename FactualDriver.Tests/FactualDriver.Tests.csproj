@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="CrosswalkQueryTests.cs" />
     <Compile Include="FacetQueryTests.cs" />
+    <Compile Include="FactualApiExceptionTests.cs" />
+    <Compile Include="FactualIntegrationBase.cs" />
     <Compile Include="FactualIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBase.cs" />

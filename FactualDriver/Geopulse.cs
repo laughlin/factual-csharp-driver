@@ -1,6 +1,5 @@
 ﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
-using Newtonsoft.Json;
 
 namespace FactualDriver
 {
@@ -14,6 +13,10 @@ namespace FactualDriver
         /// </summary>
         private Parameters _parameters = new Parameters();
 
+        /// <summary>
+        /// Create an instace with a point parameter.
+        /// </summary>
+        /// <param name="point">Geolocation point</param>
         public Geopulse(Point point)
         {
             _parameters.Add(point);
@@ -34,6 +37,10 @@ namespace FactualDriver
             return this;
         }
 
+        /// <summary>
+        /// Convert this Query object to url encoded query string.
+        /// </summary>
+        /// <returns></returns>
         public string ToUrlQuery()
         {
             return JsonUtil.ToQueryString(_parameters.ToFilterArray());

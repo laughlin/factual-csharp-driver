@@ -2,11 +2,21 @@
 
 namespace FactualDriver
 {
+    /// <summary>
+    /// Provides fluent interface to specifying row filter predicate logic.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class QueryBuilder<T> where T : IQuery 
     {
         private readonly T _query;
         private readonly string _fieldName;
 
+        /// <summary>
+        /// Constructor. Specifies the name of the field for which to build filter
+        /// logic. Instance methods are used to specify the desired logic.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="fieldName"></param>
         public QueryBuilder(T query, string fieldName)
         {
             _query = query;

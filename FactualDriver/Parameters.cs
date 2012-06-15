@@ -5,17 +5,28 @@ using FactualDriver.Filters;
 
 namespace FactualDriver
 {
+    /// <summary>
+    /// A class holder of multiple filters, responsible for logic associated with filters collections.
+    /// </summary>
     public class Parameters
     {
         private List<IFilter> _filters = new List<IFilter>();
         public List<IFilter> Filters { get { return _filters; } set { _filters = value; } }
 
-
+        /// <summary>
+        /// Adds filter to collection
+        /// </summary>
+        /// <param name="filterName">Name of the filter</param>
+        /// <param name="value">Filter's value</param>
         public void Add(string filterName, object value)
         {
             _filters.Add(new Filter(filterName, value));
         }
 
+        /// <summary>
+        /// Adds filter to collection
+        /// </summary>
+        /// <param name="filter">Filter object</param>
         public void Add(IFilter filter)
         {
             if (filter is RowFilter || filter is FilterGroup)
@@ -38,6 +49,11 @@ namespace FactualDriver
             list.Add(filter);
         }
 
+        /// <summary>
+        /// Adds a filter, if filter already exists then it would comma separate values
+        /// </summary>
+        /// <param name="filterName">Filter's name</param>
+        /// <param name="value">value to add or comma separate</param>
         public void AddCommaSeparatedFilter(string filterName, string value)
         {
             var filter = _filters.FirstOrDefault(p => p.Name == filterName);
@@ -52,11 +68,20 @@ namespace FactualDriver
             }
         }
 
+        /// <summary>
+        /// Returns only row filters from filter collection.
+        /// </summary>
+        /// <returns>Collection of filters</returns>
         public List<IFilter> GetRowFilterList()
         {
             return ((FilterList)_filters.Single(p => p.GetType() == typeof(FilterList))).Data;
         }
 
+        /// <summary>
+        /// Groups filters recently added to collection by operation, used with conditional operators.
+        /// </summary>
+        /// <param name="operation">Conditional operations</param>
+        /// <param name="queries">Queries to group</param>
         public void PopRowFiltersIntoNewGroup(string operation, IQuery[] queries)
         {
             var filterCount = queries.Count();
@@ -68,6 +93,10 @@ namespace FactualDriver
             Add(filterGroup);
         }
 
+        /// <summary>
+        /// Converts collections to filter array.
+        /// </summary>
+        /// <returns>IFilter array</returns>
         public IFilter[] ToFilterArray()
         {
             return _filters.ToArray();

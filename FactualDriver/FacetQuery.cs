@@ -10,7 +10,6 @@ namespace FactualDriver
     /// </summary>
     public class FacetQuery : IQuery
     {
-        private bool _includeRowCount;
         private Parameters _parameters = new Parameters();
 
         /// <summary>
@@ -47,11 +46,19 @@ namespace FactualDriver
             return this;
         }
 
+        /// <summary>
+        /// Add query to this filter.
+        /// </summary>
+        /// <param name="filter"></param>
         public void Add(IFilter filter)
         {
             _parameters.Add(filter);
         }
 
+        /// <summary>
+        /// Convert this Query object to url encoded query string.
+        /// </summary>
+        /// <returns></returns>
         public string ToUrlQuery()
         {
             return JsonUtil.ToQueryString(_parameters.ToFilterArray());

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using FactualDriver.Filters;
 using Newtonsoft.Json;
 
 namespace FactualDriver
 {
+    /// <summary>
+    /// Holds all parameters for this ResolveQuery.
+    /// </summary>
     public class ResolveQuery
     {
         private Dictionary<string, object> _parameters = new Dictionary<string, object>();
@@ -25,7 +27,10 @@ namespace FactualDriver
             return this;
         }
 
-
+        /// <summary>
+        /// Converts ResolveQuery object into url encoded string
+        /// </summary>
+        /// <returns></returns>
         public string ToUrlQuery()
         {
             return string.Format("{0}={1}", Constants.RESOLVE_VALUES, JsonConvert.SerializeObject(_parameters));

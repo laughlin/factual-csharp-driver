@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Web;
+using FactualDriver.Exceptions;
 using FactualDriver.Filters;
 using FactualDriver.Utils;
 using OAuth2LeggedAuthenticator = FactualDriver.OAuth.OAuth2LeggedAuthenticator;
@@ -12,7 +13,7 @@ namespace FactualDriver
     {
         private const string FactualApiUrl = "http://api.v3.factual.com";
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-dotnet-driver-v1.0.1";
+        private const string DriverHeaderTag = "factual-dotnet-driver-v1.1.3";
         private MultiQuery _multiQuery;
 
         public MultiQuery MultiQuery
@@ -38,11 +39,11 @@ namespace FactualDriver
         /// <summary>
         /// Create a new Factual HTTP GET WebRequest for granual control  
         /// </summary>
-        /// <param name="query">Relative path string with factual parameters</param>
+        /// <param name="fullQuery">Relative path string with factual query parameters</param>
         /// <returns></returns>
-        public HttpWebRequest CreateWebRequest(string query)
+        public HttpWebRequest CreateWebRequest(string fullQuery)
         {
-            return CreateWebRequest("GET", query);
+            return CreateWebRequest("GET", fullQuery);
         }
 
         /// <summary>
@@ -70,26 +71,57 @@ namespace FactualDriver
             return RawQuery(query, JsonUtil.ToQueryString(filters));
         }
 
+        /// <summary>
+        /// Runs a read query against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
+        /// <param name="query">the read query to run against table.</param>
+        /// <returns>the response of running query against Factual.</returns>
         public string Fetch(string tableName, Query query)
         {
             return RawQuery(UrlForFetch(tableName),query.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Runs a Crosswalk query against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
+        /// <param name="query">the Crosswalk query to run against table.</param>
+        /// <returns>the response of running query against Factual.</returns>
         public string Fetch(string tableName, CrosswalkQuery query)
         {
             return RawQuery(UrlForCrosswalk(tableName), query.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Run a schema query against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
+        /// <returns>the response of running query against Factual.</returns>
         public string Schema(string tableName)
         {
             return RawQuery(UrlForSchema(tableName));
         }
 
+        /// <summary>
+        /// Run a Geopulse query against the Factual API.
+        /// <para name="Example"> This example shows common usage: </para>
+        /// <c>new Geopulse(new Point(34.06021, -118.41828)).Only("commercial_density")</c>
+        /// </summary>
+        /// <param name="geopulse">Geopulse query to run</param>
+        /// <returns>the response of running query against Factual.</returns>
         public string Geopulse(Geopulse geopulse)
         {
             return RawQuery(UrlForGeopulse(), geopulse.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Run a Geocode query against the Factual API.
+        /// <para name="Example"> This example shows common usage: </para>
+        /// <c>new Point(34.06021, -118.41828)</c>
+        /// </summary>
+        /// <param name="point">Point to get geocode</param>
+        /// <returns>the response of running query against Factual.</returns>
         public string ReverseGeocode(Point point)
         {
             return RawQuery(UrlForGeocode(), point.ToUrlQuery());
@@ -146,16 +178,28 @@ namespace FactualDriver
             MultiQuery.AddQuery(UrlForFacets(table), query.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Queue a ReverseGeocode for inclusion in the next multi request.
+        /// </summary>
+        /// <param name="point">the geo location point parameter</param>
         public void QueryFetch(Point point)
         {
             MultiQuery.AddQuery(UrlForGeocode(), point.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Queue a Geopulse for inclusion in the next multi request.
+        /// </summary>
+        /// <param name="point">Geopulse query parameter</param>
         public void QueryFetch(Geopulse point)
         {
             MultiQuery.AddQuery(UrlForGeopulse(), point.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Send all milti query requests which were queued up.
+        /// </summary>
+        /// <returns></returns>
         public string SendQueueRequests()
         {
             return RawQuery(UrlForMulti(), MultiQuery.ToUrlQuery());
@@ -212,6 +256,11 @@ namespace FactualDriver
             return RawQuery(string.Format("{0}?{1}", path, queryParameters));
         }
 
+        /// <summary>
+        /// Execute a raw query again a factual api.
+        /// </summary>
+        /// <param name="completePathWithQuery">Complete path and query excluding api uri host</param>
+        /// <returns></returns>
         public string RawQuery(string completePathWithQuery)
         {
             var request = CreateWebRequest(completePathWithQuery);
@@ -225,56 +274,51 @@ namespace FactualDriver
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    using (var stream = response.GetResponseStream())
                     {
-                        var jsonResult = reader.ReadToEnd();
-                        if (string.IsNullOrEmpty(jsonResult))
-                            throw new InvalidOperationException("No data received from factual");
+                        if(stream == null)
+                            throw new FactualException("Did not receive a response stream from factual");
 
-                        if(Debug)
+                        using (var reader = new StreamReader(stream))
                         {
-                            System.Diagnostics.Debug.WriteLine("===== Factual Response =====");
-                            System.Diagnostics.Debug.WriteLine(jsonResult);
-                        }
+                            var jsonResult = reader.ReadToEnd();
+                            if (string.IsNullOrEmpty(jsonResult))
+                                throw new FactualException("No data received from factual");
 
-                        return jsonResult;
+                            if (Debug)
+                            {
+                                System.Diagnostics.Debug.WriteLine("===== Factual Response =====");
+                                System.Diagnostics.Debug.WriteLine(jsonResult);
+                            }
+
+                            return jsonResult;
+                        }
                     }
+
                 }
             }
             catch (WebException ex)
             {
                 var response = ((HttpWebResponse)ex.Response);
-
-                try
+                using (var stream = response.GetResponseStream())
                 {
-                    using (var stream = response.GetResponseStream())
+                    if(stream == null)
+                        throw new FactualApiException(response.StatusCode, string.Empty, completePathWithQuery);
+
+                    using (var reader = new StreamReader(stream))
                     {
-                        using (var reader = new StreamReader(stream))
+                        var text = reader.ReadToEnd();
+
+                        if (Debug)
                         {
-                            var text = reader.ReadToEnd();
-
-                            if (Debug)
-                            {
-                                System.Diagnostics.Debug.WriteLine("===== Factual Error =====");
-                                System.Diagnostics.Debug.WriteLine(text);
-                            }
-
-                            return text;
+                            System.Diagnostics.Debug.WriteLine("===== Factual API Error =====");
+                            System.Diagnostics.Debug.WriteLine(text);
                         }
-                    }
-                }
-                catch (WebException e)
-                {
-                    if (Debug)
-                    {
-                        System.Diagnostics.Debug.WriteLine("===== Web Exception Error =====");
-                        System.Diagnostics.Debug.WriteLine(response.StatusCode.ToString() + e.Message);
-                    }
 
-                    return response.StatusCode.ToString() + e.Message;
+                        throw new FactualApiException(response.StatusCode, text, HttpUtility.UrlDecode(completePathWithQuery));
+                    }
                 }
             }
-
         }
     }
 }

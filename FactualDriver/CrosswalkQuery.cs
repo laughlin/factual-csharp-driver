@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using FactualDriver.Filters;
+﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
 
 namespace FactualDriver
 {
+    /// <summary>
+    /// Represents a Factual Crosswalk query.
+    /// </summary>
     public class CrosswalkQuery : IQuery
     {
         /// <summary>
@@ -11,6 +13,10 @@ namespace FactualDriver
         /// </summary>
         private Parameters _parameters = new Parameters();
 
+        /// <summary>
+        /// Add filter to this query.
+        /// </summary>
+        /// <param name="filter"></param>
         public void Add(IFilter filter)
         {
             _parameters.Add(filter);
@@ -43,7 +49,7 @@ namespace FactualDriver
         /// <summary>
         /// The namespace to search for a third party ID within.
         /// </summary>
-        /// <param name="namespaceName">The namespace to search for a third party ID within.</param>
+        /// <param name="namespaceName">The namespace to search for a third party ID within. Example:"foursquare"</param>
         /// <returns>CrosswalkQuery</returns>
         public CrosswalkQuery Namespace(string namespaceName)
         {
@@ -65,7 +71,7 @@ namespace FactualDriver
         /// <summary>
         /// Restricts the results to only return ids for the specified namespace(s).
         /// </summary>
-        /// <param name="namespaces">parameters namespaces</param>
+        /// <param name="namespaces">parameters namespaces, example .Only("foursquare", "yelp");</param>
         /// <returns>CrosswalkQuery</returns>
         public CrosswalkQuery Only(params string[] namespaces)
         {
