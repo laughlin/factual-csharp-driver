@@ -9,6 +9,11 @@ using OAuth2LeggedAuthenticator = FactualDriver.OAuth.OAuth2LeggedAuthenticator;
 
 namespace FactualDriver
 {
+    /// <summary>
+    /// Main point of entry for the driver. Supports running queries against Factual
+    /// and inspecting the response. Supports the same levels of authentication
+    /// supported by Factual's API.
+    /// </summary>
     public class Factual
     {
         private const string FactualApiUrl = "http://api.v3.factual.com";
@@ -16,6 +21,9 @@ namespace FactualDriver
         private const string DriverHeaderTag = "factual-dotnet-driver-v1.1.3";
         private MultiQuery _multiQuery;
 
+        /// <summary>
+        /// MultiQuery accessor. Creates and returns new instance of MultiQuery if one already doesn't exists.
+        /// </summary>
         public MultiQuery MultiQuery
         {
             get { return _multiQuery ?? (_multiQuery = new MultiQuery()); }

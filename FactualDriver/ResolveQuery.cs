@@ -11,6 +11,12 @@ namespace FactualDriver
     {
         private Dictionary<string, object> _parameters = new Dictionary<string, object>();
 
+        /// <summary>
+        /// Adds key and value to the resolve query list
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public ResolveQuery Add(string key, object value)
         {
             if (value is double)

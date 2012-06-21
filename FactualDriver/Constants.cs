@@ -1,5 +1,8 @@
 ﻿namespace FactualDriver
 {
+    /// <summary>
+    /// Helper class that keeps all factual related constant strings.
+    /// </summary>
     public class Constants
     {
         // Circle

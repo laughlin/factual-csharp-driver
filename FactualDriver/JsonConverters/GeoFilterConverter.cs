@@ -4,11 +4,15 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.JsonConverters
 {
+    /// <summary>
+    /// Converts GeoFilter to json.
+    /// </summary>
     public class GeoFilterConverter: JsonConverter 
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var filter = value as GeoFilter;
+            if (filter == null) throw new InvalidOperationException("GeoFilterConverter attribute is not applied to GeoFilter class");
 
             writer.WriteStartObject();
             writer.WritePropertyName(filter.Shape);

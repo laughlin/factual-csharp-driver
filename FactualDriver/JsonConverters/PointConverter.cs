@@ -4,11 +4,16 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.JsonConverters
 {
+    /// <summary>
+    /// Converts Point to json.
+    /// </summary>
     public class PointConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var filter = value as Point;
+            if (filter == null) throw new InvalidOperationException("PointConverter attribute is not applied to Point class");
+
             writer.WriteStartObject();
             writer.WritePropertyName(filter.PointKey);
             serializer.Serialize(writer, new[] { filter.Latitude, filter.Longitude });

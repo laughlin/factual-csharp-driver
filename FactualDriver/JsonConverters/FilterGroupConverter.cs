@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.JsonConverters
 {
+    /// <summary>
+    /// Converts FilterGroup to json.
+    /// </summary>
     public class FilterGroupConverter : JsonConverter
     {
         #region Overrides of JsonConverter
@@ -11,6 +14,7 @@ namespace FactualDriver.JsonConverters
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var filter = value as FilterGroup;
+            if (filter == null) throw new InvalidOperationException("FilterGroupConverter attribute is not applied to FilterGroup class");
 
             writer.WriteStartObject();
             writer.WritePropertyName(filter.Operator);

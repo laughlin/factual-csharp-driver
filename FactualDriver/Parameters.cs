@@ -11,7 +11,6 @@ namespace FactualDriver
     public class Parameters
     {
         private List<IFilter> _filters = new List<IFilter>();
-        public List<IFilter> Filters { get { return _filters; } set { _filters = value; } }
 
         /// <summary>
         /// Adds filter to collection

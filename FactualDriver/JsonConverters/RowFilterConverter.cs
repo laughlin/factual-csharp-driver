@@ -4,11 +4,15 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.JsonConverters
 {
+    /// <summary>
+    /// Converts RowFilter to json.
+    /// </summary>
     public class RowFilterConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var filter = value as RowFilter;
+            if (filter == null) throw new InvalidOperationException("RowFilterConverter attribute is not applied to RowFilter class");
 
             writer.WriteStartObject();
             writer.WritePropertyName(filter.FieldName);
