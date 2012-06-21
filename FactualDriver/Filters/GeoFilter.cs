@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.Filters
 {
+    /// <summary>
+    /// GeoFilter class.
+    /// </summary>
     [JsonConverter(typeof(GeoFilterConverter))]
     public class GeoFilter : IFilter
     {
@@ -12,29 +15,51 @@ namespace FactualDriver.Filters
         private string _target = Constants.CENTER;
         private string _distanceUnits = Constants.METERS;
 
+        /// <summary>
+        /// Shape key, defaults to circle.
+        /// </summary>
         public string Shape
         {
             get { return _shape; }
             set { _shape = value; }
         }
 
+        /// <summary>
+        /// Target key, default to center.
+        /// </summary>
         public string Target
         {
             get { return _target; }
             set { _target = value; }
         }
 
-        
+        /// <summary>
+        /// Distance units, default is meters.
+        /// </summary>
         public string DistanceUnits
         {
             get { return _distanceUnits; }
             set { _distanceUnits = value; }
         }
 
+        /// <summary>
+        /// Latitude of the filter.
+        /// </summary>
         public double Latitude { get; set; }
+        
+        /// <summary>
+        /// Longitutde of the filter. 
+        /// </summary>
         public double Longitude { get; set; }
+
+        /// <summary>
+        /// Distance of the filter.
+        /// </summary>
         public int Distance { get; set; }
 
+        /// <summary>
+        /// Filter key, defaults to geo.
+        /// </summary>
         public string Name
         {
             get { return _name; }

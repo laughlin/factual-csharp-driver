@@ -1,5 +1,8 @@
 ﻿namespace FactualDriver.Filters
 {
+    /// <summary>
+    /// Simple search filters for full text search on Factual API which gets serialized into q=search term.
+    /// </summary>
     public class SearchFilter : IFilter
     {
         private string _name = Constants.SEARCH;
@@ -9,6 +12,9 @@
             set { _name = value; }
         }
 
+        /// <summary>
+        /// Search text of the query.
+        /// </summary>
         public string SearchText { get; set; }
 
         /// <summary>

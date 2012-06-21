@@ -3,15 +3,23 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.Filters
 {
+    /// <summary>
+    /// A generic filter which gets serialized into key=value.
+    /// </summary>
     [JsonConverter(typeof(FilterConverter))]
     public class Filter: IFilter
     {
         #region Implementation of IFilter
-
+        /// <summary>
+        /// Filter key.
+        /// </summary>
         public string Name { get; set; }
 
         #endregion
 
+        /// <summary>
+        /// Filter value.
+        /// </summary>
         public object Value { get; set; }
 
         /// <summary>

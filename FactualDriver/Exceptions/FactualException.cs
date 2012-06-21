@@ -7,6 +7,10 @@ namespace FactualDriver.Exceptions
     /// </summary>
     public class FactualException : Exception
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="message"></param>
         public FactualException(string message) : base(message) {}
     }
 }

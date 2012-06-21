@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.Filters
 {
+    /// <summary>
+    /// Class represents a collection of row filters grouped by conditional operators.
+    /// </summary>
     [JsonConverter(typeof(FilterGroupConverter))]
     public class FilterGroup : IFilter
     {
@@ -11,7 +14,9 @@ namespace FactualDriver.Filters
 
         private string _name = Constants.FILTERS;
 
-
+        /// <summary>
+        /// Key of the filter. Defaults to the correct Factual Filters keys.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -19,8 +24,13 @@ namespace FactualDriver.Filters
         }
 
         #endregion
-
+        /// <summary>
+        /// Filter conditional operator.
+        /// </summary>
         public string Operator { get; set; }
+        /// <summary>
+        /// A collection of row filters under FilterGroup.
+        /// </summary>
         public List<IFilter> RowFilters { get; set; }
 
         /// <summary>
@@ -34,6 +44,10 @@ namespace FactualDriver.Filters
             RowFilters = filters;
         }
 
+        /// <summary>
+        /// Creates an empty Filters group with specified conditional operator.
+        /// </summary>
+        /// <param name="conditionalOperator">Operator</param>
         public FilterGroup(string conditionalOperator)
         {
             Operator = conditionalOperator;

@@ -3,12 +3,27 @@ using Newtonsoft.Json;
 
 namespace FactualDriver.Filters
 {
+    /// <summary>
+    /// Row filter class for limiting result sets based on individual filter operators. 
+    /// </summary>
     [JsonConverter(typeof(RowFilterConverter))]
     public class RowFilter : IFilter
     {
         private string _name = Constants.FILTERS;
+
+        /// <summary>
+        /// Name of the field upon which we are going to perform a comparison.
+        /// </summary>
         public string FieldName { get; set; }
+
+        /// <summary>
+        /// Operator which specifies comparison type.
+        /// </summary>
         public string Operator { get; set; }
+
+        /// <summary>
+        /// Value of the filter name to which operator applies.
+        /// </summary>
         public object Value { get; set; }
 
         /// <summary>
