@@ -18,7 +18,7 @@ namespace FactualDriver
     {
         private const string FactualApiUrl = "http://api.v3.factual.com";
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-dotnet-driver-v1.1.3";
+        private const string DriverHeaderTag = "factual-dotnet-driver-v1.2.0";
         private MultiQuery _multiQuery;
 
         /// <summary>
@@ -102,6 +102,36 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Asks Factual to resolve the entity for the attributes specified by
+        /// query, within the table called tableName.
+        /// Returns the read response from a Factual Resolve request, which includes
+        /// all records that are potential matches.
+        /// Each result record will include a confidence score ("similarity"),
+        /// and a flag indicating whether Factual decided the entity is the correct
+        /// resolved match with a high degree of accuracy ("resolved").
+        /// There will be 0 or 1 entities returned with "resolved"=true. If there was a
+        /// full match, it is guaranteed to be the first record in the response.
+        /// </summary>
+        /// <param name="tableName">the name of the table to resolve within.</param>
+        /// <param name="query">a Resolve query with partial attributes for an entity.</param>
+        /// <returns>the response from Factual for the Resolve request.</returns>
+        public string Fetch(string tableName, ResolveQuery query)
+        {
+            return RawQuery(UrlForResolve(tableName), query.ToUrlQuery());
+        }
+
+        /// <summary>
+        /// Runs a facet read against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query for facets (e.g., "places")</param>
+        /// <param name="query">the facet query to run against table</param>
+        /// <returns>the response of running facet against Factual.</returns>
+        public string Fetch(string tableName, FacetQuery query)
+        {
+            return RawQuery(UrlForFacets(tableName), query.ToUrlQuery());
+        }
+
+        /// <summary>
         /// Run a schema query against the specified Factual table.
         /// </summary>
         /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
@@ -181,7 +211,7 @@ namespace FactualDriver
         /// </summary>
         /// <param name="table">the name of the table you wish to use a facet request against (e.g., "places")</param>
         /// <param name="query">the facet query to run against table.</param>
-        public void QueryFetch(string table, FacetQuery query)
+        public void QueueFetch(string table, FacetQuery query)
         {
             MultiQuery.AddQuery(UrlForFacets(table), query.ToUrlQuery());
         }
@@ -190,7 +220,7 @@ namespace FactualDriver
         /// Queue a ReverseGeocode for inclusion in the next multi request.
         /// </summary>
         /// <param name="point">the geo location point parameter</param>
-        public void QueryFetch(Point point)
+        public void QueueFetch(Point point)
         {
             MultiQuery.AddQuery(UrlForGeocode(), point.ToUrlQuery());
         }
@@ -199,7 +229,7 @@ namespace FactualDriver
         /// Queue a Geopulse for inclusion in the next multi request.
         /// </summary>
         /// <param name="point">Geopulse query parameter</param>
-        public void QueryFetch(Geopulse point)
+        public void QueueFetch(Geopulse point)
         {
             MultiQuery.AddQuery(UrlForGeopulse(), point.ToUrlQuery());
         }

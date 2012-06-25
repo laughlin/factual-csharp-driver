@@ -17,7 +17,7 @@ namespace FactualDriver
         /// <summary>
         /// We start query count at one per driver documentation.
         /// </summary>
-        private int _queryCount = 1;
+        private int _queryCount = 0;
 
         /// <summary>
         /// Add a a query to the multiquery collection
@@ -26,7 +26,7 @@ namespace FactualDriver
         /// <param name="query"></param>
         public void AddQuery(string path, string query)
         {
-            _queries.Add("query" + _queryCount, string.Format("{0}?{1}", path, query));
+            _queries.Add("q" + _queryCount, string.Format("{0}?{1}", path, query));
             _queryCount++;
         }
 

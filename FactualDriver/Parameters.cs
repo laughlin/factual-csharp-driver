@@ -87,6 +87,10 @@ namespace FactualDriver
             var filterGroup = new FilterGroup(operation);
             var filterList = GetRowFilterList();
             filterGroup.RowFilters = filterList.Skip(Math.Max(0, filterList.Count - filterCount)).Take(filterCount).ToList();
+
+            if (filterCount > filterList.Count)
+                filterCount = filterList.Count();
+
             filterList.RemoveRange(filterList.Count - filterCount, filterCount);
 
             Add(filterGroup);
