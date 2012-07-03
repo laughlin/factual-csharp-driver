@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>1.2.0</version>
+    <authors>Sergey Maskalik</authors>
+    <owners>Factual</owners>
+    <projectUrl>https://github.com/Factual/factual-asp-net-driver</projectUrl>
+    <dependencies>
+      <dependency id="Google.GData.Client" version="2.1.0.0" />
+      <dependency id="Newtonsoft.Json" version="4.5.7" />
+    </dependencies>
+    <id>FactualDriver</id>
+    <title />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.Net client library for Factual API</description>
+    <summary>.NET driver for Factual API. Provides a library to setup and receive data from factual in two lines of code. Most of the design is ported from Java Factual Driver.</summary>
+    <releaseNotes>Please refer to Java driver documentation (https://github.com/Factual/factual-java-driver/blob/master/README.md). Driver has almost exact same API. In addition there is a series of tests that could be used for samples.</releaseNotes>
+  </metadata>
+  <files />
+</package>
