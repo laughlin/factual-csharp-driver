@@ -59,7 +59,7 @@ namespace FactualDriver
             if (filter != null && filter is Filter)
             {
                 var existingFilter = (Filter)filter;
-                existingFilter.Value = string.Format("{0},{1}", existingFilter.Value, value);
+                existingFilter.Value = string.Format("{0},{1}", existingFilter.Value, value.Replace(",", "%2C"));
             }
             else
             {
