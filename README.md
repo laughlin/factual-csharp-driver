@@ -36,7 +36,7 @@ be used as documentation. To setup your tests you would need to add your factual
 # Simple Query Example
 
     // 3 random records from Factual's Places table:
-    factual.Fetch("places", new Query().limit(3))
+    factual.Fetch("places", new Query().Limit(3))
 	
 # Full Text Search
 
