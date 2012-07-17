@@ -45,6 +45,18 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Create an instance of Factual .NET driver
+        /// </summary>
+        /// <param name="oAuthKey">OAuth consumer key</param>
+        /// <param name="oAuthSecret">Oauth consumer secret key</param>
+        /// <param name="debug">Include debuggin info</param>
+        public Factual(string oAuthKey, string oAuthSecret, bool debug)
+        {
+            _factualAuthenticator = new OAuth2LeggedAuthenticator("FactualDriver", oAuthKey, oAuthSecret);
+            Debug = debug;
+        }
+
+        /// <summary>
         /// Create a new Factual HTTP GET WebRequest for granual control  
         /// </summary>
         /// <param name="fullQuery">Relative path string with factual query parameters</param>

@@ -63,7 +63,7 @@ namespace FactualDriver
             }
             else
             {
-                _filters.Add(new Filter(filterName, value));
+                _filters.Add(new Filter(filterName, value.Replace(",", "%2C")));
             }
         }
 
