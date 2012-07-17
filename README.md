@@ -348,7 +348,7 @@ NOTE: although these parameters are individually optional, at least one of the f
 
 Factual may occasionally release a new API which is not immediately supported by the Java driver.  To test queries against these APIs, we recommend using the raw read feature.  The recommendation is to only construct a raw read query if the feature is not yet supported using other convenience methods.
 
-<p>You can perform any GET request using the <tt>factual.RawQuery(table,parameters)/tt> method. Add parameters to your request by building a json string, and the request will be made using your OAuth token.  The driver will URL-encode the parameter values.
+<p>You can perform any GET request using the <tt>factual.RawQuery(table,parameters)</tt> method. Add parameters to your request by building a json string, and the request will be made using your OAuth token.  The driver will URL-encode the parameter values.
 
 ## Example Raw Read Queries
 
@@ -443,7 +443,7 @@ Not all fields are configured to return facet counts. To determine what fields y
 # Multi
 
 The driver fully supports Factual's Multi feature, which enables making multiple requests on the same connection.
-Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>SendRequests</tt>.  The <tt>SendRequests</tt> method requests all reads queued since the last <tt>SendRequests</tt>.  The responses from the multi request are returned in a list, corresponding to the same order in which they were queued.
+Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>SendQueueRequests</tt>.  The <tt>SendQueueRequests</tt> method requests all reads queued since the last <tt>SendQueueRequests</tt>.  The responses from the multi request are returned in a list, corresponding to the same order in which they were queued.
 
 ## Simple Multi Example
 
@@ -460,7 +460,7 @@ The driver fully supports Factual's <a href="http://developer.factual.com/displa
 
 The <tt>geopulse</tt> method fetches results based on the given point:
 
-	ReadResponse resp = factual.Geopulse(new Geopulse(new Point(latitude, longitude))
+	var respponse = factual.Geopulse(new Geopulse(new Point(latitude, longitude))
 												.Only("commercial_density", "commercial_profile"));
 
 
@@ -519,10 +519,11 @@ Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
 
     Factual badness = new Factual("BAD_KEY", "BAD_SECRET");
     try
-	{
-      badness.Fetch("places", new Query().field("country").Equal(true));
-    } catch (FactualApiException ex) 
-	{
+    {
+      badness.Fetch("places", new Query().Field("country").Equal(true));
+    } 
+    catch (FactualApiException ex) 
+    {
       Console.WriteLine("Requested URL: " + ex.Url);
       Console.WriteLine("Error Status Code: " + ex.StatusCode);
       Console.WriteLine("Error Response Message: " + ex.Response);
