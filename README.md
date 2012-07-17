@@ -7,12 +7,12 @@ Officially supported .NET driver for [Factual's public API](http://developer.fac
 
 ## Nuget
 
-In the package manager console window: <tt>Install-Package FactualDriver</tt>, or right click on your project and click
+In the package manager console window: <tt>Install-Package FactualDriver</tt>, or right click on your project, click
 manage packages, search for factual and install.
 
 ## Non Nuget
 
-Either clone the github [repo](https://github.com/Factual/factual-csharp-driver), or [download as a zip or tar] (https://github.com/Factual/factual-csharp-driver/downloads)
+You can either clone the github [repository](https://github.com/Factual/factual-csharp-driver), or [download as a zip or tar] (https://github.com/Factual/factual-csharp-driver/downloads) and then build.
 
 # Basic Design
 
@@ -31,7 +31,7 @@ First obtain free developer keys from factual.com
 # Optional tests setup
 
 If you are going to clone or download the repository you will have access to integration tests which can also
-help during development. To setup your tests: add your factual key and factual secret key in the FactualDriver.Tests\app.config.	
+be used as documentation. To setup your tests you would need to add your factual key and factual secret key to the FactualDriver.Tests\app.config.	
 	
 # Simple Query Example
 
