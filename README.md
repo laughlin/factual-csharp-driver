@@ -1,8 +1,6 @@
 factual-csharp-driver
 ======================
 
-# About
-
 Officially supported .NET driver for [Factual's public API](http://developer.factual.com).
 
 # Installation
@@ -350,7 +348,7 @@ NOTE: although these parameters are individually optional, at least one of the f
 
 Factual may occasionally release a new API which is not immediately supported by the Java driver.  To test queries against these APIs, we recommend using the raw read feature.  The recommendation is to only construct a raw read query if the feature is not yet supported using other convenience methods.
 
-<p>You can perform any GET request using the <tt>factual.RawQuery(…)</tt> method. Add parameters to your request by building a json string, and the request will be made using your OAuth token.  The driver will URL-encode the parameter values.
+<p>You can perform any GET request using the <tt>factual.RawQuery(ï¿½)</tt> method. Add parameters to your request by building a json string, and the request will be made using your OAuth token.  The driver will URL-encode the parameter values.
 
 <p>For convenience, use <tt>JsonUtil.toJsonStr(object)</tt> to serialize Java objects to the json format before adding a parameter.  The object can contain maps, collections, primitive types, etc., making it easier to guarantee a valid json string.
 
@@ -376,7 +374,7 @@ Use the <tt>Factual</tt> constructor to enable debug on a new instance:
 or modify an existing instance to toggle debug mode on and off for individual requests:
 	
 	factual.Debug = true;
-	factual.Fetch(…);
+	factual.Fetch(ï¿½);
 	factual.Debug = false;
 	
 Debug information will be printed to output window, with detailed request and response information.
@@ -447,7 +445,7 @@ Not all fields are configured to return facet counts. To determine what fields y
 # Multi
 
 The driver fully supports Factual's Multi feature, which enables making multiple requests on the same connection.
-Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>sendRequests</tt>.  The <tt>sendRequests</tt> method requests all reads queued since the last <tt>SendRequests</tt>.  The responses from the multi request are returned in a list, corresponding to the same order in which they were queued.
+Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>SendRequests</tt>.  The <tt>SendRequests</tt> method requests all reads queued since the last <tt>SendRequests</tt>.  The responses from the multi request are returned in a list, corresponding to the same order in which they were queued.
 
 ## Simple Multi Example
 
