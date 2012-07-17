@@ -7,7 +7,7 @@ Officially supported .NET driver for [Factual's public API](http://developer.fac
 
 ## Nuget
 
-In the package manager console window: <tt>Install-Package FactualDriver</tt>, or right click on your package and click
+In the package manager console window: <tt>Install-Package FactualDriver</tt>, or right click on your project and click
 manage packages, search for factual and install.
 
 ## Non Nuget
