@@ -23,7 +23,7 @@ Queries are created using the Query class, which provides a fluent interface to 
 Results are returned as the JSON returned by Factual. 
 
 # Setup
-	Obtain free developer keys from factual.com
+First obtain free developer keys from factual.com
 
     // Create an authenticated handle to Factual
     Factual factual = new Factual(MY_KEY, MY_SECRET);
