@@ -103,17 +103,6 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Runs a Crosswalk query against the specified Factual table.
-        /// </summary>
-        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
-        /// <param name="query">the Crosswalk query to run against table.</param>
-        /// <returns>the response of running query against Factual.</returns>
-        public string Fetch(string tableName, CrosswalkQuery query)
-        {
-            return RawQuery(UrlForCrosswalk(tableName), query.ToUrlQuery());
-        }
-
-        /// <summary>
         /// Asks Factual to resolve the entity for the attributes specified by
         /// query, within the table called tableName.
         /// Returns the read response from a Factual Resolve request, which includes
@@ -196,16 +185,6 @@ namespace FactualDriver
         public void QueueFetch(string table, Query query)
         {
             MultiQuery.AddQuery(UrlForFetch(table), query.ToUrlQuery());
-        }
-
-        /// <summary>
-        /// Queue a crosswalk request for inclusion in the next multi request.
-        /// </summary>
-        /// <param name="table">the name of the table you wish to use crosswalk against (e.g., "places")</param>
-        /// <param name="query">the crosswalk query to run against table</param>
-        public void QueueFetch(string table, CrosswalkQuery query)
-        {
-            MultiQuery.AddQuery(UrlForCrosswalk(table), query.ToUrlQuery());
         }
 
         /// <summary>

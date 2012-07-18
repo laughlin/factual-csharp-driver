@@ -23,16 +23,6 @@ namespace FactualDriver.Tests
         }
 
         [Test]
-        public void MiltipleSearchTest()
-        {
-            //Arrange
-            var query = new Query().Search("Coffee").Search("Tea");
-
-            //Assert
-            AreEqualQueries("q=Coffee,Tea", query);
-        }
-
-        [Test]
         public void OnlyTests()
         {
             //Arrange

@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrosswalkQueryTests.cs" />
     <Compile Include="FacetQueryTests.cs" />
     <Compile Include="FactualApiExceptionTests.cs" />
     <Compile Include="FactualIntegrationBase.cs" />

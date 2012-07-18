@@ -85,8 +85,8 @@ namespace FactualDriver.Tests
         [Test]
         public void TestMultiCrosswalk()
         {
-            Factual.QueueFetch("places", new CrosswalkQuery()
-                                             .FactualId("97598010-433f-4946-8fd5-4a6dd1639d77")
+            Factual.QueueFetch("crosswalk", new Query()
+                                             .Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77")
                                              .Limit(1));
             //Act
             var response = Factual.SendQueueRequests();
@@ -291,12 +291,14 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             var response = Factual.Fetch("places", new Query().Search("Fried Chicken, Los Angeles"));
-
+            Factual.Debug = true;
             var raw = Factual.RawQuery("t/places", "q=Fried Chicken, Los Angeles");
-
+            var test2 = Factual.RawQuery("t/places", "q=Fried Chicken%2C Los Angeles");
             //Assert
             AssertReceivedOkResponse(response);
+            Assert.AreEqual(test2, raw);
             Assert.AreEqual(response, raw);
+            
         }
 
         /// <summary>
@@ -455,7 +457,7 @@ namespace FactualDriver.Tests
         public void TestCrosswalkEx1()
         {
             //Arrange & Act
-            var response = Factual.Fetch("places", new CrosswalkQuery().FactualId("97598010-433f-4946-8fd5-4a6dd1639d77"));
+            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77"));
 
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
@@ -467,42 +469,30 @@ namespace FactualDriver.Tests
         public void TestCrosswalkEx2()
         {
             //Arrange & Act
-            var response = Factual.Fetch("places", new CrosswalkQuery().FactualId("97598010-433f-4946-8fd5-4a6dd1639d77").Only("loopt"));
+            var response = Factual.Fetch("crosswalk",
+                                         new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77"));
 
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
             AssertCrosswalkResult(response, "factual_id", "97598010-433f-4946-8fd5-4a6dd1639d77");
-            AssertCrosswalkResult(response, "namespace", "loopt");
         }
 
         [Test]
         public void TestCrosswalkEx3()
         {
             //Arrange
-            var response = Factual.Fetch("places", new CrosswalkQuery()
-                                                       .Namespace("foursquare")
-                                                       .NamespaceId("4ae4df6df964a520019f21e3"));
+            var response = Factual.Fetch("crosswalk", new Query().Field("namespace").Equal("foursquare")
+                                                       .Field("namespace_id").Equal("4ae4df6df964a520019f21e3"));
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
         }
 
-        [Test]
-        public void TestCrosswalkEx4()
-        {
-            //Arrange
-            var response = Factual.Fetch("places", new CrosswalkQuery()
-                                                       .Namespace("foursquare")
-                                                       .NamespaceId("4ae4df6df964a520019f21e3").Only("yelp"));
-            AssertReceivedOkResponse(response);
-            AssertNotEmpty(response);
-            AssertCrosswalkResult(response, "namespace", "yelp");
-        }
 
         [Test]
         public void TestCrosswalkLimit()
         {
             //Arrange
-            var response = Factual.Fetch("places", new CrosswalkQuery().FactualId("97598010-433f-4946-8fd5-4a6dd1639d77").Limit(1));
+            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77").Limit(1));
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
             dynamic json = JsonConvert.DeserializeObject(response);

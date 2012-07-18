@@ -34,7 +34,7 @@ namespace FactualDriver
         /// <returns>this Query</returns>
         public Query Search(string term)
         {
-            _parameters.AddCommaSeparatedFilter(Constants.SEARCH, term);
+            Add(new Filter(Constants.SEARCH, term));;
             return this;
         }
 
