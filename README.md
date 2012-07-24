@@ -8,7 +8,10 @@ Officially supported .NET driver for [Factual's public API](http://developer.fac
 ## Nuget
 
 In the package manager console window: <tt>Install-Package FactualDriver</tt>, or right click on your project, click
-manage packages, search for factual and install.
+manage packages, search for factual and install. Project uses nuget automatic package restore feature, please keep in mind
+if you don't have automatic restore enabled you would need to enable it in. In Visual Studio, enable "Allow NuGet to download
+missing packages during build". This setting lives under Options -> Package Manager -> General.
+![Enable package restore](http://docs.nuget.org/docs/workflows/images/allow-package-restore-configuration.png)
 
 ## Non Nuget
 
