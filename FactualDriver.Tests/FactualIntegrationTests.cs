@@ -302,6 +302,10 @@ namespace FactualDriver.Tests
             
         }
 
+        /// <summary>
+        /// Do a full-text search of the the global database with non-english search charachters
+        /// terms "משה"
+        /// </summary>
         [Test]
         public void TestCoreExample3International()
         {
