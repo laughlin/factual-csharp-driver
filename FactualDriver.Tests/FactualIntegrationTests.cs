@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using FactualDriver.Filters;
 using NUnit.Framework;
@@ -68,10 +69,10 @@ namespace FactualDriver.Tests
             Factual.QueueFetch("places", new FacetQuery("region", "locality"));
             Factual.QueueFetch("places", new Query().Limit(1));
             Factual.QueueFetch("places", new ResolveQuery()
-                .Add("name", "McDonalds")
-                //.Add("address", "10451 Santa Monica Blvd")
-                .Add("region", "CA")
-                .Add("postcode", "90025"));
+                                             .Add("name", "McDonalds")
+                                             .Add("address", "10451 Santa Monica Blvd")
+                                             .Add("region", "CA")
+                                             .Add("postcode", "90025"));
             //Act
             var response = Factual.SendQueueRequests();
 
@@ -301,6 +302,17 @@ namespace FactualDriver.Tests
             
         }
 
+        [Test]
+        public void TestCoreExample3International()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("global", new Query().Search("משה"));
+            Factual.Debug = true;
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
         /// <summary>
         /// To support paging in your app, return rows 20-25 of the full-text search result
         /// from Example 3
@@ -520,7 +532,7 @@ namespace FactualDriver.Tests
             //Arrange
             var response = Factual.Fetch("places", new Query().Field("country").Equal("US").Only("address","country"));
             AssertReceivedOkResponse(response);
-            AssertAll(response, "country", "US");
+            AssertAll(response, "country", "us");
 
             var raw = Factual.RawQuery("t/places", "filters={\"country\":{\"$eq\":\"US\"}}&select=address,country");
 

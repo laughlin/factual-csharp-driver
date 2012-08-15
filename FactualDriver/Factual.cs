@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using FactualDriver.Exceptions;
 using FactualDriver.Filters;
@@ -41,7 +43,7 @@ namespace FactualDriver
         /// <param name="oAuthSecret">Oauth consumer secret key</param>
         public Factual(string oAuthKey, string oAuthSecret)
         {
-            _factualAuthenticator = new OAuth2LeggedAuthenticator("FactualDriver", oAuthKey, oAuthSecret);
+            _factualAuthenticator = new OAuth2LeggedAuthenticator(oAuthKey, oAuthSecret);
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace FactualDriver
         /// <param name="debug">Include debuggin info</param>
         public Factual(string oAuthKey, string oAuthSecret, bool debug)
         {
-            _factualAuthenticator = new OAuth2LeggedAuthenticator("FactualDriver", oAuthKey, oAuthSecret);
+            _factualAuthenticator = new OAuth2LeggedAuthenticator(oAuthKey, oAuthSecret);
             Debug = debug;
         }
 
@@ -297,6 +299,8 @@ namespace FactualDriver
             {
                 System.Diagnostics.Debug.WriteLine("==== Request Url =====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
+                System.Diagnostics.Debug.WriteLine("==== Headers ====");
+                System.Diagnostics.Debug.WriteLine(request.Headers);
             }
                 
             try

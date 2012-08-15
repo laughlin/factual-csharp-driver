@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
+﻿using System.Text;
 using System.Linq;
 using FactualDriver.Filters;
 using NUnit.Framework;
@@ -312,7 +310,20 @@ namespace FactualDriver.Tests
             AreEqualQueries("filters={\"$or\":[{\"$and\":[{\"city\":{\"$eq\":\"Los Angeles\"}},{\"score\":{\"$eq\":\"38\"}}]},{\"$or\":[{\"last_name\":{\"$eq\":\"Kok\"}},{\"first_name\":{\"$eq\":\"Chun\"}}]}]}",query);
         }
 
+        //[Test]
+        //public void TestEncoding()
+        //{
+        //    var special = "משה";
+        //    var test1 = System.Web.HttpUtility.UrlEncode(special, Encoding.UTF8);
+        //    byte[] source = Encoding.UTF8.GetBytes(special);
+        //    var converted = new string(source.Select(b => (char) b).ToArray());
+        //    var result = System.Web.HttpUtility.UrlEncode(converted);
 
+        //    var urlEncodedUtf8 = System.Web.HttpUtility.UrlEncode("משה").ToUpper();
+        //    var decoded = Utilities.UrlDecodedValue(urlEncodedUtf8);
+        //    var googleEncoded = OAuthBase.EncodingPerRFC3986(decoded);
+        //    Assert.AreEqual(urlEncodedUtf8, googleEncoded);
+        //}
  
     }
 }

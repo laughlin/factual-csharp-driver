@@ -1,4 +1,6 @@
-﻿using FactualDriver.Filters;
+﻿using System.Linq;
+using System.Text;
+using FactualDriver.Filters;
 using FactualDriver.Utils;
 
 namespace FactualDriver
@@ -34,7 +36,7 @@ namespace FactualDriver
         /// <returns>this Query</returns>
         public Query Search(string term)
         {
-            Add(new Filter(Constants.SEARCH, term));;
+            Add(new Filter(Constants.SEARCH, term));
             return this;
         }
 
