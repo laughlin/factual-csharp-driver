@@ -447,6 +447,16 @@ The <tt>ReverseGeocode</tt> method fetches results based on the given point:
 
 	var response = factual.ReverseGeocode(new Point(latitude, longitude));	
 
+# Monetize
+
+The driver fully supports Factual's Monetize feature, which enables you to find deals for places in Factual's Global Places database.  Use the Query object to specify filters on which to run the monetize request.
+
+## Simple Monetize Example
+
+The <tt>monetize</tt> method fetches deals based on a specified query:
+
+    var response = Factual.Monetize(new Query().Field("place_locality").Equal("Los Angeles"));	
+	
 ## All Top Level Reverse Geocoder Parameters
 
 <table>

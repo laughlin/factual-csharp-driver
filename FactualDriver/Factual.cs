@@ -168,6 +168,16 @@ namespace FactualDriver
             return RawQuery(UrlForGeocode(), point.ToUrlQuery());
         }
 
+        /// <summary>
+        /// Runs a monetize query against the specified Factual table.
+        /// </summary>
+        /// <param name="query">the query to run against monetize.</param>
+        /// <returns>the response of running query against Factual API.</returns>
+        public string Monetize(Query query)
+        {
+            return RawQuery(UrlForMonetize(), query.ToUrlQuery());
+        }
+
 
         /// <summary>
         /// Queue a raw read request for inclusion in the next multi request.
@@ -274,6 +284,11 @@ namespace FactualDriver
         protected static string UrlForMulti()
         {
             return "multi";
+        }
+
+        private string UrlForMonetize()
+        {
+            return "places/monetize";
         }
 
         /// <summary>

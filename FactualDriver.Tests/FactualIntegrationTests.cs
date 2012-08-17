@@ -129,6 +129,26 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestMonetize()
+        {
+            //Arrange
+            var response = Factual.Monetize(new Query().Field("place_locality").Equal("Los Angeles"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestMonetizeByBusiness()
+        {
+            //Arrange
+            var response = Factual.Monetize(new Query().Field("place_factual_id").Equal("3226fac0-2f85-49d7-bc67-288fb2fc52ee"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
         public void RawQueryTest()
         {
             // Arrange
@@ -307,7 +327,7 @@ namespace FactualDriver.Tests
         /// terms "משה"
         /// </summary>
         [Test]
-        public void TestCoreExample3International()
+        public void TestCoreExample3NonEnglish()
         {
             //Arrange & Act
             var response = Factual.Fetch("global", new Query().Search("משה"));
