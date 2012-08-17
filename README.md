@@ -31,6 +31,8 @@ First obtain free developer keys from factual.com
     // Create an authenticated handle to Factual
     Factual factual = new Factual(MY_KEY, MY_SECRET);
     
+If you don't have a Factual API account yet, [it's free and easy to get one](https://www.factual.com/api-keys/request).   
+    
 # Optional tests setup
 
 If you are going to clone or download the repository you will have access to integration tests which can also
