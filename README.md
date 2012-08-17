@@ -295,6 +295,23 @@ Crosswalk requests are treated as any other table read, as seen in the example b
     // Get all Crosswalk data for a specific Places entity, using its Factual ID:
     var response = factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77")); 
           
+          
+# World Geographies
+
+Driver fully supports Factual's World Geographies. For a complete documentation please refer to http://developer.factual.com/display/docs/World+Geographies.
+
+## World Geographies example
+
+            //Arrange
+            var query = new Query();
+                query.And
+                (
+                    query.Field("name").Equal("philadelphia"),
+                    query.Field("country").Equal("us"),
+                    query.Field("placetype").Equal("locality")
+                );
+            //Act
+            var response = Factual.Fetch("world-geographies", query);
 
 # Raw Read
 
