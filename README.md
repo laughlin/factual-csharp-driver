@@ -296,6 +296,26 @@ Crosswalk requests are treated as any other table read, as seen in the example b
     var response = factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77")); 
           
           
+# Resolve
+
+The driver fully supports Factual's Resolve feature, which lets you start with incomplete data you may have for an entity, and get potential entity matches back from Factual.
+
+Each result record will include a confidence score (<tt>"similarity"</tt>), and a flag indicating whether Factual decided the entity is the correct resolved match with a high degree of accuracy (<tt>"resolved"</tt>).
+
+For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved"=true</tt>. If there was a full match, it is guaranteed to be the first record in the JSON response.
+
+(See [the Resolve Blog](http://blog.factual.com/factual-resolve) for more background.)
+
+## Simple Resolve Example
+
+The <tt>resolve</tt> method gives you the one full match if there is one, or null:
+
+    // Get the entity that is a full match, or null:
+    var response = Factual.Fetch("places", new ResolveQuery()
+    .Add("name", "Buena Vista")
+    .Add("latitude", 34.06)
+    .Add("longitude", -118.40));          
+          
 # World Geographies
 
 Driver fully supports Factual's World Geographies. For a complete documentation please refer to http://developer.factual.com/display/docs/World+Geographies.
