@@ -238,6 +238,15 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Queue a monetize query for inclusing in the next multi request.
+        /// </summary>
+        /// <param name="query"></param>
+        public void QueueFetchMonetize(Query query)
+        {
+            MultiQuery.AddQuery(UrlForMonetize(), query.ToUrlQuery());
+        }
+
+        /// <summary>
         /// Send all milti query requests which were queued up.
         /// </summary>
         /// <returns></returns>

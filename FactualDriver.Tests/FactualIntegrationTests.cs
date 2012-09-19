@@ -63,6 +63,24 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestMultiQueryWithMonetize()
+        {
+            //Arrange
+            Factual.QueueFetch("places", new Query().Field("region").Equal("CA"));
+            Factual.QueueFetch("places", new Query().Limit(1));
+            Factual.QueueFetchMonetize(new Query().Field("place_locality").Equal("Los Angeles"));
+
+            //Act
+            var result = Factual.SendQueueRequests();
+
+            //Assert
+            dynamic json = JsonConvert.DeserializeObject(result);
+            Assert.AreEqual("ok", (string)json.q0.status);
+            Assert.AreEqual("ok", (string)json.q1.status);
+            Assert.AreEqual("ok", (string)json.q2.status);
+        }
+
+        [Test]
         public void TestMultiComplex()
         {
             //Arrange
