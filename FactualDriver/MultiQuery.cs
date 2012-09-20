@@ -19,6 +19,12 @@ namespace FactualDriver
         /// </summary>
         private int _queryCount = 0;
 
+        private string _key = "q";
+        public string Key
+        {
+            get { return _key; } 
+            set { _key = value; }
+        }
         /// <summary>
         /// Add a a query to the multiquery collection
         /// </summary>
@@ -26,7 +32,7 @@ namespace FactualDriver
         /// <param name="query"></param>
         public void AddQuery(string path, string query)
         {
-            _queries.Add("q" + _queryCount, string.Format("{0}?{1}", path, query));
+            _queries.Add(Key + _queryCount, string.Format("{0}?{1}", path, query));
             _queryCount++;
         }
 

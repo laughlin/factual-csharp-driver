@@ -63,6 +63,23 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestMultiQueryWithCustomKey()
+        {
+            //Arrange
+            Factual.MultiQuery.Key = "test";
+            Factual.QueueFetch("places", new Query().Field("region").Equal("CA"));
+            Factual.QueueFetch("places", new Query().Limit(1));
+            
+            //Act
+            var result = Factual.SendQueueRequests();
+
+            //Assert
+            dynamic json = JsonConvert.DeserializeObject(result);
+            Assert.AreEqual("ok", (string)json.test0.status);
+            Assert.AreEqual("ok", (string)json.test1.status);
+        }
+
+        [Test]
         public void TestMultiQueryWithMonetize()
         {
             //Arrange
