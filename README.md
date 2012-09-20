@@ -441,6 +441,18 @@ Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>S
 	factual.QueueFetch("places", new Query().Limit(1)); 
 	var multiResponse = factual.SendQueueRequests();
 
+You can also en-queue monetize with <tt>Factual.QueueFetchMonetize(Query query)</tt>
+
+### Setting cusom query keys
+By default driver prepends query keys with a "q" and then the number of the query. You can also specify your own multi key so that response data objects will have queries returned with you own prepended key.
+To do that you would need to set Factual.MultiQuery.Key property before calling QueueFetch methods.
+
+        //Arrange
+        Factual.MultiQuery.Key = "test";
+        Factual.QueueFetch("places", new Query().Field("region").Equal("CA"));
+        Factual.QueueFetch("places", new Query().Limit(1));
+
+
 # Geopulse
 
 The driver fully supports Factual's <a href="http://developer.factual.com/display/docs/Places+API+-+Geopulse">Geopulse</a> feature, which provides point-based access to geographic attributes: you provide a long/lat coordinate pair, we provide everything we can know about that geography. 
