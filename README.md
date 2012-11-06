@@ -522,6 +522,112 @@ The <tt>monetize</tt> method fetches deals based on a specified query:
 </table>
 	
 
+#Submit
+
+NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
+---
+
+## Introduction
+
+Submit allows you to add a record to Factual, or update an existing record.  To delete a record, see [Flag](https://github.com/Factual/factual-java-driver/wiki/Flag).
+
+Factual does not currently support deleting entity attributes.
+
+## Syntax
+
+Strictly speaking, our systems do an 'UPSERT' -- we determine if the entity already exists, and return the Factual ID as part of the result object.  You can determine whether the entity you submitted is new
+However, it's always a good idea to obtain the Factual ID from a Submit Result, and store it against the submitted entity. See below for specific examples.
+
+In a few cases (such as if the Factual ID you submitted has been deprecated), we may return a Factual ID different from the one you submitted.  It is good practice to check.
+
+The only difference between updating an extant record and adding a new one is the inclusion of the Factual ID.
+
+## All Top Level Submit Parameters
+
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>values</td>
+    <td>A JSON hash field of names and values to be added to a Factual table</td>
+    <td>Update a value:<p><tt>s.setValue("longitude", 100)</tt><p>Make a value blank:<p><tt>s.removeValue("longitude")</tt></td>
+  </tr>
+  <tr>
+    <td>user</td>
+    <td>An arbitrary token representing the user submitting the data.</td>
+    <td><tt>new Metadata().User("my_username")</tt></td>
+  </tr>
+  <tr>
+    <td>comment</td>
+    <td>Any english text comment that may help explain your corrections.</td>
+    <td><tt>metadata.Comment("my comment")</tt></td>
+  </tr>
+  <tr>
+    <td>reference</td>
+    <td>A reference to a URL, title, person, etc. that is the source of this data.</td>
+    <td><tt>metadata.Reference("http://...")</tt></td>
+  </tr>
+</table>
+
+## Examples
+
+<b><ex>Add data to Factual's us-sandbox table:</ex></b><br>
+```csharp
+// Entity data
+Submit values = new Submit();
+values.AddValue("name", "Starbucks");
+values.AddValue("address", "123 Testing Blvd.");
+values.AddValue("locality", "Los Angeles");
+values.AddValue("region", "CA");
+values.AddValue("postcode", "90049");
+
+// An end user id is required
+Metadata metadata = new Metadata().User("some_user_id");
+
+// Run the Submit
+var response = factual.Submit("us-sandbox", values, metadata);
+```
+
+<b><ex>Determine whether Factual considered your Submit to be a new entity:</ex></b><br>
+```csharp
+dynamic json = JsonConvert.DeserializeObject(response);
+Assert.IsTrue((bool)json.response.new_entity);
+```
+<b><ex>Correct the latitude and longitude of a specific entity in Factual's us-sandbox table:</ex></b><br>
+```csharp
+Submit submit = new Submit()
+  .AddValue("latitude", -79.431708)
+  .AddValue("longitude", 43.641605);
+factual.Submit("us-sandbox",
+               "f33527e0-a8b4-4808-a820-2686f18cb00c",
+               submit,
+               new Metadata().user("some_user_id"));
+```
+
+<b><ex>Correct the business name of a specific entity in Factual's us-sandbox table:</ex></b><br>
+```csharp
+Submit submit = new Submit()
+  .setValue("name", "The New & Improved Tyler's Austin");
+factual.submit("us-sandbox",
+               "f33527e0-a8b4-4808-a820-2686f18cb00c",
+               submit,
+               new Metadata().user("some_user_id"));
+```
+
+<b><ex>Add a neighborhood to a specific entity in Factual's us-sandbox table:</ex></b><br>
+```csharp
+Submit submit = new Submit()
+  .AddValue("neighborhood", "Downtown");
+factual.Submit("us-sandbox",
+               "f33527e0-a8b4-4808-a820-2686f18cb00c",
+               submit,
+               new Metadata().user("some_user_id"));
+```
+
+
 # Exception Handling
 
 If Factual's API indicates an error, a <tt>FactualApiException</tt> unchecked Exception will be thrown. It will contain details about the request you sent and the error that Factual returned.
