@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using FactualDriver.Exceptions;
 using FactualDriver.Filters;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
 namespace FactualDriver.Tests
@@ -101,7 +103,7 @@ namespace FactualDriver.Tests
         public void TestMultiComplex()
         {
             //Arrange
-            Factual.QueueFetch("places", new FacetQuery("region", "locality"));
+            Factual.QueueFetch("global", new FacetQuery("region", "locality"));
             Factual.QueueFetch("places", new Query().Limit(1));
             Factual.QueueFetch("places", new ResolveQuery()
                                              .Add("name", "McDonalds")
@@ -631,7 +633,7 @@ namespace FactualDriver.Tests
                 .IncludeRowCount();
 
             //Act
-            var response = Factual.Fetch("places", facet);
+            var response = Factual.Fetch("global", facet);
 
             //Assert
             AssertReceivedOkResponse(response);
@@ -655,7 +657,7 @@ namespace FactualDriver.Tests
                     facet.Field("locality").BeginsWith("w")
                 );
             //Act
-            var response = Factual.Fetch("places", facet);
+            var response = Factual.Fetch("global", facet);
 
             //Assert
             AssertReceivedOkResponse(response);
@@ -669,7 +671,7 @@ namespace FactualDriver.Tests
             //Arrange
             var facet = new FacetQuery("category").Within(new Circle(Latitude, Longitude, Meters));
             //Act
-            var response = Factual.Fetch("places", facet);
+            var response = Factual.Fetch("global", facet);
             //Assert
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
@@ -722,10 +724,142 @@ namespace FactualDriver.Tests
             Assert.IsTrue(((int)json.response.included_rows) == 14);
         }
 
+        [Test]
+        public void TestFlagDuplicate()
+        {
+            //Arrange
+            var response = Factual.FlagDuplicate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+           
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagInaccurate()
+        {
+            //Arrange
+            var response = Factual.FlagInaccurate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagInappropriate()
+        {
+            //Arrange
+            var response = Factual.FlagInappropriate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagNonExistent()
+        {
+            //Arrange
+            var response = Factual.FlagNonExistent("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagSpam()
+        {
+            //Arrange
+            var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagOther()
+        {
+            //Arrange
+            var response = Factual.FlagOther("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        //[Test]
+        public void TestDiffs()
+        {
+            //Arrange
+            DiffsQuery diff = new DiffsQuery(1339123455775);
+
+            //Act
+            string response = Factual.Fetch("2EH4Pz", diff);
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestSubmitAdd()
+        {
+            CreateNewEntity();
+        }
+
+        public string CreateNewEntity()
+        {
+            //Arrange
+            Submit submit = new Submit()
+                .AddValue("longitude", 100);
+            var response = Factual.Submit("us-sandbox", submit, new Metadata().User("test_driver_user"));
+
+            //Asert
+            AssertReceivedOkResponse(response);
+            dynamic newEntityjson = JsonConvert.DeserializeObject(response);
+            var newEntityId = (string)newEntityjson.response.factual_id;
+            return newEntityId;
+        }
+
+        [Test]
+        public void TestSubmitEdit()
+        {
+            var newEntityId = CreateNewEntity();
+
+            //Arrange
+            Submit submit = new Submit()
+                .AddValue("longitude", 101);
+            var response = Factual.Submit("us-sandbox", newEntityId, submit, new Metadata().User("test_driver_user"));
+
+            //Asert
+            AssertReceivedOkResponse(response);
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.IsFalse((bool)json.response.new_entity);
+
+        }
+
+        [Test]
+        public void TestSubmitDelete()
+        {
+            var newEntityId = CreateNewEntity();
+            //Arrange
+            Submit submit = new Submit()
+                .RemoveValue("longitude");
+            var response = Factual.Submit("us-sandbox", newEntityId, submit, new Metadata().User("test_driver_user"));
+
+            //Asert
+            AssertReceivedOkResponse(response);
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.IsFalse((bool)json.response.new_entity);
+        }
+
+        //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
+        public void TestSubmitError()
+        {
+            //Arrange
+            Submit submit = new Submit()
+                .RemoveValue("longitude");
+
+            var exception = Assert.Throws<FactualApiException>(
+                () => Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user")));
+            //Asert
+            Assert.IsNotNull(exception);
+        }
+
         private void AssertAll(string response, string key, string valueToCheck)
         {
             dynamic json = JsonConvert.DeserializeObject(response);
-            Assert.IsTrue(((ICollection<JToken>) json.response.data).All(p => ((string) p[key]) == valueToCheck));
+            Assert.IsTrue(((ICollection<JToken>) json.response.data).All(p => ((string) p[key]).ToLower() == valueToCheck.ToLower()));
 
         }
 

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using FactualDriver.Filters;
+using FactualDriver.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace FactualDriver
 {
@@ -11,6 +14,13 @@ namespace FactualDriver
     public class Parameters
     {
         private List<IFilter> _filters = new List<IFilter>();
+
+        public Parameters() {}
+
+        public Parameters(List<IFilter> filters)
+        {
+            _filters = filters;
+        }
 
         /// <summary>
         /// Adds filter to collection
@@ -46,6 +56,36 @@ namespace FactualDriver
 
             var list = GetRowFilterList();
             list.Add(filter);
+        }
+
+        /// <summary>
+        /// Adds a json filter parameter.
+        /// </summary>
+        /// <param name="name">Name of the filter</param>
+        /// <param name="keyValuePairs">key value pairs to be serialized</param>
+        public void AddJsonFilter(string name, Dictionary<string,object> keyValuePairs)
+        {
+            _filters.Add(new Filter(name, keyValuePairs));
+        }
+
+        /// <summary>
+        /// Adds a pair of values to the specified Key Value Filter.
+        /// </summary> 
+        /// <param name="filterName">Filter name to add a pair</param>
+        /// <param name="field">Field or a key in the pair</param>
+        /// <param name="value">Value of the pair</param>
+        public void SetJsonPair(string filterName, string field, object value)
+        {
+            var filter = _filters.SingleOrDefault(p => p.Name == filterName);
+            if(filter != null && filter is KeyValueFilter)
+            {
+                var existingFilter = (KeyValueFilter)filter;
+                existingFilter.Pairs.Add(field, value);
+            }
+            else
+            {
+                _filters.Add(new KeyValueFilter(filterName, new Dictionary<string, object> {{field, value}}));
+            }
         }
 
         /// <summary>
@@ -103,6 +143,20 @@ namespace FactualDriver
         public IFilter[] ToFilterArray()
         {
             return _filters.ToArray();
+        }
+
+        public Parameters Copy()
+        {
+            return new Parameters(new List<IFilter>(_filters));
+        }
+
+        /// <summary>
+        /// Outputs parameters into url encoded query string.
+        /// </summary>
+        /// <returns>Url Encoded Query string</returns>
+        public string ToUrlQuery()
+        {
+            return JsonUtil.ToQueryString(_filters.ToArray());
         }
     }
 }

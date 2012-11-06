@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DiffsQuery.cs" />
     <Compile Include="FacetQuery.cs" />
     <Compile Include="Factual.cs" />
     <Compile Include="Exceptions\FactualApiException.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Filters\Circle.cs" />
     <Compile Include="Filters\FilterGroup.cs" />
     <Compile Include="Filters\FilterList.cs" />
+    <Compile Include="Filters\KeyValueFilter.cs" />
     <Compile Include="Filters\Point.cs" />
     <Compile Include="Geopulse.cs" />
     <Compile Include="IQuery.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="JsonConverters\PointConverter.cs" />
     <Compile Include="JsonConverters\RowFilterConverter.cs" />
     <Compile Include="Filters\SearchFilter.cs" />
+    <Compile Include="Metadata.cs" />
     <Compile Include="MultiQuery.cs" />
     <Compile Include="OAuth\OAuth2LeggedAuthenticator.cs" />
     <Compile Include="OAuth\OAuthBase.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="Query.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ResolveQuery.cs" />
+    <Compile Include="Submit.cs" />
     <Compile Include="Utils\JsonUtil.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -45,6 +45,12 @@
 	    public const string CROSSWALK_DATA = "data";
 	    public const string CROSSWALK_URL = "url";
 
+        // Diffs
+
+        public const string DIFFS_START_DATE = "start-date";
+        public const string DIFFS_END_DATE = "end-date";
+        public const string DIFFS_DATA = "data";
+
 	    // Filters
 	    public const string FILTERS = "filters";
 	    public const string FILTER_GEO = "geo";
@@ -72,6 +78,11 @@
 	
 	    // Resolve
 	    public const string RESOLVE_VALUES = "values";
+
+        	// Submit
+	    public const string SUBMIT_VALUES = "values";
+	    public const string SUBMIT_FACTUAL_ID = "factual_id";
+	    public const string SUBMIT_NEW_ENTITY = "new_entity";
 
 	    // Contribute
 	    public const string CONTRIBUTE_VALUES = "values";

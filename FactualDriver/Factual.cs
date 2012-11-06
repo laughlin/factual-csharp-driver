@@ -135,6 +135,49 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="diff"></param>
+        /// <returns></returns>
+        public string Fetch(string tableName, DiffsQuery diff)
+        {
+            return RawQuery(UrlForFetch(tableName) + "/diffs", diff.ToUrlQuery());
+        }
+
+        /// <summary>
+        /// Runs a Submit input against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to submit updates for (e.g., "places")</param>
+        /// <param name="submit">the submit parameters to run against table</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response of running submit against Factual.</returns>
+        public string Submit(string tableName, Submit submit, Metadata metadata)
+        {
+            return SubmitCustom("t/" + tableName + "/submit", submit, metadata);
+        }
+
+
+        /// <summary>
+        /// Runs a Submit input against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to submit updates for (e.g., "places")</param>
+        /// <param name="factualId">the factual id on which the submit is run</param>
+        /// <param name="submit">the submit parameters to run against table</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response of running submit against Factual.</returns>
+        public string Submit(string tableName, string factualId, Submit submit, Metadata metadata)
+        {
+            return SubmitCustom("t/" + tableName + "/" + factualId + "/submit", submit, metadata);
+        }
+
+        private string SubmitCustom(string root, Submit submit, Metadata metadata)
+        {
+            var postData = submit.ToUrlQuery() + "&" + metadata.ToUrlQuery();
+            return RequestPost(root + "?" + postData, "");
+        }
+
+        /// <summary>
         /// Run a schema query against the specified Factual table.
         /// </summary>
         /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
@@ -255,6 +298,8 @@ namespace FactualDriver
             return RawQuery(UrlForMulti(), MultiQuery.ToUrlQuery());
         }
 
+        //private string FlagCustome(string root, string flagType, )
+
         protected static String UrlForCrosswalk(String tableName)
         {
             return tableName + "/crosswalk";
@@ -300,6 +345,89 @@ namespace FactualDriver
             return "places/monetize";
         }
 
+        protected static string UrlForFlag(string tableName, string factualId)
+        {
+            return "t/" + tableName + "/" + factualId + "/flag";
+        }
+
+        /// <summary>
+        /// Flags a row as a duplicate in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagDuplicate(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "duplicate", metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as inaccurate in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagInaccurate(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "inaccurate", metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as inappropriate in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagInappropriate(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "inappropriate", metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as non-existent in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagNonExistent(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "nonexistent", metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as spam in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagSpam(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "spam", metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as problematic in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagOther(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "other", metadata);
+        }
+
+        public string FlagCustom(string root, string flagType, Metadata metadata)
+        {
+            var postData = "problem=" + flagType + "&" + metadata.ToUrlQuery();
+            return RequestPost(root + "?" + postData, "");
+        }
+
         /// <summary>
         /// Execute a path against a factual api with raw path and query parameters and return a json string
         /// </summary>
@@ -319,14 +447,19 @@ namespace FactualDriver
         public string RawQuery(string completePathWithQuery)
         {
             var request = CreateWebRequest(completePathWithQuery);
-            if(Debug)
+            if (Debug)
             {
                 System.Diagnostics.Debug.WriteLine("==== Request Url =====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
                 System.Diagnostics.Debug.WriteLine("==== Headers ====");
                 System.Diagnostics.Debug.WriteLine(request.Headers);
             }
-                
+            return ReadRequest(completePathWithQuery, request);
+        }
+
+        private string ReadRequest(string completePathWithQuery, HttpWebRequest request)
+        {
+            string jsonResult;
             try
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
@@ -338,7 +471,7 @@ namespace FactualDriver
 
                         using (var reader = new StreamReader(stream))
                         {
-                            var jsonResult = reader.ReadToEnd();
+                            jsonResult = reader.ReadToEnd();
                             if (string.IsNullOrEmpty(jsonResult))
                                 throw new FactualException("No data received from factual");
 
@@ -348,7 +481,7 @@ namespace FactualDriver
                                 System.Diagnostics.Debug.WriteLine(jsonResult);
                             }
 
-                            return jsonResult;
+                            
                         }
                     }
 
@@ -376,6 +509,29 @@ namespace FactualDriver
                     }
                 }
             }
+            return jsonResult;
+        }
+
+        public string RequestPost(string completePathWithQuery, string postData)
+        {
+            var request = CreateWebRequest("POST", completePathWithQuery);
+            if (Debug)
+            {
+                System.Diagnostics.Debug.WriteLine("==== Request Url =====");
+                System.Diagnostics.Debug.WriteLine(request.RequestUri);
+            }
+            
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = byteArray.Length;
+
+            using (Stream dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(byteArray, 0 , byteArray.Length);
+            }
+
+
+            return ReadRequest(completePathWithQuery, request);
         }
     }
 }
