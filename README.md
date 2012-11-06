@@ -611,7 +611,7 @@ factual.Submit("us-sandbox",
 ```csharp
 Submit submit = new Submit()
   .setValue("name", "The New & Improved Tyler's Austin");
-factual.submit("us-sandbox",
+factual.Submit("us-sandbox",
                "f33527e0-a8b4-4808-a820-2686f18cb00c",
                submit,
                new Metadata().user("some_user_id"));
@@ -625,6 +625,74 @@ factual.Submit("us-sandbox",
                "f33527e0-a8b4-4808-a820-2686f18cb00c",
                submit,
                new Metadata().user("some_user_id"));
+```
+
+#Flag
+NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
+---
+
+## Introduction
+
+The Flag feature provides developers and editorial teams the ability to 'flag' problematic entities in tables for Factual editorial review. Use this feature to request an entity be deleted, flag an entity as a dupe or spam, note it does not exist, or just ask the Factual editors to check it out.
+
+## Syntax
+
+Calls to Flag require an indication of the problem type, the end user who is reporting the problem, and the Factual ID of the entity being flagged.
+
+## All Top Level Flag Parameters
+
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>problem</td>
+    <td>One of: duplicate, inaccurate, inappropriate, nonexistent, spam, or other.</td>
+    <td><tt>factual.FlagDuplicate(table, factualId, metadata)</tt>
+      <p><tt>factual.FlagInaccurate(table, factualId, metadata)</tt>      
+      <p><tt>factual.FlagInappropriate(table, factualId, metadata)</tt>
+      <p><tt>factual.FlagNonExistent(table, factualId, metadata)</tt>
+      <p><tt>factual.FlagSpam(table, factualId, metadata)</tt>
+      <p><tt>factual.FlagOther(table, factualId, metadata)</tt>
+      </td>
+  </tr>
+  <tr>
+    <td>user</td>
+    <td>An arbitrary token representing the user flagging the data.</td>
+    <td><tt>Metadata metadata = new Metadata().User("my_username")</tt></td>
+  </tr>
+  <tr>
+    <td>comment</td>
+    <td>Any english text comment that may help explain your corrections.</td>
+    <td><tt>metadata.Comment("my comment")</tt></td>
+  </tr>
+  <tr>
+    <td>reference</td>
+    <td>A reference to a URL, title, person, etc. that is the source of this data.</td>
+    <td><tt>metadata.Reference("http://www.example.com")</tt></td>
+  </tr>
+</table>
+
+
+## Examples
+
+<b><ex>Flag a row as spam:</ex></b><br>
+```csharp
+factual.FlagSpam("us-sandbox",
+                 "e16ef265-b9be-437f-b7e2-ded852e3920e",
+                 new Metadata().User("some_user_id"));
+```
+
+<b><ex>Flag a row as innacurate, and also include a comment and a reference:</ex></b><br>
+```java
+Metadata metadata = new Metadata()
+  .Comment("Recently revised by IAAC")
+  .Reference("http://www.example.com");
+factual.FlagInaccurate("us-sandbox",
+                 "e16ef265-b9be-437f-b7e2-ded852e3920e",
+                 metadata);
 ```
 
 
