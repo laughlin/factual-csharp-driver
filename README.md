@@ -719,7 +719,7 @@ Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
 
 For more code examples:
 
-* [ASP.NET Web API integration example](wiki/ASP.NET-Web-API-with-Factual-Driver-Example)
+* [ASP.NET Web API integration example](https://github.com/Factual/factual-csharp-driver/wiki/ASP.NET-Web-API-with-Factual-Driver-Example)
 
 * See the integration tests in <tt>FactualDriver.Tests/FactualIntegrationTests.cs</tt>
 
