@@ -797,6 +797,27 @@ namespace FactualDriver.Tests
             CreateNewEntity();
         }
 
+        /// <summary>
+        /// http://support.factual.com/factual/topics/submit_api_using_c_driver
+        /// </summary>
+        [Test]
+        public void SubmitAddCase()
+        {
+            //Arrange
+            var submit = new Submit();
+            submit.AddValue("name", "Subway");
+            submit.AddValue("address", "22000 Burbank Blvd");
+            submit.AddValue("locality", "Northridge");
+            submit.AddValue("region", "Los Angeles");
+            submit.AddValue("postcode", 91367);
+            
+            //Act
+            var response = Factual.Submit("us-sandbox", submit, new Metadata().User("test_driver_user"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
         public string CreateNewEntity()
         {
             //Arrange
@@ -897,7 +918,7 @@ namespace FactualDriver.Tests
             dynamic json = JsonConvert.DeserializeObject(response);
             foreach (var value in (ICollection<JToken>)json.response.data)
             {
-                Assert.IsTrue(((string)value[key]).StartsWith(valueToCheck));
+                Assert.IsTrue(((string)value[key]).StartsWith(valueToCheck, StringComparison.OrdinalIgnoreCase));
             }
         }
 
