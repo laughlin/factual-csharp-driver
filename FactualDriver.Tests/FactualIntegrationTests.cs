@@ -32,8 +32,8 @@ namespace FactualDriver.Tests
         {
             //Arrange
             var result =
-                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("commercial_density",
-                                                                                    "commercial_profile"));
+                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("income",
+                                                                                    "housing"));
             dynamic json = JsonConvert.DeserializeObject(result);
             //Assert
             Assert.AreEqual("ok", (string)json.status);
@@ -683,13 +683,13 @@ namespace FactualDriver.Tests
         {
             //Arrange
             var response = Factual.Geopulse(new Geopulse(new Point(Latitude, Longitude))
-                .Only("commercial_density", "commercial_profile"));
+                .Only("income", "area_statistics"));
             dynamic json = JsonConvert.DeserializeObject(response);
-            var pulse = json.response.data[0];
+            var pulse = json.response.data.demographics;
             //Assert
             AssertReceivedOkResponse(response);
-            Assert.IsTrue(pulse["commercial_profile"] != null);
-            Assert.IsTrue(pulse["commercial_density"] != null);
+            Assert.IsTrue(pulse["income"] != null);
+            Assert.IsTrue(pulse["area_statistics"] != null);
         }
 
         [Test]
