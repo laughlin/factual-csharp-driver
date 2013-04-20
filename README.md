@@ -462,7 +462,7 @@ The driver fully supports Factual's <a href="http://developer.factual.com/displa
 The <tt>geopulse</tt> method fetches results based on the given point:
 
 	var respponse = factual.Geopulse(new Geopulse(new Point(latitude, longitude))
-												.Only("commercial_density", "commercial_profile"));
+												.Only("income", "housing"));
 
 
 ## All Top Level Geopulse Parameters
