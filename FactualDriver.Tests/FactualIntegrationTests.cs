@@ -32,8 +32,8 @@ namespace FactualDriver.Tests
         {
             //Arrange
             var result =
-                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("commercial_density",
-                                                                                    "commercial_profile"));
+                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("income",
+                                                                                    "housing"));
             dynamic json = JsonConvert.DeserializeObject(result);
             //Assert
             Assert.AreEqual("ok", (string)json.status);
@@ -683,13 +683,13 @@ namespace FactualDriver.Tests
         {
             //Arrange
             var response = Factual.Geopulse(new Geopulse(new Point(Latitude, Longitude))
-                .Only("commercial_density", "commercial_profile"));
+                .Only("income", "area_statistics"));
             dynamic json = JsonConvert.DeserializeObject(response);
-            var pulse = json.response.data[0];
+            var pulse = json.response.data.demographics;
             //Assert
             AssertReceivedOkResponse(response);
-            Assert.IsTrue(pulse["commercial_profile"] != null);
-            Assert.IsTrue(pulse["commercial_density"] != null);
+            Assert.IsTrue(pulse["income"] != null);
+            Assert.IsTrue(pulse["area_statistics"] != null);
         }
 
         [Test]
@@ -797,6 +797,27 @@ namespace FactualDriver.Tests
             CreateNewEntity();
         }
 
+        /// <summary>
+        /// http://support.factual.com/factual/topics/submit_api_using_c_driver
+        /// </summary>
+        [Test]
+        public void SubmitAddCase()
+        {
+            //Arrange
+            var submit = new Submit();
+            submit.AddValue("name", "Subway");
+            submit.AddValue("address", "22000 Burbank Blvd");
+            submit.AddValue("locality", "Northridge");
+            submit.AddValue("region", "Los Angeles");
+            submit.AddValue("postcode", 91367);
+            
+            //Act
+            var response = Factual.Submit("us-sandbox", submit, new Metadata().User("test_driver_user"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
         public string CreateNewEntity()
         {
             //Arrange
@@ -897,7 +918,7 @@ namespace FactualDriver.Tests
             dynamic json = JsonConvert.DeserializeObject(response);
             foreach (var value in (ICollection<JToken>)json.response.data)
             {
-                Assert.IsTrue(((string)value[key]).StartsWith(valueToCheck));
+                Assert.IsTrue(((string)value[key]).StartsWith(valueToCheck, StringComparison.OrdinalIgnoreCase));
             }
         }
 
