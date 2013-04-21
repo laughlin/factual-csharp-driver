@@ -93,6 +93,7 @@
     <Compile Include="Query.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ResolveQuery.cs" />
+    <Compile Include="RowQuery.cs" />
     <Compile Include="Submit.cs" />
     <Compile Include="Utils\JsonUtil.cs" />
   </ItemGroup>

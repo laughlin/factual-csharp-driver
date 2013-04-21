@@ -146,6 +146,29 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Runs a row query against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
+        /// <param name="factualId">the factual id (e.g., "03c26917-5d66-4de9-96bc-b13066173c65")</param>
+        /// <param name="query">the row query to run against table.</param>
+        /// <returns>the response of running query against Factual.</returns>
+        public string FetchRow(string tableName, string factualId, RowQuery query)
+        {
+            return RawQuery(UrlForFetchRow(tableName, factualId), query.ToUrlQuery());
+        }
+
+        /// <summary>
+        /// Runs a row query against the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
+        /// <param name="factualId">the factual id (e.g., "03c26917-5d66-4de9-96bc-b13066173c65")</param>
+        /// <returns>the response of running query against Factual.</returns>
+        public string FetchRow(string tableName, string factualId)
+        {
+            return FetchRow(tableName, factualId, new RowQuery());
+        }
+
+        /// <summary>
         /// Runs a Submit input against the specified Factual table.
         /// </summary>
         /// <param name="tableName">the name of the table you wish to submit updates for (e.g., "places")</param>
@@ -313,6 +336,11 @@ namespace FactualDriver
         protected static String UrlForFetch(String tableName)
         {
             return "t/" + tableName;
+        }
+
+        protected static String UrlForFetchRow(String tableName, String factualId)
+        {
+            return "t/" + tableName + "/" + factualId;
         }
 
         protected static String UrlForFacets(String tableName)

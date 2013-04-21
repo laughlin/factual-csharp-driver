@@ -864,6 +864,28 @@ namespace FactualDriver.Tests
             Assert.IsFalse((bool)json.response.new_entity);
         }
 
+        [Test]
+        public void TestRowQueryResponse()
+        {
+            //Arrange
+            var response = Factual.FetchRow("places", "03c26917-5d66-4de9-96bc-b13066173c65");
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestRowQueryOnlyResponse()
+        {
+            //Arrange
+            var rowQuery = new RowQuery();
+            rowQuery.Only("name", "address", "region", "postcode");
+            var response = Factual.FetchRow("places", "03c26917-5d66-4de9-96bc-b13066173c65", rowQuery);
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
         //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
         public void TestSubmitError()
         {
