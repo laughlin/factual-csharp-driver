@@ -192,5 +192,26 @@ namespace FactualDriver
             return _query;
         }
 
+        /// <summary>
+        /// Adds an includes filter.
+        /// </summary>
+        /// <param name="value">Value of the filter.</param>
+        /// <returns>Generic QueryBuilder.</returns>
+        public T Includes(object value)
+        {
+            AddFilter(Constants.OPERATOR_INCLUDES, value);
+            return _query;
+        }
+
+        /// <summary>
+        /// Adds an includes any filter.
+        /// </summary>
+        /// <param name="values">Values of the filter.</param>
+        /// <returns>Generic QueryBuilder.</returns>
+        public T IncludesAny(params object[] values)
+        {
+            AddFilter(Constants.OPERATOR_INCLUDES_ANY, values);
+            return _query;
+        }
     }
 }

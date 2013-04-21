@@ -289,7 +289,6 @@ namespace FactualDriver.Tests
             AreEqualQueries("filters={\"$and\":[{\"region\":{\"$in\":[\"MA\",\"VT\",\"NH\"]}},{\"$or\":[{\"first_name\":{\"$eq\":\"Chun\"}},{\"last_name\":{\"$eq\":\"Kok\"}}]}]}", query);
         }
 
-
         [Test]
         public void TestNestedFilters()
         {
@@ -324,6 +323,26 @@ namespace FactualDriver.Tests
         //    var googleEncoded = OAuthBase.EncodingPerRFC3986(decoded);
         //    Assert.AreEqual(urlEncodedUtf8, googleEncoded);
         //}
- 
+
+        [Test]
+        public void FieldCategoryIDsIncludes10()
+        {
+            //Arrange
+            var query = new Query().Field("category_ids").Includes(10);
+
+            //Assert
+            AreEqualQueries("filters={\"category_ids\":{\"$includes\":10}}", query);
+        }
+
+
+       [Test]
+        public void FieldCategoryIDsIncludesAny10100()
+        {
+            //Arrange
+            var query = new Query().Field("category_ids").IncludesAny(10, 100);
+
+            //Assert
+            AreEqualQueries("filters={\"category_ids\":{\"$includes_any\":[10,100]}}", query);
+        }
     }
 }

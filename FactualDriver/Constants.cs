@@ -104,5 +104,7 @@
         public const string OPERATOR_LESS_THAN = "$lt";
         public const string OPERATOR_LESS_THAN_OR_EQUAL = "$lte";
         public const string OPERATOR_SEARCH = "$search";
+        public const string OPERATOR_INCLUDES = "$includes";
+        public const string OPERATOR_INCLUDES_ANY = "$includes_any";
     }
 }

@@ -232,6 +232,16 @@ The driver supports various row filter logic. Examples:
     <td>less than or equal to</td>
     <td><tt>q.Field("rating").LessThanOrEqual(7.5)</tt></td>
   </tr>
+  <tr>
+    <td>includes</td>
+    <td>includes</td>
+    <td><tt>q.Field("category_ids").Includes(10)</tt></td>
+  </tr>
+  <tr>
+    <td>includesAny</td>
+    <td>includes any</td>
+    <td><tt>q.Field("category_ids").IncludesAny(10, 100)</tt></td>
+  </tr>
 </table>
 
 ## AND
