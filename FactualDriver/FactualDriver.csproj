@@ -79,6 +79,7 @@
     <Compile Include="JsonConverters\GeoFilterConverter.cs" />
     <Compile Include="Filters\IFilter.cs" />
     <Compile Include="Filters\RowFilter.cs" />
+    <Compile Include="JsonConverters\KeyValueFilterConverter.cs" />
     <Compile Include="JsonConverters\PointConverter.cs" />
     <Compile Include="JsonConverters\RowFilterConverter.cs" />
     <Compile Include="Filters\SearchFilter.cs" />

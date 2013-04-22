@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Web;
 using FactualDriver.Exceptions;
 using FactualDriver.Filters;
 using NUnit.Framework;
@@ -801,21 +802,39 @@ namespace FactualDriver.Tests
         /// http://support.factual.com/factual/topics/submit_api_using_c_driver
         /// </summary>
         [Test]
-        public void SubmitAddCase()
+        public void SubmitAddTestCase2()
         {
             //Arrange
-            var submit = new Submit();
-            submit.AddValue("name", "Subway");
-            submit.AddValue("address", "22000 Burbank Blvd");
-            submit.AddValue("locality", "Northridge");
-            submit.AddValue("region", "Los Angeles");
-            submit.AddValue("postcode", 91367);
+            Submit values = new Submit();
+
+            values.AddValue("name", "Starbucks");
+            values.AddValue("address", "72 Spring St");
+            values.AddValue("locality", "New York");
+            values.AddValue("region", "NY");
+            values.AddValue("postcode", "10012");
+            values.AddValue("country", "US");
             
             //Act
-            var response = Factual.Submit("us-sandbox", submit, new Metadata().User("test_driver_user"));
+            Metadata metadata = new Metadata().User("mercury2269@gmail.com");
+            var response = Factual.Submit("us-sandbox", values, metadata); 
 
             //Assert
             AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void SubmitQueryMatchesRawTest()
+        {
+            Submit submit = new Submit();
+
+            submit.AddValue("name", "McDenny’s");
+            submit.AddValue("address", "1 Main St.");
+            submit.AddValue("locality", "Bedrock");
+            submit.AddValue("region", "BC");
+            
+            //Assert
+
+            Assert.AreEqual("values={\"name\":\"McDenny’s\",\"address\":\"1 Main St.\",\"locality\":\"Bedrock\",\"region\":\"BC\"}", HttpUtility.UrlDecode(submit.ToUrlQuery()));
         }
 
         public string CreateNewEntity()

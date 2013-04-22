@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using FactualDriver.JsonConverters;
+using Newtonsoft.Json;
 
 namespace FactualDriver.Filters
 {
@@ -7,6 +9,7 @@ namespace FactualDriver.Filters
     /// <summary>
     /// A generic filter which serialises results into json key value pairs
     /// </summary>
+    [JsonConverter(typeof(KeyValueFilterConverter))]
     public class KeyValueFilter : IFilter
     {
         /// <summary>
