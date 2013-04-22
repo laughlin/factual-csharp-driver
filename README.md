@@ -48,6 +48,11 @@ be used as documentation. To setup your tests you would need to add your factual
     // Entities that match a full text search for Sushi in Santa Monica:
     factual.Fetch("places", new Query().Search("Sushi Santa Monica"));
 
+# Get Row Example
+
+    // Entity from Factual's Places table with ID 03c26917-5d66-4de9-96bc-b13066173c65:
+    factual.GetRow("places", "03c26917-5d66-4de9-96bc-b13066173c65";
+
 # Geo Filters
 
 You can query Factual for entities located within a geographic area. For example:
@@ -231,6 +236,16 @@ The driver supports various row filter logic. Examples:
     <td>lessThanOrEqual</td>
     <td>less than or equal to</td>
     <td><tt>q.Field("rating").LessThanOrEqual(7.5)</tt></td>
+  </tr>
+  <tr>
+    <td>includes</td>
+    <td>includes</td>
+    <td><tt>q.Field("category_ids").Includes(10)</tt></td>
+  </tr>
+  <tr>
+    <td>includesAny</td>
+    <td>includes any</td>
+    <td><tt>q.Field("category_ids").IncludesAny(10, 100)</tt></td>
   </tr>
 </table>
 

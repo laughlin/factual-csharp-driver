@@ -34,7 +34,7 @@ namespace FactualDriver.OAuth
         /// <param name="consumerSecret">The consumer secret</param>
         /// <param name="httpMethod">The http method</param>
         /// <returns>The OAuth authorization header</returns>
-        public static string GenerateHeader(Uri uri, String consumerKey, String consumerSecret, String httpMethod)
+        public static string GenerateHeader(Uri uri, string consumerKey, string consumerSecret, string httpMethod)
         {
             return GenerateHeader(uri, consumerKey, consumerSecret, string.Empty, string.Empty, httpMethod);
         }
@@ -49,8 +49,8 @@ namespace FactualDriver.OAuth
         /// <param name="tokenSecret">The OAuth token secret</param>
         /// <param name="httpMethod">The http method</param>
         /// <returns>The OAuth authorization header</returns>
-        public static string GenerateHeader(Uri uri, String consumerKey, String consumerSecret, String token,
-            String tokenSecret, String httpMethod)
+        public static string GenerateHeader(Uri uri, string consumerKey, string consumerSecret, string token,
+            string tokenSecret, string httpMethod)
         {
             OAuthParameters parameters = new OAuthParameters()
             {

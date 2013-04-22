@@ -62,6 +62,7 @@
     <Compile Include="QueryBase.cs" />
     <Compile Include="QueryTests.cs" />
     <Compile Include="ResoleQueryTests.cs" />
+    <Compile Include="RowQueryTests.cs" />
     <Compile Include="SerializationTests.cs" />
   </ItemGroup>
   <ItemGroup>
