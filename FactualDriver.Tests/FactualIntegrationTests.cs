@@ -865,6 +865,26 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestIncludesRowFilter()
+        {
+            //Arrange
+            var response = Factual.Fetch("places", new Query().Field("category_ids").Includes(10));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestIncludesAnyRowFilter()
+        {
+            //Arrange
+            var response = Factual.Fetch("places", new Query().Field("category_ids").IncludesAny(10, 100));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
         public void TestRowQueryResponse()
         {
             //Arrange

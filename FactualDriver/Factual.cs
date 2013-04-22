@@ -323,37 +323,37 @@ namespace FactualDriver
 
         //private string FlagCustome(string root, string flagType, )
 
-        protected static String UrlForCrosswalk(String tableName)
+        protected static string UrlForCrosswalk(string tableName)
         {
             return tableName + "/crosswalk";
         }
 
-        protected static String UrlForResolve(String tableName)
+        protected static string UrlForResolve(string tableName)
         {
             return tableName + "/resolve";
         }
 
-        protected static String UrlForFetch(String tableName)
+        protected static string UrlForFetch(string tableName)
         {
             return "t/" + tableName;
         }
 
-        protected static String UrlForFetchRow(String tableName, String factualId)
+        protected static string UrlForFetchRow(string tableName, string factualId)
         {
             return "t/" + tableName + "/" + factualId;
         }
 
-        protected static String UrlForFacets(String tableName)
+        protected static string UrlForFacets(string tableName)
         {
             return "t/" + tableName + "/facets";
         }
 
-        protected static String UrlForGeocode()
+        protected static string UrlForGeocode()
         {
             return "places/geocode";
         }
 
-        protected static String UrlForGeopulse()
+        protected static string UrlForGeopulse()
         {
             return "places/geopulse";
         }
