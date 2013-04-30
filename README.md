@@ -642,6 +642,72 @@ factual.Submit("us-sandbox",
                new Metadata().user("some_user_id"));
 ```
 
+#Clear
+
+NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
+---
+
+## Introduction
+
+Clear allows you to clear one or more attributes from a Factual record.
+
+## Syntax
+
+## All Top Level Submit Parameters
+
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Description</th>
+	<th>Required</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>user</td>
+    <td>An arbitrary token representing the end user who is submitting the data.</td>
+	<td>Yes</td>
+    <td><tt>new Metadata().User("my_username")</tt></td>
+  </tr>
+  <tr>
+    <td>fields</td>
+    <td>The attribute fields to be cleared.</td>
+	<td>Yes</td>
+    <td><tt>Clear.AddField("longitude")</tt></td>
+  </tr>
+  <tr>
+    <td>comment</td>
+    <td>Any english text comment that may help explain the submit.</td>
+	<td>No</td>
+    <td><tt>Metadata.Comment("my comment")</tt></td>
+  </tr>
+  <tr>
+    <td>reference</td>
+    <td>A reference to a URL, title, person, etc. that is the source of the submitted data.</td>
+	<td>No</td>
+    <td><tt>Metadata.Reference("http://...")</tt></td>
+  </tr>
+</table>
+
+## Examples
+
+<b><ex>Clear the value of name, address, locality, and region in an existing entity:</ex></b><br>
+```csharp
+String factualId = "1d93c1ed-8cf3-4d58-94e0-05bbcd827cba";
+Clear clear = new Clear();
+clear.AddField("name");
+clear.AddField("address");
+clear.AddField("locality");
+clear.AddField("region");
+var response = Factual.Clear("us-sandbox", factualId, clear, new Metadata().User("test_driver_user"));
+```
+
+<b><ex>Overloaded: Clear the value of name, address, locality, and region in an existing entity:</ex></b><br>
+```csharp
+String factualId = "1d93c1ed-8cf3-4d58-94e0-05bbcd827cba";
+Clear clear = new Clear("name", "address", "locality", "region");
+var response = Factual.Clear("us-sandbox", factualId, clear, new Metadata().User("test_driver_user"));
+```
+
 #Flag
 NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
 ---
