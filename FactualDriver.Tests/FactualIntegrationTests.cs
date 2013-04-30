@@ -388,7 +388,7 @@ namespace FactualDriver.Tests
                 .Offset(20)
                 .Limit(5));
             dynamic jsonResponse = JsonConvert.DeserializeObject(response);
-            var raw = Factual.RawQuery("t/places", "q=Fried Chicken, Los Angeles&offset=20&limit=5");
+            var raw = Factual.RawQuery("t/places", "q=Fried Chicken,Los Angeles&offset=20&limit=5");
 
             //Assert
             AssertReceivedOkResponse(response);

@@ -355,7 +355,7 @@ namespace FactualDriver
 
         protected static string UrlForGeopulse()
         {
-            return "places/geopulse";
+            return "geopulse/context";
         }
 
         protected static string UrlForSchema(string tableName)
