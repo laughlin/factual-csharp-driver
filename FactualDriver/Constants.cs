@@ -79,10 +79,13 @@
 	    // Resolve
 	    public const string RESOLVE_VALUES = "values";
 
-        	// Submit
+        // Submit
 	    public const string SUBMIT_VALUES = "values";
 	    public const string SUBMIT_FACTUAL_ID = "factual_id";
 	    public const string SUBMIT_NEW_ENTITY = "new_entity";
+
+        // Clear
+        public const string CLEAR_FIELDS = "fields";
 
 	    // Contribute
 	    public const string CONTRIBUTE_VALUES = "values";

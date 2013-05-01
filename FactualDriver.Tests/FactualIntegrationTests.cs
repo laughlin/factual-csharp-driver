@@ -388,7 +388,7 @@ namespace FactualDriver.Tests
                 .Offset(20)
                 .Limit(5));
             dynamic jsonResponse = JsonConvert.DeserializeObject(response);
-            var raw = Factual.RawQuery("t/places", "q=Fried Chicken, Los Angeles&offset=20&limit=5");
+            var raw = Factual.RawQuery("t/places", "q=Fried Chicken,Los Angeles&offset=20&limit=5");
 
             //Assert
             AssertReceivedOkResponse(response);
@@ -837,6 +837,7 @@ namespace FactualDriver.Tests
             Assert.AreEqual("values={\"name\":\"McDenny’s\",\"address\":\"1 Main St.\",\"locality\":\"Bedrock\",\"region\":\"BC\"}", HttpUtility.UrlDecode(submit.ToUrlQuery()));
         }
 
+        [Test]
         public string CreateNewEntity()
         {
             //Arrange
@@ -865,7 +866,6 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
             Assert.IsFalse((bool)json.response.new_entity);
-
         }
 
         [Test]
@@ -881,6 +881,58 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
             Assert.IsFalse((bool)json.response.new_entity);
+        }
+
+        [Test]
+        public void ClearDefaultTest()
+        {
+            //Arrange
+            Clear clear = new Clear();
+
+            //Act
+            clear.AddField("name");
+            clear.AddField("address");
+            clear.AddField("locality");
+            clear.AddField("region");
+
+            //Assert
+            Assert.AreEqual("fields=name,address,locality,region", HttpUtility.UrlDecode(clear.ToUrlQuery()));
+        }
+
+        [Test]
+        public void ClearOverloadedTest()
+        {
+            //Arrange & Act
+            Clear clear = new Clear("name", "address", "locality", "region");
+
+            //Assert
+            Assert.AreEqual("fields=name,address,locality,region", HttpUtility.UrlDecode(clear.ToUrlQuery()));
+        }
+
+        [Test]
+        public void ClearOverloadedWithAddTest()
+        {
+            //Arrange & Act
+            Clear clear = new Clear("name", "address", "locality");
+            clear.AddField("region");
+
+            //Assert
+            Assert.AreEqual("fields=name,address,locality,region", HttpUtility.UrlDecode(clear.ToUrlQuery()));
+        }
+
+        [Test]
+        public void ClearIntegrationTest()
+        {
+            //Arrange
+            Clear clear = new Clear("name", "address", "locality");
+            clear.AddField("region");
+            
+            //Act
+            var response = Factual.Clear("us-sandbox", "1d93c1ed-8cf3-4d58-94e0-05bbcd827cba", clear,
+                                         new Metadata().User("test_driver_user"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
         }
 
         [Test]

@@ -180,7 +180,6 @@ namespace FactualDriver
             return SubmitCustom("t/" + tableName + "/submit", submit, metadata);
         }
 
-
         /// <summary>
         /// Runs a Submit input against the specified Factual table.
         /// </summary>
@@ -197,6 +196,25 @@ namespace FactualDriver
         private string SubmitCustom(string root, Submit submit, Metadata metadata)
         {
             var postData = submit.ToUrlQuery() + "&" + metadata.ToUrlQuery();
+            return RequestPost(root + "?" + postData, "");
+        }
+
+        /// <summary>
+        /// Runs a clear request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to clear attributes for an entity (e.g., "places")</param>
+        /// <param name="factualId">the factual id on which the clear is run</param>
+        /// <param name="clear">the clear parameters to run against entity</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response of running clear request on a Factual entity.</returns>
+        public string Clear(string tableName, string factualId, Clear clear, Metadata metadata)
+        {
+            return ClearCustom("t/" + tableName + "/" + factualId + "/clear", clear, metadata);
+        }
+
+        private string ClearCustom(string root, Clear clear, Metadata metadata)
+        {
+            var postData = clear.ToUrlQuery() + "&" + metadata.ToUrlQuery();
             return RequestPost(root + "?" + postData, "");
         }
 
@@ -355,7 +373,7 @@ namespace FactualDriver
 
         protected static string UrlForGeopulse()
         {
-            return "places/geopulse";
+            return "geopulse/context";
         }
 
         protected static string UrlForSchema(string tableName)
