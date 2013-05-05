@@ -79,6 +79,9 @@
 	    // Resolve
 	    public const string RESOLVE_VALUES = "values";
 
+        // Match
+        public const string MATCH_VALUES = "values";
+
         // Submit
 	    public const string SUBMIT_VALUES = "values";
 	    public const string SUBMIT_FACTUAL_ID = "factual_id";

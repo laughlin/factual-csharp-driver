@@ -310,6 +310,22 @@ Crosswalk requests are treated as any other table read, as seen in the example b
     // Get all Crosswalk data for a specific Places entity, using its Factual ID:
     var response = factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77")); 
           
+# Finding a Match
+
+Use the common query structure to add known attributes to the query:
+
+    //Build the query
+    MatchQuery matchQuery = new MatchQuery()
+		.Add("name", "McDonalds")
+        .Add("address", "10451 Santa Monica Blvd")
+		.Add("region", "CA")
+        .Add("postcode", "90025");
+
+And then see if we found a match:	
+	
+    String id = Factual.Match("places", matchQuery); 
+    // id = null means no match, id = some factual id means there is a match	
+
           
 # Resolve
 

@@ -125,7 +125,7 @@ namespace FactualDriver.Tests
         public void TestMultiCrosswalk()
         {
             Factual.QueueFetch("crosswalk", new Query()
-                                             .Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77")
+                                             .Field("factual_id").Equal("c730d193-ba4d-4e98-8620-29c672f2f117")
                                              .Limit(1));
             //Act
             var response = Factual.SendQueueRequests();
@@ -384,7 +384,7 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             var response = Factual.Fetch("places", new Query()
-                .Search("Fried Chicken, Los Angeles")
+                .Search("Fried Chicken,Los Angeles")
                 .Offset(20)
                 .Limit(5));
             dynamic jsonResponse = JsonConvert.DeserializeObject(response);
@@ -405,10 +405,10 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             var response = Factual.Fetch("places", new Query()
-                                                       .Field("name").Equal("Stand")
+                                                       .Field("name").Equal("The Counter")
                                                        .WithIn(new Circle(Latitude, Longitude, Meters)));
 
-            var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$eq\":\"Stand\"}}&geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}");
+            var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$eq\":\"The Counter\"}}&geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}");
 
             //Assert
             AssertReceivedOkResponse(response);
@@ -531,11 +531,11 @@ namespace FactualDriver.Tests
         public void TestCrosswalkEx1()
         {
             //Arrange & Act
-            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77"));
+            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("c730d193-ba4d-4e98-8620-29c672f2f117"));
 
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
-            AssertCrosswalkResult(response, "factual_id", "97598010-433f-4946-8fd5-4a6dd1639d77");
+            AssertCrosswalkResult(response, "factual_id", "c730d193-ba4d-4e98-8620-29c672f2f117");
             
         }
 
@@ -544,11 +544,11 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             var response = Factual.Fetch("crosswalk",
-                                         new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77"));
+                                         new Query().Field("factual_id").Equal("c730d193-ba4d-4e98-8620-29c672f2f117"));
 
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
-            AssertCrosswalkResult(response, "factual_id", "97598010-433f-4946-8fd5-4a6dd1639d77");
+            AssertCrosswalkResult(response, "factual_id", "c730d193-ba4d-4e98-8620-29c672f2f117");
         }
 
         [Test]
@@ -566,7 +566,7 @@ namespace FactualDriver.Tests
         public void TestCrosswalkLimit()
         {
             //Arrange
-            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("97598010-433f-4946-8fd5-4a6dd1639d77").Limit(1));
+            var response = Factual.Fetch("crosswalk", new Query().Field("factual_id").Equal("c730d193-ba4d-4e98-8620-29c672f2f117").Limit(1));
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
             dynamic json = JsonConvert.DeserializeObject(response);
@@ -586,6 +586,36 @@ namespace FactualDriver.Tests
             //Assert
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
+        }
+
+        [Test]
+        public void TestMatchFound()
+        {
+            //Arrange & Act
+            string id =
+                  Factual.Match("places", new MatchQuery()
+                  .Add("name", "McDonalds")
+                  .Add("address", "10451 Santa Monica Blvd")
+                  .Add("region", "CA")
+                  .Add("postcode", "90025"));
+
+            //Assert
+            Assert.AreEqual("c730d193-ba4d-4e98-8620-29c672f2f117", id);
+        }
+
+        [Test]
+        public void TestMatchNotFound()
+        {
+            //Arrange & Act
+            string id =
+                  Factual.Match("places", new MatchQuery()
+                  .Add("name", "XYZ")
+                  .Add("address", "10451 Santa Monica Blvd")
+                  .Add("region", "CA")
+                  .Add("postcode", "90025"));
+
+            //Assert
+            Assert.AreEqual(null, id);
         }
 
         [Test]
@@ -815,7 +845,7 @@ namespace FactualDriver.Tests
             values.AddValue("country", "US");
             
             //Act
-            Metadata metadata = new Metadata().User("mercury2269@gmail.com");
+            Metadata metadata = new Metadata().User("test_driver_user");
             var response = Factual.Submit("us-sandbox", values, metadata); 
 
             //Assert

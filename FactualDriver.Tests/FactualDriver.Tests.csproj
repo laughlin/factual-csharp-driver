@@ -59,6 +59,7 @@
     <Compile Include="FactualApiExceptionTests.cs" />
     <Compile Include="FactualIntegrationBase.cs" />
     <Compile Include="FactualIntegrationTests.cs" />
+    <Compile Include="MatchQueryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBase.cs" />
     <Compile Include="QueryTests.cs" />
