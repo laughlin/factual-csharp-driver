@@ -7,6 +7,7 @@ using System.Web;
 using FactualDriver.Exceptions;
 using FactualDriver.Filters;
 using FactualDriver.Utils;
+using Newtonsoft.Json;
 using OAuth2LeggedAuthenticator = FactualDriver.OAuth.OAuth2LeggedAuthenticator;
 
 namespace FactualDriver
@@ -91,6 +92,22 @@ namespace FactualDriver
         public string Query(string query, params IFilter[] filters)
         {
             return RawQuery(query, JsonUtil.ToQueryString(filters));
+        }
+
+        /// <summary>
+        /// Ask Factual to match the entity for the attributes specified by MatchQuery
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="query"></param>
+        /// <returns>the response of running a match query against Factual.</returns>
+        public string Match(string tableName, MatchQuery query)
+        {
+            var response = RawQuery(urlForMatch(tableName), query.ToUrlQuery());
+            dynamic json = JsonConvert.DeserializeObject(response);
+            if (((int) json.response.included_rows) == 1)
+                return (string) json.response.data[0].factual_id;
+            else
+                return null;
         }
 
         /// <summary>
@@ -349,6 +366,11 @@ namespace FactualDriver
         protected static string UrlForResolve(string tableName)
         {
             return tableName + "/resolve";
+        }
+
+        protected static string urlForMatch(string tableName)
+        {
+            return "t/" + tableName + "/match";
         }
 
         protected static string UrlForFetch(string tableName)

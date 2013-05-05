@@ -85,6 +85,7 @@
     <Compile Include="JsonConverters\PointConverter.cs" />
     <Compile Include="JsonConverters\RowFilterConverter.cs" />
     <Compile Include="Filters\SearchFilter.cs" />
+    <Compile Include="MatchQuery.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="MultiQuery.cs" />
     <Compile Include="OAuth\OAuth2LeggedAuthenticator.cs" />
