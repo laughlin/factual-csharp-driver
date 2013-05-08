@@ -23,6 +23,8 @@ namespace FactualDriver
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
         private const string DriverHeaderTag = "factual-dotnet-driver-v1.2.0";
         private MultiQuery _multiQuery;
+        private int connectionTimeout = -1;
+        private int readTimeout = -1;
 
         /// <summary>
         /// MultiQuery accessor. Creates and returns new instance of MultiQuery if one already doesn't exists.
@@ -80,6 +82,10 @@ namespace FactualDriver
             var requestUrl = new Uri(new Uri(FactualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
+            if (readTimeout != -1)
+                request.ReadWriteTimeout = readTimeout;
+            if (connectionTimeout != -1)
+                request.Timeout = connectionTimeout;
             return request;
         }
 
@@ -517,7 +523,11 @@ namespace FactualDriver
             var request = CreateWebRequest(completePathWithQuery);
             if (Debug)
             {
-                System.Diagnostics.Debug.WriteLine("==== Request Url =====");
+                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
                 System.Diagnostics.Debug.WriteLine("==== Headers ====");
                 System.Diagnostics.Debug.WriteLine(request.Headers);
@@ -545,7 +555,7 @@ namespace FactualDriver
 
                             if (Debug)
                             {
-                                System.Diagnostics.Debug.WriteLine("===== Factual Response =====");
+                                System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
                                 System.Diagnostics.Debug.WriteLine(jsonResult);
                             }
 
@@ -569,7 +579,7 @@ namespace FactualDriver
 
                         if (Debug)
                         {
-                            System.Diagnostics.Debug.WriteLine("===== Factual API Error =====");
+                            System.Diagnostics.Debug.WriteLine("==== Factual API Error ====");
                             System.Diagnostics.Debug.WriteLine(text);
                         }
 
@@ -585,7 +595,11 @@ namespace FactualDriver
             var request = CreateWebRequest("POST", completePathWithQuery);
             if (Debug)
             {
-                System.Diagnostics.Debug.WriteLine("==== Request Url =====");
+                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
             }
             
@@ -600,6 +614,26 @@ namespace FactualDriver
 
 
             return ReadRequest(completePathWithQuery, request);
+        }
+
+        /// <summary>
+        /// Set connection timeout (default is 100000)
+        /// </summary>
+        /// <param name="connectionTimeout">Integer in milliseconds specifying connection timeout</param>
+        /// <returns></returns>
+        public void SetConnectionTimeout(int connectionTimeout)
+        {
+            this.connectionTimeout = connectionTimeout;
+        }
+
+        /// <summary>
+        /// Set read/write timeout (default is 300000)
+        /// </summary>
+        /// <param name="readTimeout">Integer in milliseconds specifying read/write timeout</param>
+        /// <returns></returns>
+        public void SetReadTimeout(int readTimeout)
+        {
+            this.readTimeout = readTimeout;
         }
     }
 }
