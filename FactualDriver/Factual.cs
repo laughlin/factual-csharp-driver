@@ -23,6 +23,8 @@ namespace FactualDriver
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
         private const string DriverHeaderTag = "factual-dotnet-driver-v1.2.0";
         private MultiQuery _multiQuery;
+        public int? ConnectionTimeout { get; set; }
+        public int? ReadTimeout { get; set; }
 
         /// <summary>
         /// MultiQuery accessor. Creates and returns new instance of MultiQuery if one already doesn't exists.
@@ -80,6 +82,10 @@ namespace FactualDriver
             var requestUrl = new Uri(new Uri(FactualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
+            if (ConnectionTimeout.HasValue)
+                request.Timeout = ConnectionTimeout.Value;
+            if (ReadTimeout.HasValue)
+                request.ReadWriteTimeout = ReadTimeout.Value;
             return request;
         }
 
@@ -517,7 +523,11 @@ namespace FactualDriver
             var request = CreateWebRequest(completePathWithQuery);
             if (Debug)
             {
-                System.Diagnostics.Debug.WriteLine("==== Request Url =====");
+                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
                 System.Diagnostics.Debug.WriteLine("==== Headers ====");
                 System.Diagnostics.Debug.WriteLine(request.Headers);
@@ -545,7 +555,7 @@ namespace FactualDriver
 
                             if (Debug)
                             {
-                                System.Diagnostics.Debug.WriteLine("===== Factual Response =====");
+                                System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
                                 System.Diagnostics.Debug.WriteLine(jsonResult);
                             }
 
@@ -569,7 +579,7 @@ namespace FactualDriver
 
                         if (Debug)
                         {
-                            System.Diagnostics.Debug.WriteLine("===== Factual API Error =====");
+                            System.Diagnostics.Debug.WriteLine("==== Factual API Error ====");
                             System.Diagnostics.Debug.WriteLine(text);
                         }
 
@@ -585,7 +595,11 @@ namespace FactualDriver
             var request = CreateWebRequest("POST", completePathWithQuery);
             if (Debug)
             {
-                System.Diagnostics.Debug.WriteLine("==== Request Url =====");
+                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
             }
             

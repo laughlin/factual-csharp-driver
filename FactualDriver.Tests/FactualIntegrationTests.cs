@@ -1007,6 +1007,24 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
         }
 
+        [Test]
+        public void TestTimeouts()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("places", new Query()
+                .Field("name")
+                .BeginsWith("Star")
+                .IncludeRowCount());
+            Factual.ConnectionTimeout = 2500;
+            Factual.ReadTimeout = 7500;
+            var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true");
+            
+            //Assert
+            AssertReceivedOkResponse(response);
+            AssertReceivedOkResponse(raw);
+            Assert.AreEqual(response, raw);
+        }
+
         //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
         public void TestSubmitError()
         {

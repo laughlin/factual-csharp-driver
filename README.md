@@ -32,7 +32,14 @@ First obtain free developer keys from factual.com
     Factual factual = new Factual(MY_KEY, MY_SECRET);
     
 If you don't have a Factual API account yet, [it's free and easy to get one](https://www.factual.com/api-keys/request).   
-    
+
+# Request Timeout
+You can optionally set a client-side request timeout for requests sent to Factual. Default values are 100000 and 300000 respectively. For example:
+
+	// Set the request timeouts to 2.5 seconds (values must be integers larger than 0 expressed in milliseconds):
+	factual.ConnectionTimeout = 2500;
+	factual.ReadTimeout = 2500;
+
 # Optional tests setup
 
 If you are going to clone or download the repository you will have access to integration tests which can also
