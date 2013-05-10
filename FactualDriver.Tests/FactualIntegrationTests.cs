@@ -1015,8 +1015,8 @@ namespace FactualDriver.Tests
                 .Field("name")
                 .BeginsWith("Star")
                 .IncludeRowCount());
-            Factual.ConnectionTimeout = 25000;
-            Factual.ReadTimeout = 75000;
+            Factual.ConnectionTimeout = 2500;
+            Factual.ReadTimeout = 7500;
             var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true");
             
             //Assert

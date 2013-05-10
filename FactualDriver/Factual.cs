@@ -82,10 +82,10 @@ namespace FactualDriver
             var requestUrl = new Uri(new Uri(FactualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
-            if (ConnectionTimeout != null)
-                request.Timeout = (int)ConnectionTimeout;
-            if (ReadTimeout != null)
-                request.ReadWriteTimeout = (int)ReadTimeout;
+            if (ConnectionTimeout.HasValue)
+                request.Timeout = ConnectionTimeout.Value;
+            if (ReadTimeout.HasValue)
+                request.ReadWriteTimeout = ReadTimeout.Value;
             return request;
         }
 
