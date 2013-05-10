@@ -23,8 +23,8 @@ namespace FactualDriver
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
         private const string DriverHeaderTag = "factual-dotnet-driver-v1.2.0";
         private MultiQuery _multiQuery;
-        private int connectionTimeout = -1;
-        private int readTimeout = -1;
+        public int? ConnectionTimeout { get; set; }
+        public int? ReadTimeout { get; set; }
 
         /// <summary>
         /// MultiQuery accessor. Creates and returns new instance of MultiQuery if one already doesn't exists.
@@ -82,10 +82,10 @@ namespace FactualDriver
             var requestUrl = new Uri(new Uri(FactualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
-            if (readTimeout != -1)
-                request.ReadWriteTimeout = readTimeout;
-            if (connectionTimeout != -1)
-                request.Timeout = connectionTimeout;
+            if (ConnectionTimeout != null)
+                request.Timeout = (int)ConnectionTimeout;
+            if (ReadTimeout != null)
+                request.ReadWriteTimeout = (int)ReadTimeout;
             return request;
         }
 
@@ -614,26 +614,6 @@ namespace FactualDriver
 
 
             return ReadRequest(completePathWithQuery, request);
-        }
-
-        /// <summary>
-        /// Set connection timeout (default is 100000)
-        /// </summary>
-        /// <param name="connectionTimeout">Integer in milliseconds specifying connection timeout</param>
-        /// <returns></returns>
-        public void SetConnectionTimeout(int connectionTimeout)
-        {
-            this.connectionTimeout = connectionTimeout;
-        }
-
-        /// <summary>
-        /// Set read/write timeout (default is 300000)
-        /// </summary>
-        /// <param name="readTimeout">Integer in milliseconds specifying read/write timeout</param>
-        /// <returns></returns>
-        public void SetReadTimeout(int readTimeout)
-        {
-            this.readTimeout = readTimeout;
         }
     }
 }
