@@ -158,14 +158,14 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// 
+        /// Runs a diff query against the specified Factual table.
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="diff"></param>
         /// <returns></returns>
         public string Fetch(string tableName, DiffsQuery diff)
         {
-            return RawQuery(UrlForFetch(tableName) + "/diffs", diff.ToUrlQuery());
+            return RawQuery(UrlForDiffs(tableName), diff.ToUrlQuery());
         }
 
         /// <summary>
@@ -382,6 +382,11 @@ namespace FactualDriver
         protected static string UrlForFetch(string tableName)
         {
             return "t/" + tableName;
+        }
+
+        protected static string UrlForDiffs(string tableName)
+        {
+            return "t/" + tableName + "/diffs";
         }
 
         protected static string UrlForFetchRow(string tableName, string factualId)
