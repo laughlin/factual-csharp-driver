@@ -491,6 +491,21 @@ To do that you would need to set Factual.MultiQuery.Key property before calling 
         Factual.QueueFetch("places", new Query().Limit(1));
 
 
+# Diffs
+
+The driver supports Factual's Diffs feature, which enables Factual data update downloads.
+
+## Simple Diffs Example
+
+The <tt>Fetch</tt> method gives the diff data:
+
+	// Request all diffs from the US Places dataset that were generated in a for window of just over 24 minutes, on Fri, 07 Dec 2012 13:41:03 -0800
+	DiffsQuery diffs = new DiffsQuery()
+		.After(1354916463822)
+		.Before(1354917903834);
+    var response = Factual.Fetch("places-us", diffs);
+	
+
 # Geopulse
 
 The driver fully supports Factual's <a href="http://developer.factual.com/display/docs/Places+API+-+Geopulse">Geopulse</a> feature, which provides point-based access to geographic attributes: you provide a long/lat coordinate pair, we provide everything we can know about that geography. 

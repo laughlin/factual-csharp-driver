@@ -9,35 +9,52 @@
         /// Holds all parameters for this DiffsQuery.
         /// </summary>
         private Parameters _queryParameters = new Parameters();
-
+        
         /// <summary>
-        /// Constructor.  Create a request to find diffs on a Factual table between two times.
+        /// Constructor. Create a request to find diffs on a Factual table between two times.
         /// </summary>
-        /// <param name="before">before the before time to create this diff against.</param>
-        public DiffsQuery(long before)
+        /// <returns>DiffsQuery</returns>
+        public DiffsQuery()
         {
-            Before(before);
+            
         }
 
         /// <summary>
-        /// The before time to create this diff against.
+        /// Constructor. Create a request to find diffs on a Factual table between two times.
         /// </summary>
-        /// <param name="timestamp">timestamp before time for this diff.</param>
+        /// <param name="after">begin time to create this diff against.</param>
         /// <returns>DiffsQuery</returns>
-        private DiffsQuery Before(long timestamp)
+        public DiffsQuery(long after)
         {
-            AddParam(Constants.DIFFS_START_DATE, timestamp);
+            After(after);
+        }
+
+        private bool isValidTimestamp(long timestamp)
+        {
+            return (timestamp > 1325376000000);
+        }
+
+        /// <summary>
+        /// Begin time to create this diff against.
+        /// </summary>
+        /// <param name="timestamp">timestamp begin time for this diff.</param>
+        /// <returns>DiffsQuery</returns>
+        public DiffsQuery After(long timestamp)
+        {
+            //if(isValidTimestamp(timestamp))
+                AddParam(Constants.DIFFS_START_DATE, timestamp);
             return this;
         }
 
         /// <summary>
-        /// The after time to create this diff against.
+        /// End time to create this diff against.
         /// </summary>
-        /// <param name="timestamp">timestamp after time for this diff.</param>
-        /// <returns>this DiffsQuery</returns>
-        public DiffsQuery After(long timestamp)
+        /// <param name="timestamp">timestamp end time for this diff.</param>
+        /// <returns>DiffsQuery</returns>
+        public DiffsQuery Before(long timestamp)
         {
-            AddParam(Constants.DIFFS_END_DATE, timestamp);
+            //if(isValidTimestamp(timestamp))
+                AddParam(Constants.DIFFS_END_DATE, timestamp);
             return this;
         }
 
@@ -51,6 +68,10 @@
             _queryParameters.Add(key,value);
         }
 
+        /// <summary>
+        /// Converts DiffQuery object into url encoded string
+        /// </summary>
+        /// <returns>string</returns>
         public string ToUrlQuery()
         {
             return _queryParameters.ToUrlQuery();

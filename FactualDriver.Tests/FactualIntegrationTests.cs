@@ -810,16 +810,33 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
         }
 
-        //[Test]
-        public void TestDiffs()
+        [Test]
+        public void TestDiffsResponse()
         {
             //Arrange
-            DiffsQuery diff = new DiffsQuery(1339123455775);
+            DiffsQuery diffs = new DiffsQuery()
+                .After(1354916463822)
+                .Before(1354917903834);
 
             //Act
-            string response = Factual.Fetch("2EH4Pz", diff);
+            var response = Factual.Fetch("places-us", diffs);
+            var raw = Factual.RawQuery("t/places-us/diffs?start=1354916463822&end=1354917903834");
+
             //Assert
-            AssertReceivedOkResponse(response);
+            Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        [ExpectedException(typeof(FactualException))]
+        public void TestDiffsNoResponse()
+        {
+            //Arrange
+            DiffsQuery diffs = new DiffsQuery()
+                .After(1304916463822)
+                .Before(1304917903834);
+
+            //Act
+            var response = Factual.Fetch("places-us", diffs);
         }
 
         [Test]
@@ -955,7 +972,6 @@ namespace FactualDriver.Tests
         {
             //Arrange
             Clear clear = new Clear("name", "address", "locality");
-            clear.AddField("region");
             
             //Act
             var response = Factual.Clear("us-sandbox", "1d93c1ed-8cf3-4d58-94e0-05bbcd827cba", clear,
