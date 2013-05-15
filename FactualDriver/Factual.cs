@@ -362,13 +362,6 @@ namespace FactualDriver
             return RawQuery(UrlForMulti(), MultiQuery.ToUrlQuery());
         }
 
-        //private string FlagCustome(string root, string flagType, )
-
-        protected static string UrlForCrosswalk(string tableName)
-        {
-            return tableName + "/crosswalk";
-        }
-
         protected static string UrlForResolve(string tableName)
         {
             return tableName + "/resolve";
