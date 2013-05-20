@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,12 +20,12 @@ namespace FactualDriver
     /// </summary>
     public class Factual
     {
-        private const string FactualApiUrl = "http://api.v3.factual.com";
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-dotnet-driver-v1.2.0";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.4.4";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
+        public string FactualApiUrlOverride { get; set; }
 
         /// <summary>
         /// MultiQuery accessor. Creates and returns new instance of MultiQuery if one already doesn't exists.
@@ -79,13 +80,12 @@ namespace FactualDriver
         /// <returns></returns>
         public HttpWebRequest CreateWebRequest(string httpMethod, string query)
         {
-            var requestUrl = new Uri(new Uri(FactualApiUrl), query);
+            string factualApiUrl = FactualApiUrlOverride ?? "http://api.v3.factual.com";
+            var requestUrl = new Uri(new Uri(factualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
-            if (ConnectionTimeout.HasValue)
-                request.Timeout = ConnectionTimeout.Value;
-            if (ReadTimeout.HasValue)
-                request.ReadWriteTimeout = ReadTimeout.Value;
+            request.Timeout = ConnectionTimeout ?? 100000;
+            request.ReadWriteTimeout = ReadTimeout ?? 300000;
             return request;
         }
 
@@ -108,7 +108,7 @@ namespace FactualDriver
         /// <returns>the response of running a match query against Factual.</returns>
         public string Match(string tableName, MatchQuery query)
         {
-            var response = RawQuery(urlForMatch(tableName), query.ToUrlQuery());
+            var response = RawQuery(UrlForMatch(tableName), query.ToUrlQuery());
             dynamic json = JsonConvert.DeserializeObject(response);
             if (((int) json.response.included_rows) == 1)
                 return (string) json.response.data[0].factual_id;
@@ -219,7 +219,7 @@ namespace FactualDriver
         private string SubmitCustom(string root, Submit submit, Metadata metadata)
         {
             var postData = submit.ToUrlQuery() + "&" + metadata.ToUrlQuery();
-            return RequestPost(root + "?" + postData, "");
+            return RequestPost(root, postData, "");
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace FactualDriver
         private string ClearCustom(string root, Clear clear, Metadata metadata)
         {
             var postData = clear.ToUrlQuery() + "&" + metadata.ToUrlQuery();
-            return RequestPost(root + "?" + postData, "");
+            return RequestPost(root, postData, "");
         }
 
         /// <summary>
@@ -364,10 +364,10 @@ namespace FactualDriver
 
         protected static string UrlForResolve(string tableName)
         {
-            return tableName + "/resolve";
+            return "t/" + tableName + "/resolve";
         }
 
-        protected static string urlForMatch(string tableName)
+        protected static string UrlForMatch(string tableName)
         {
             return "t/" + tableName + "/match";
         }
@@ -494,28 +494,61 @@ namespace FactualDriver
             return FlagCustom(UrlForFlag(tableName, factualId), "other", metadata);
         }
 
-        public string FlagCustom(string root, string flagType, Metadata metadata)
+        private string FlagCustom(string root, string flagType, Metadata metadata)
         {
             var postData = "problem=" + flagType + "&" + metadata.ToUrlQuery();
-            return RequestPost(root + "?" + postData, "");
+            return RequestPost(root, postData, "");
         }
 
         /// <summary>
-        /// Execute a path against a factual api with raw path and query parameters and return a json string
+        /// Runs a GET request against the specified endpoint path, using the given
+        /// parameters and your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to path. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
         /// </summary>
-        /// <param name="path">Api address of the request</param>
-        /// <param name="queryParameters">Raw path string parameters</param>
-        /// <returns></returns>
+        /// <param name="path">The endpoint path to run the request against. Example: "t/places"</param>
+        /// <param name="queryParameters">The query string parameters to send with the request. Do not encode
+        /// or escape these; that will be done automatically</param>
+        /// <returns>The response body from running the GET request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
+        public string RawQuery(string path, Dictionary<string, object> queryParameters)
+        {
+            return RawQuery(string.Format("{0}?{1}", path, UrlForRaw(queryParameters)));
+        }
+
+        /// <summary>
+        /// Runs a GET request against the specified endpoint path, using the given
+        /// parameters and your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to path. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
+        /// Developer is entirly responsible for correct query formatting and URL encoding.
+        /// </summary>
+        /// <param name="path">The endpoint path to run the request against. Example: "t/places"</param>
+        /// <param name="queryParameters">The query string parameters to send with the request</param>
+        /// <returns>The response body from running the GET request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RawQuery(string path, string queryParameters)
         {
             return RawQuery(string.Format("{0}?{1}", path, queryParameters));
         }
 
         /// <summary>
-        /// Execute a raw query again a factual api.
+        /// Runs a GET request against the specified complete path with query,
+        /// using your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to completePathWithQuery. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
+        /// Developer is entirly responsible for correct query formatting and URL encoding.
         /// </summary>
-        /// <param name="completePathWithQuery">Complete path and query excluding api uri host</param>
-        /// <returns></returns>
+        /// <param name="completePathWithQuery">The complete path with query to run the request against.
+        /// Example: "t/places-us/diffs?start=1354916463822&end=1354917903834"</param>
+        /// <returns>The response body from running the GET request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RawQuery(string completePathWithQuery)
         {
             var request = CreateWebRequest(completePathWithQuery);
@@ -533,6 +566,87 @@ namespace FactualDriver
             return ReadRequest(completePathWithQuery, request);
         }
 
+        /// <summary>
+        /// Runs a POST request against the specified endpoint path, using the given
+        /// parameters and your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to path. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
+        /// </summary>
+        /// <param name="path">The endpoint path to run the request against. Example: "t/places"</param>
+        /// <param name="queryParameters">The query string parameters to send with the request. Do not encode
+        /// or escape these; that will be done automatically</param>
+        /// <param name="postData">The POST content parameters to send with the request. Do not encode
+        /// or escape these; that will be done automatically</param>
+        /// <returns>The response body from running the POST request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
+        public string RequestPost(string path, Dictionary<string, object> queryParameters, Dictionary<string, object> postData)
+        {
+            return RequestPost(string.Format("{0}?{1}", path, UrlForRaw(queryParameters)), UrlForRaw(postData));
+        }
+
+        /// <summary>
+        /// Runs a POST request against the specified endpoint path, using the given
+        /// parameters and your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to path. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
+        /// Developer is entirly responsible for correct query formatting and URL encoding.
+        /// </summary>
+        /// <param name="path">The endpoint path to run the request against. Example: "t/places"</param>
+        /// <param name="queryParameters">The query string parameters to send with the request</param>
+        /// <param name="postData">The POST content parameters to send with the request</param>
+        /// <returns>The response body from running the POST request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
+        public string RequestPost(string path, string queryParameters, string postData)
+        {
+            return RequestPost(string.Format("{0}?{1}", path, queryParameters), postData);
+        }
+
+        /// <summary>
+        /// Runs a POST request against the specified complete path with query,
+        /// using your OAuth credentials. Returns the raw response body
+        /// returned by Factual.
+        /// The necessary URL base will be automatically prepended to completePathWithQuery. If
+        /// you need to change it, e.g. to make requests against a development instance of
+        /// the Factual service, please set FactualApiUrlOverride property.
+        /// Developer is entirly responsible for correct query formatting and URL encoding.
+        /// </summary>
+        /// <param name="completePathWithQuery">The complete path with query to run the request against.
+        /// Example: "t/places-us/diffs?start=1354916463822&end=1354917903834"</param>
+        /// <param name="postData">The POST content parameters to send with the request</param>
+        /// <returns>The response body from running the POST request against Factual</returns>
+        /// <exception cref="FactualApiException">If something goes wrong</exception>
+        public string RequestPost(string completePathWithQuery, string postData)
+        {
+            var request = CreateWebRequest("POST", completePathWithQuery);
+            if (Debug)
+            {
+                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
+                System.Diagnostics.Debug.WriteLine(request.RequestUri);
+                System.Diagnostics.Debug.WriteLine("==== Headers ====");
+                System.Diagnostics.Debug.WriteLine(request.Headers);
+            }
+            
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = byteArray.Length;
+
+            using (Stream dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(byteArray, 0 , byteArray.Length);
+            }
+
+
+            return ReadRequest(completePathWithQuery, request);
+        }
+
         private string ReadRequest(string completePathWithQuery, HttpWebRequest request)
         {
             string jsonResult;
@@ -542,7 +656,7 @@ namespace FactualDriver
                 {
                     using (var stream = response.GetResponseStream())
                     {
-                        if(stream == null)
+                        if (stream == null)
                             throw new FactualException("Did not receive a response stream from factual");
 
                         using (var reader = new StreamReader(stream))
@@ -556,8 +670,6 @@ namespace FactualDriver
                                 System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
                                 System.Diagnostics.Debug.WriteLine(jsonResult);
                             }
-
-                            
                         }
                     }
 
@@ -568,7 +680,7 @@ namespace FactualDriver
                 var response = ((HttpWebResponse)ex.Response);
                 using (var stream = response.GetResponseStream())
                 {
-                    if(stream == null)
+                    if (stream == null)
                         throw new FactualApiException(response.StatusCode, string.Empty, completePathWithQuery);
 
                     using (var reader = new StreamReader(stream))
@@ -588,30 +700,14 @@ namespace FactualDriver
             return jsonResult;
         }
 
-        public string RequestPost(string completePathWithQuery, string postData)
+        private string UrlForRaw(Dictionary<string, object> queryParameters)
         {
-            var request = CreateWebRequest("POST", completePathWithQuery);
-            if (Debug)
-            {
-                System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
-                System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
-                System.Diagnostics.Debug.WriteLine("==== Request Url ====");
-                System.Diagnostics.Debug.WriteLine(request.RequestUri);
-            }
-            
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = byteArray.Length;
-
-            using (Stream dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(byteArray, 0 , byteArray.Length);
-            }
-
-
-            return ReadRequest(completePathWithQuery, request);
+            string urlForRaw = "";
+            foreach (var pair in queryParameters)
+                urlForRaw += pair.Key + "=" + pair.Value + "&";
+            if (urlForRaw.Length > 0)
+                urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1);
+            return urlForRaw;
         }
     }
 }

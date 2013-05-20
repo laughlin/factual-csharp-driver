@@ -40,6 +40,19 @@ You can optionally set a client-side request timeout for requests sent to Factua
 	factual.ConnectionTimeout = 2500;
 	factual.ReadTimeout = 2500;
 
+	// Set the request timeouts back to default 100000 and 300000 respectively
+	factual.ConnectionTimeout = null;
+	factual.ReadTimeout = null;
+
+# Factual API URL Override
+You can optionally override the default Factual API URL. Default value is http://api.v3.factual.com. For example:
+
+	// Set the base URL to http://fakeurl.factual.com
+	factual.FactualApiUrlOverride = "http://fakeurl.factual.com";
+
+	// Set the base URL back to default http://api.v3.factual.com
+	factual.FactualApiUrlOverride = null;
+
 # Optional tests setup
 
 If you are going to clone or download the repository you will have access to integration tests which can also
@@ -371,23 +384,117 @@ Driver fully supports Factual's World Geographies. For a complete documentation 
             //Act
             var response = Factual.Fetch("world-geographies", query);
 
-# Raw Read
+# Raw GET
 
-Factual may occasionally release a new API which is not immediately supported by the Java driver.  To test queries against these APIs, we recommend using the raw read feature.  The recommendation is to only construct a raw read query if the feature is not yet supported using other convenience methods.
+A Raw GET request can be used to make just about any kind of query against Factual, including features we've yet to design.
+	public string RawQuery(string path, Dictionary<string, object> queryParameters)
 
-<p>You can perform any GET request using the <tt>factual.RawQuery(table,parameters)</tt> method. Add parameters to your request by building a json string, and the request will be made using your OAuth token.  The driver will URL-encode the parameter values.
+<p>You can run a GET request against the specified endpoint path, using the given parameters and your OAuth credentials. Returns the raw response body returned by Factual. The necessary URL base will be automatically prepended to path. If you need to change it, e.g. to make requests against a development instance of the Factual service, please set FactualApiUrlOverride property.</p>
 
-## Example Raw Read Queries
+## Example Raw GET Queries
 
-Fetch only names that begins with "Star" and include count: 
-    
-    var rawParameters = "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true";
-    string result = Factual.RawQuery("t/global", rawParameters);
-    dynamic json = JsonConvert.DeserializeObject(result);
-    
-    
-Note that the above examples demonstrate the ability to construct read queries using the raw read feature.  However, in practice, the recommendation is to always use the convenience classes for features which are supported.  In the above cases, a Query object should be used instead.
+	//GET only the name and category fields from places table, including the row count in the response: 
+	//http://api.v3.factual.com/t/places?select=name,category&include_count=True
 
+		string result = Factual.RawQuery("t/places", new Dictionary<string, object>
+			{
+				{"select", "name,category"},
+				{"include_count", true}
+			});
+		dynamic json = JsonConvert.DeserializeObject(result);
+
+	//GET first 5 restaurants in the Food & Beverage category:
+	//http://api.v3.factual.com/t/restaurants-us?filters={"category":"Food & Beverage"}&limit=5
+
+		string result = Factual.RawQuery("t/restaurants-us", new Dictionary<string, object>
+			{
+				{
+					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+					{
+						{
+							"category", "Food %26 Beverage"
+						}
+					})
+				},
+				{
+					"limit", 5
+				}
+			});
+		dynamic json = JsonConvert.DeserializeObject(result);
+
+	//GET first 5 deals in Los Angeles area:
+	//http://api.v3.factual.com/places/monetize?filters={"place_locality":"Los Angeles"}
+
+		string result = Factual.RawQuery("places/monetize", new Dictionary<string, object>
+			{
+				{
+					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+					{
+						{
+							"place_locality", "Los Angeles"
+						}
+					})
+				},
+				{
+					"limit", 5
+				}
+			});
+		dynamic json = JsonConvert.DeserializeObject(result);
+
+Note that the above examples demonstrate the ability to construct read queries using the raw read feature.  However, in practice, the recommendation is to always use the convenience classes for features which are supported.
+
+# Raw GET Encoded URL
+
+A Raw GET Encoded URL request can be used to make just about any kind of query against Factual, including features we've yet to design.
+	public string RawQuery(string path, string queryParameters)
+
+<p>You can run a GET request against the specified endpoint path, using the given parameters and your OAuth credentials. Returns the raw response body returned by Factual. The necessary URL base will be automatically prepended to path. If you need to change it, e.g. to make requests against a development instance of the Factual service, please set FactualApiUrlOverride property. Developer is entirly responsible for correct query formatting and URL encoding.</p>
+
+## Example Raw GET Encoded Queries
+
+	//GET only the name and category fields from places table, including the row count in the response: 
+	//http://api.v3.factual.com/t/places?select=name,category&include_count=True
+
+		string result = Factual.RawQuery("t/places", "select=name,category&include_count=True");
+		dynamic json = JsonConvert.DeserializeObject(result);
+
+# Raw POST
+
+A Raw POST request can be used to make just about any kind of query against Factual, including features we've yet to design.
+	 public string RequestPost(string path, Dictionary<string, object> queryParameters, Dictionary<string, object> postData)
+
+<p>You can run a POST request against the specified endpoint path, using the given parameters and your OAuth credentials. Returns the raw response body returned by Factual. The necessary URL base will be automatically prepended to path. If you need to change it, e.g. to make requests against a development instance of the Factual service, please set FactualApiUrlOverride property.</p>
+
+## Example Raw POST Queries
+
+	//GET only the name and category fields from places table, including the row count in the response: 
+	//http://api.v3.factual.com/t/us-sandbox/submit?values={"name":"Factual North","address":"1 North Pole","latitude":90,"longitude":0}&user=test_driver_user
+
+		string result = Factual.RequestPost("/t/us-sandbox/submit", new Dictionary<string, object>
+		{
+			{
+				"values", "%7B%22name%22%3A%22Factual%20North%22%2C%22address%22%3A%221%20North%20Pole%22%2C%22latitude%22%3A90%2C%22longitude%22%3A0%7D"
+			},
+			{
+				"user", "test_driver_user"
+			}
+		}, new Dictionary<string, object>());
+		dynamic json = JsonConvert.DeserializeObject(result);
+
+# Raw POST Encoded URL
+
+A Raw POST request can be used to make just about any kind of query against Factual, including features we've yet to design.
+	 public string RequestPost(string path, string queryParameters, string postData)
+
+<p>You can run a POST request against the specified endpoint path, using the given parameters and your OAuth credentials. Returns the raw response body returned by Factual. The necessary URL base will be automatically prepended to path. If you need to change it, e.g. to make requests against a development instance of the Factual service, please set FactualApiUrlOverride property. Developer is entirly responsible for correct query formatting and URL encoding.</p>
+
+## Example Raw POST Queries
+
+	//GET only the name and category fields from places table, including the row count in the response: 
+	//http://api.v3.factual.com/t/us-sandbox/submit?values={"name":"Factual North","address":"1 North Pole","latitude":90,"longitude":0}&user=test_driver_user
+
+		string result = Factual.RequestPost("/t/us-sandbox/submit", "values={"name":"Factual North","address":"1 North Pole","latitude":90,"longitude":0}&user=test_driver_user", "");
+		dynamic json = JsonConvert.DeserializeObject(result);
 
 # Debug Mode
 
