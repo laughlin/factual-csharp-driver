@@ -412,7 +412,7 @@ namespace FactualDriver
             return "multi";
         }
 
-        private string UrlForMonetize()
+        protected static string UrlForMonetize()
         {
             return "places/monetize";
         }
