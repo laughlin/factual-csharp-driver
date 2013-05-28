@@ -80,7 +80,7 @@ namespace FactualDriver
         /// <returns></returns>
         public HttpWebRequest CreateWebRequest(string httpMethod, string query)
         {
-            string factualApiUrl = FactualApiUrlOverride ?? "http://api.v3.factual.com";
+            string factualApiUrl = string.IsNullOrEmpty(FactualApiUrlOverride) ? "http://api.v3.factual.com" : FactualApiUrlOverride;
             var requestUrl = new Uri(new Uri(factualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
@@ -704,7 +704,7 @@ namespace FactualDriver
         {
             string urlForRaw = "";
             foreach (var pair in queryParameters)
-                urlForRaw += pair.Key + "=" + pair.Value + "&";
+                urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
             if (urlForRaw.Length > 0)
                 urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1);
             return urlForRaw;
