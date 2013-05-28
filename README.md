@@ -895,6 +895,7 @@ Calls to Flag require an indication of the problem type, the end user who is rep
       <p><tt>factual.FlagInappropriate(table, factualId, metadata)</tt>
       <p><tt>factual.FlagNonExistent(table, factualId, metadata)</tt>
       <p><tt>factual.FlagSpam(table, factualId, metadata)</tt>
+      <p><tt>factual.FlagClosed(table, factualId, metadata)</tt>
       <p><tt>factual.FlagOther(table, factualId, metadata)</tt>
       </td>
   </tr>

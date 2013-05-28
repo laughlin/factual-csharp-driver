@@ -483,6 +483,18 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Flags a row as closed in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table that contains the item you wish to flag as closed (e.g., "places")</param>
+        /// <param name="factualId">the factual id of the item you wish to flag as closed</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging an item as closed.</returns>
+        public string FlagClosed(string tableName, string factualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "closed", metadata);
+        }
+
+        /// <summary>
         /// Flags a row as problematic in the specified Factual table.
         /// </summary>
         /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>

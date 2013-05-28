@@ -843,6 +843,15 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestFlagClosed()
+        {
+            //Arrange
+            var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
         public void TestFlagOther()
         {
             //Arrange
