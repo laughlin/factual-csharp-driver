@@ -404,7 +404,7 @@ A Raw GET request can be used to make just about any kind of query against Factu
 		dynamic json = JsonConvert.DeserializeObject(result);
 
 	//GET first 5 restaurants in the Food & Beverage category:
-	//http://api.v3.factual.com/t/restaurants-us?filters={"category":"Food & Beverage"}&limit=5
+	//http://api.v3.factual.com/t/restaurants-us?filters={"category":"Food+&+Beverage"}&limit=5
 
 		string result = Factual.RawQuery("t/restaurants-us", new Dictionary<string, object>
 			{
@@ -412,7 +412,7 @@ A Raw GET request can be used to make just about any kind of query against Factu
 					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>
 					{
 						{
-							"category", "Food %26 Beverage"
+							"category", "Food & Beverage"
 						}
 					})
 				},
@@ -443,7 +443,7 @@ A Raw GET request can be used to make just about any kind of query against Factu
 
 Note that the above examples demonstrate the ability to construct read queries using the raw read feature.  However, in practice, the recommendation is to always use the convenience classes for features which are supported.
 
-# Raw GET Encoded URL
+# Raw GET (Self Encoded URL)
 
 A Raw GET Encoded URL request can be used to make just about any kind of query against Factual, including features we've yet to design.
 	public string RawQuery(string path, string queryParameters)
@@ -468,20 +468,34 @@ A Raw POST request can be used to make just about any kind of query against Fact
 ## Example Raw POST Queries
 
 	//GET only the name and category fields from places table, including the row count in the response: 
-	//http://api.v3.factual.com/t/us-sandbox/submit?values={"name":"Factual North","address":"1 North Pole","latitude":90,"longitude":0}&user=test_driver_user
+	//http://api.v3.factual.com/t/us-sandbox/submit?values={"name":"Factual+North","address":"1+North+Pole","latitude":90,"longitude":0}&user=test_driver_user
 
 		string result = Factual.RequestPost("/t/us-sandbox/submit", new Dictionary<string, object>
-		{
 			{
-				"values", "%7B%22name%22%3A%22Factual%20North%22%2C%22address%22%3A%221%20North%20Pole%22%2C%22latitude%22%3A90%2C%22longitude%22%3A0%7D"
-			},
-			{
-				"user", "test_driver_user"
-			}
-		}, new Dictionary<string, object>());
+				{
+					"values", JsonConvert.SerializeObject(new Dictionary<string, object>
+					{
+						{
+							"name", "Factual North"
+						},
+						{
+							"address", "1 North Pole"
+						},
+						{
+							"latitude", 90
+						},
+						{
+							"longitude", 0
+						}
+					})
+				},
+				{
+					"user", "test_driver_user"
+				}
+			}, new Dictionary<string, object>());
 		dynamic json = JsonConvert.DeserializeObject(result);
 
-# Raw POST Encoded URL
+# Raw POST (Self Encoded URL)
 
 A Raw POST request can be used to make just about any kind of query against Factual, including features we've yet to design.
 	 public string RequestPost(string path, string queryParameters, string postData)
