@@ -404,9 +404,9 @@ A Raw GET request can be used to make just about any kind of query against Factu
 		dynamic json = JsonConvert.DeserializeObject(result);
 
 	//GET first 5 restaurants in the Food & Beverage category:
-	//http://api.v3.factual.com/t/restaurants-us?filters={"category":"Food+&+Beverage"}&limit=5
+	//http://api.v3.factual.com/t/restaurants?filters={"category":"Food+&+Beverage"}&limit=5
 
-		string result = Factual.RawQuery("t/restaurants-us", new Dictionary<string, object>
+		string result = Factual.RawQuery("t/restaurants", new Dictionary<string, object>
 			{
 				{
 					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>

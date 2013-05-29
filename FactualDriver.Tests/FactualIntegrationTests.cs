@@ -23,7 +23,7 @@ namespace FactualDriver.Tests
         public void TestSchema()
         {
             //Arrange
-            var result = Factual.Schema("restaurants-us");
+            var result = Factual.Schema("restaurants");
             dynamic json = JsonConvert.DeserializeObject(result);
             //Assert
             Assert.AreEqual("ok", (string)json.status);
@@ -275,7 +275,7 @@ namespace FactualDriver.Tests
             var filter = new SearchFilter("vegan,Los Angeles");
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter);
+            string result = Factual.Query("t/restaurants", filter);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -291,7 +291,7 @@ namespace FactualDriver.Tests
             var filter2 = new Filter("include_count", "true");
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter, filter2);
+            string result = Factual.Query("t/restaurants", filter, filter2);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -306,7 +306,7 @@ namespace FactualDriver.Tests
             var filter2 = new GeoFilter(34.06018, -118.41835, 5000);
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter, filter2);
+            string result = Factual.Query("t/restaurants", filter, filter2);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -1154,8 +1154,8 @@ namespace FactualDriver.Tests
         public void TestNewRawGetComplex()
         {
             //Arrange & Act
-            var response = Factual.RawQuery("t/restaurants-us", "filters={\"category\":\"Food %26 Beverage\"}&limit=5");
-            var raw = Factual.RawQuery("t/restaurants-us", new Dictionary<string, object>
+            var response = Factual.RawQuery("t/restaurants", "filters={\"category\":\"Food %26 Beverage\"}&limit=5");
+            var raw = Factual.RawQuery("t/restaurants", new Dictionary<string, object>
                 {
                     {
                         "filters", JsonConvert.SerializeObject(new Dictionary<string, object>
