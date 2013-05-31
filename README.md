@@ -3,6 +3,8 @@ factual-csharp-driver
 
 Officially supported .NET driver for [Factual's public API](http://developer.factual.com).
 
+[![NuGet Status](http://nugetstatus.com/factualdriver.png)](http://nugetstatus.com/packages/factualdriver)
+
 # Installation
 
 ## Nuget
