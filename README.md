@@ -957,7 +957,7 @@ Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
     
 # Thread Safety
 
-The Factual CSharp Driver is NOT currently thread safe. Due to certain properties such as ConnectionTimeout, ReadTimeout and FactualApiUrlOverride affect the way web requests are built and therefore can cause UB (unexpected behavior) when setting them in one thread, while making API calls in another thread using the same Factual object instance. However, the same instance can certainly be reused in the same thread over and over, which is the intended use. If you choose to experiment with multithreading on the same instance, you are completely responsible for setting all environment properties such as ConnectionTimeout, ReadTimeout and FactualApiUrlOverride before branching out to new threads. Also, all MultiQueue related functions such as various QueueFetch() functions and SendQueueRequests() must be executed within the same thread to avoid UB.
+This driver is thread safe.
 
 # More Examples
 
