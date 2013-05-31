@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web;
 using FactualDriver.Exceptions;
 using FactualDriver.Filters;
+using FactualDriver.Utils;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -22,7 +23,7 @@ namespace FactualDriver.Tests
         public void TestSchema()
         {
             //Arrange
-            var result = Factual.Schema("restaurants-us");
+            var result = Factual.Schema("restaurants");
             dynamic json = JsonConvert.DeserializeObject(result);
             //Assert
             Assert.AreEqual("ok", (string)json.status);
@@ -167,6 +168,30 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestMultiUnicode()
+        {
+            //Arrange
+            Factual.QueueFetch("global", new Query()
+                .Field("locality").Equal("大阪市").Limit(5));
+            Factual.QueueFetch("global", new Query()
+                .Field("locality").Equal("בית שמש").Limit(5));
+            Factual.QueueFetch("global", new Query()
+                .Field("locality").Equal("München").Limit(5));
+
+            //Act
+            var response = Factual.SendQueueRequests();
+
+            //Assert
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.AreEqual((string)json.q0.response.data[0].locality, "大阪市");
+            Assert.AreEqual((int)json.q0.response.included_rows, 5);
+            Assert.AreEqual((string)json.q1.response.data[0].locality, "בית שמש");
+            Assert.AreEqual((int)json.q1.response.included_rows, 5);
+            Assert.AreEqual((string)json.q2.response.data[0].locality, "München");
+            Assert.AreEqual((int)json.q2.response.included_rows, 5);
+        }
+
+        [Test]
         public void TestMonetize()
         {
             //Arrange
@@ -250,7 +275,7 @@ namespace FactualDriver.Tests
             var filter = new SearchFilter("vegan,Los Angeles");
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter);
+            string result = Factual.Query("t/restaurants", filter);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -266,7 +291,7 @@ namespace FactualDriver.Tests
             var filter2 = new Filter("include_count", "true");
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter, filter2);
+            string result = Factual.Query("t/restaurants", filter, filter2);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -281,7 +306,7 @@ namespace FactualDriver.Tests
             var filter2 = new GeoFilter(34.06018, -118.41835, 5000);
 
             // Act
-            string result = Factual.Query("t/restaurants-us", filter, filter2);
+            string result = Factual.Query("t/restaurants", filter, filter2);
             dynamic json = JsonConvert.DeserializeObject(result);
 
             // Assert
@@ -376,7 +401,7 @@ namespace FactualDriver.Tests
         }
 
         /// <summary>
-        /// To support paging in your app, return rows 20-25 of the full-text search result
+        /// To support paging in your app, return rows 6-10 of the full-text search result
         /// from Example 3
         /// </summary>
         [Test]
@@ -385,10 +410,10 @@ namespace FactualDriver.Tests
             //Arrange & Act
             var response = Factual.Fetch("places", new Query()
                 .Search("Fried Chicken,Los Angeles")
-                .Offset(20)
+                .Offset(5)
                 .Limit(5));
             dynamic jsonResponse = JsonConvert.DeserializeObject(response);
-            var raw = Factual.RawQuery("t/places", "q=Fried Chicken,Los Angeles&offset=20&limit=5");
+            var raw = Factual.RawQuery("t/places", "q=Fried+Chicken,Los+Angeles&offset=5&limit=5");
 
             //Assert
             AssertReceivedOkResponse(response);
@@ -447,7 +472,7 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
             AssertStartsWith(response, "name", "McDonald");
-            AssertStartsWith(response, "category", "Food & Beverage");
+            //AssertStartsWith(response, "category", "Food & Beverage");
 
             var raw = Factual.RawQuery("t/places", "filters={\"$and\":[{\"name\":{\"$bw\":\"McDonald's\"}},{\"category\":{\"$bw\":\"Food %26 Beverage\"}}]}");
 
@@ -589,6 +614,22 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestResolveEx2()
+        {
+            //Arrange & Act
+            var response =
+                  Factual.Fetch("places", new ResolveQuery()
+                    .Add("name", "César E. Chávez Library")
+                    .Add("locality", "Oakland")
+                    .Add("region", "CA")
+                    .Add("address", "3301 E 12th St"));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            AssertNotEmpty(response);
+        }
+
+        [Test]
         public void TestMatchFound()
         {
             //Arrange & Act
@@ -700,13 +741,13 @@ namespace FactualDriver.Tests
         public void TestFacetGeo()
         {
             //Arrange
-            var facet = new FacetQuery("category").Within(new Circle(Latitude, Longitude, Meters));
+            var facet = new FacetQuery("category_labels").Within(new Circle(Latitude, Longitude, Meters));
             //Act
             var response = Factual.Fetch("global", facet);
             //Assert
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
-            Assert.IsTrue(((ICollection<JToken>)json.response.data.category).Count > 0);
+            Assert.IsTrue(((ICollection<JToken>)json.response.data.category_labels).Count > 0);
         }
 
         [Test]
@@ -794,6 +835,15 @@ namespace FactualDriver.Tests
 
         [Test]
         public void TestFlagSpam()
+        {
+            //Arrange
+            var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            //Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagClosed()
         {
             //Arrange
             var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
@@ -971,7 +1021,7 @@ namespace FactualDriver.Tests
         public void ClearIntegrationTest()
         {
             //Arrange
-            Clear clear = new Clear("name", "address", "locality");
+            Clear clear = new Clear("latitude", "longitude");
             
             //Act
             var response = Factual.Clear("us-sandbox", "1d93c1ed-8cf3-4d58-94e0-05bbcd827cba", clear,
@@ -1034,11 +1084,198 @@ namespace FactualDriver.Tests
             Factual.ConnectionTimeout = 2500;
             Factual.ReadTimeout = 7500;
             var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true");
-            
+
             //Assert
             AssertReceivedOkResponse(response);
             AssertReceivedOkResponse(raw);
             Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        //[ExpectedException(typeof(System.NullReferenceException))]
+        public void TestApiUrlOverride1()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("places", new Query()
+                .Field("name")
+                .BeginsWith("Star")
+                .IncludeRowCount());
+            //Override FactualApiUrl
+            //Factual.FactualApiUrlOverride = "http://fakeurl.factual.com";
+            //Reset FactualApiUrl back to default
+            //Factual.FactualApiUrlOverride = null;
+            var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true");
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            AssertReceivedOkResponse(raw);
+            Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        [ExpectedException(typeof(System.NullReferenceException))]
+        public void TestApiUrlOverride2()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("places", new Query()
+                .Field("name")
+                .BeginsWith("Star")
+                .IncludeRowCount());
+            //Override FactualApiUrl
+            Factual.FactualApiUrlOverride = "http://fakeurl.factual.com";
+            //Reset FactualApiUrl back to default
+            //Factual.FactualApiUrlOverride = null;
+            var raw = Factual.RawQuery("t/places", "filters={\"name\":{\"$bw\":\"Star\"}}&include_count=true");
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            //AssertReceivedOkResponse(raw);
+            //Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        public void TestNewRawGetSimple()
+        {
+            //Arrange & Act
+            var response = Factual.RawQuery("t/places", "select=name,category_labels&include_count=True");
+            var raw = Factual.RawQuery("t/places", new Dictionary<string, object>
+                {
+                    {"select", "name,category_labels"},
+                    {"include_count", true}
+                });
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            AssertReceivedOkResponse(raw);
+            Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        public void TestNewRawGetComplex()
+        {
+            //Arrange & Act
+            var response = Factual.RawQuery("t/restaurants", "filters={\"category\":\"Food %26 Beverage\"}&limit=5");
+            var raw = Factual.RawQuery("t/restaurants", new Dictionary<string, object>
+                {
+                    {
+                        "filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+                        {
+                            {
+                                "category", "Food & Beverage"
+                            }
+                        })
+                    },
+                    {
+                        "limit", 5
+                    }
+                });
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            AssertReceivedOkResponse(raw);
+            Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        public void TestNewRawGetMonetize()
+        {
+            //Arrange & Act
+            //var response = Factual.RawQuery("places/monetize", "filters={\"place_locality\":\"Los Angeles\"}&limit=5");
+            var raw = Factual.RawQuery("places/monetize", new Dictionary<string, object>
+                {
+                    {
+                        "filters", new Dictionary<string, object>
+                        {
+                            {
+                                "place_locality", "Los Angeles"
+                            }
+                        }
+                    },
+                    {
+                        "limit", 5
+                    }
+                });
+
+            //Assert
+            //AssertReceivedOkResponse(response);
+            AssertReceivedOkResponse(raw);
+            //Assert.AreEqual(response, raw);
+        }
+
+        [Test]
+        public void TestNewRawPostSubmit()
+        {
+            //Arrange & Act
+            var raw = Factual.RequestPost("/t/us-sandbox/submit",
+                new Dictionary<string, object>
+                {
+                    {
+                        "values", new Dictionary<string, object>
+                        {
+                            {
+                                "name", "Factual North"
+                            },
+                            {
+                                "address", "1 North Pole"
+                            },
+                            {
+                                "latitude", 90
+                            },
+                            {
+                                "longitude", 0
+                            }
+                        }
+                    },
+                    {
+                        "user", "test_driver_user"
+                    }
+                }, 
+                new Dictionary<string, object>());
+
+            //Assert
+            AssertReceivedOkResponse(raw);
+        }
+
+        [Test]
+        public void TestBasicUnicodeJapanese()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("global", new Query()
+                .Field("locality").Equal("大阪市").Limit(5));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.AreEqual((string)json.response.data[0].locality, "大阪市");
+            Assert.AreEqual((int)json.response.included_rows, 5);
+        }
+
+        [Test]
+        public void TestBasicUnicodeHebrew()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("global", new Query()
+                .Field("locality").Equal("בית שמש").Limit(5));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.AreEqual((string)json.response.data[0].locality, "בית שמש");
+            Assert.AreEqual((int)json.response.included_rows, 5);
+        }
+
+        [Test]
+        public void TestBasicUnicodeGerman()
+        {
+            //Arrange & Act
+            var response = Factual.Fetch("global", new Query()
+                .Field("locality").Equal("München").Limit(5));
+
+            //Assert
+            AssertReceivedOkResponse(response);
+            dynamic json = JsonConvert.DeserializeObject(response);
+            Assert.AreEqual((string)json.response.data[0].locality, "München");
+            Assert.AreEqual((int)json.response.included_rows, 5);
         }
 
         //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
