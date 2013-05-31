@@ -409,12 +409,12 @@ A Raw GET request can be used to make just about any kind of query against Factu
 		string result = Factual.RawQuery("t/restaurants", new Dictionary<string, object>
 			{
 				{
-					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+					"filters", new Dictionary<string, object>
 					{
 						{
 							"category", "Food & Beverage"
 						}
-					})
+					}
 				},
 				{
 					"limit", 5
@@ -428,12 +428,12 @@ A Raw GET request can be used to make just about any kind of query against Factu
 		string result = Factual.RawQuery("places/monetize", new Dictionary<string, object>
 			{
 				{
-					"filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+					"filters", new Dictionary<string, object>
 					{
 						{
 							"place_locality", "Los Angeles"
 						}
-					})
+					}
 				},
 				{
 					"limit", 5

@@ -716,7 +716,13 @@ namespace FactualDriver
         {
             string urlForRaw = "";
             foreach (var pair in queryParameters)
-                urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
+            {
+                
+                if (pair.Value.GetType().ToString().Contains("System.Collections.Generic.Dictionary"))
+                    urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(JsonConvert.SerializeObject(pair.Value)) + "&";
+                else
+                    urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
+            }
             if (urlForRaw.Length > 0)
                 urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1);
             return urlForRaw;

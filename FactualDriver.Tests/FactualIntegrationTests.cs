@@ -472,7 +472,7 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             AssertNotEmpty(response);
             AssertStartsWith(response, "name", "McDonald");
-            AssertStartsWith(response, "category", "Food & Beverage");
+            //AssertStartsWith(response, "category", "Food & Beverage");
 
             var raw = Factual.RawQuery("t/places", "filters={\"$and\":[{\"name\":{\"$bw\":\"McDonald's\"}},{\"category\":{\"$bw\":\"Food %26 Beverage\"}}]}");
 
@@ -741,13 +741,13 @@ namespace FactualDriver.Tests
         public void TestFacetGeo()
         {
             //Arrange
-            var facet = new FacetQuery("category").Within(new Circle(Latitude, Longitude, Meters));
+            var facet = new FacetQuery("category_labels").Within(new Circle(Latitude, Longitude, Meters));
             //Act
             var response = Factual.Fetch("global", facet);
             //Assert
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
-            Assert.IsTrue(((ICollection<JToken>)json.response.data.category).Count > 0);
+            Assert.IsTrue(((ICollection<JToken>)json.response.data.category_labels).Count > 0);
         }
 
         [Test]
@@ -1137,10 +1137,10 @@ namespace FactualDriver.Tests
         public void TestNewRawGetSimple()
         {
             //Arrange & Act
-            var response = Factual.RawQuery("t/places", "select=name,category&include_count=True");
+            var response = Factual.RawQuery("t/places", "select=name,category_labels&include_count=True");
             var raw = Factual.RawQuery("t/places", new Dictionary<string, object>
                 {
-                    {"select", "name,category"},
+                    {"select", "name,category_labels"},
                     {"include_count", true}
                 });
 
@@ -1184,12 +1184,12 @@ namespace FactualDriver.Tests
             var raw = Factual.RawQuery("places/monetize", new Dictionary<string, object>
                 {
                     {
-                        "filters", JsonConvert.SerializeObject(new Dictionary<string, object>
+                        "filters", new Dictionary<string, object>
                         {
                             {
                                 "place_locality", "Los Angeles"
                             }
-                        })
+                        }
                     },
                     {
                         "limit", 5
@@ -1210,7 +1210,7 @@ namespace FactualDriver.Tests
                 new Dictionary<string, object>
                 {
                     {
-                        "values", JsonConvert.SerializeObject(new Dictionary<string, object>
+                        "values", new Dictionary<string, object>
                         {
                             {
                                 "name", "Factual North"
@@ -1224,7 +1224,7 @@ namespace FactualDriver.Tests
                             {
                                 "longitude", 0
                             }
-                        })
+                        }
                     },
                     {
                         "user", "test_driver_user"
