@@ -107,7 +107,7 @@ namespace FactualDriver.Tests
             //Arrange
             Factual.QueueFetch("global", new FacetQuery("region", "locality"));
             Factual.QueueFetch("places", new Query().Limit(1));
-            Factual.QueueFetch("places", new ResolveQuery()
+            Factual.QueueFetch("restaurants", new ResolveQuery()
                                              .Add("name", "McDonalds")
                                              .Add("address", "10451 Santa Monica Blvd")
                                              .Add("region", "CA")
@@ -603,7 +603,7 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             var response =
-                  Factual.Fetch("places", new ResolveQuery()
+                  Factual.Fetch("restaurants", new ResolveQuery()
                   .Add("name", "McDonalds")
                   .Add("address", "10451 Santa Monica Blvd")
                   .Add("region", "CA")
@@ -634,7 +634,7 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             string id =
-                  Factual.Match("places", new MatchQuery()
+                  Factual.Match("restaurants", new MatchQuery()
                   .Add("name", "McDonalds")
                   .Add("address", "10451 Santa Monica Blvd")
                   .Add("region", "CA")
@@ -649,7 +649,7 @@ namespace FactualDriver.Tests
         {
             //Arrange & Act
             string id =
-                  Factual.Match("places", new MatchQuery()
+                  Factual.Match("restaurants", new MatchQuery()
                   .Add("name", "XYZ")
                   .Add("address", "10451 Santa Monica Blvd")
                   .Add("region", "CA")
