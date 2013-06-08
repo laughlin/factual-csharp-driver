@@ -13,7 +13,7 @@ namespace FactualDriver.Tests
         public void Init()
         {
             if (string.IsNullOrWhiteSpace(OAuthKey) || string.IsNullOrEmpty(OAuthSecret))
-                throw new ConfigurationException("please specify oauth keys");
+                throw new ConfigurationErrorsException("please specify oauth keys");
 
             Factual = new Factual(OAuthKey, OAuthSecret);
             Factual.Debug = true;

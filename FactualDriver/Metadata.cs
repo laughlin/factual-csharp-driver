@@ -7,10 +7,10 @@ namespace FactualDriver
     /// </summary>
     public class Metadata
     {
-        public const string USER = "user";
-        public const string DEBUG = "debug";
-        public const string COMMENT = "comment";
-        public const string REFERENCE = "reference";
+        public const string META_USER = "user";
+        public const string META_DEBUG = "debug";
+        public const string META_COMMENT = "comment";
+        public const string META_REFERENCE = "reference";
 
         private Parameters _queryParameters = new Parameters();
 
@@ -33,7 +33,7 @@ namespace FactualDriver
         public Metadata User(string username)
         {
             var parameters = _queryParameters.Copy();
-            parameters.Add(USER, username);
+            parameters.Add(META_USER, username);
             return new Metadata(parameters);
         }
 
@@ -55,7 +55,7 @@ namespace FactualDriver
         private Metadata Debug(bool debug)
         {
             var parameters = _queryParameters.Copy();
-            parameters.Add(DEBUG, debug);
+            parameters.Add(META_DEBUG, debug);
             return new Metadata(parameters);
         }
 
@@ -67,7 +67,7 @@ namespace FactualDriver
         public Metadata Comment(string comment)
         {
             var parameters = _queryParameters.Copy();
-            parameters.Add(COMMENT, comment);
+            parameters.Add(META_COMMENT, comment);
             return new Metadata(parameters);
         }
 
@@ -79,7 +79,7 @@ namespace FactualDriver
         public Metadata Reference(string reference)
         {
             var parameters = _queryParameters.Copy();
-            parameters.Add(REFERENCE, reference);
+            parameters.Add(META_REFERENCE, reference);
             return new Metadata(parameters);
         }
 

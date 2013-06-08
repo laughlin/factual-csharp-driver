@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.2";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.3";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
