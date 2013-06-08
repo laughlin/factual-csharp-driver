@@ -961,6 +961,24 @@ Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
 
 This driver is thread safe.
 
+# Driver Usage in VB.NET
+
+This driver may be used in a VB.NET project as follows:</br>
+	1. Add FactualDriver.dll using Package Manger Console (PM> Install-Package FactualDriver);</br>
+	2. Add 'Imports FactualDriver' statement;</br>
+	3. Create an instance of Factual object with oAuthKey and oAuthSecret.
+
+## Example
+
+	Imports FactualDriver 
+	Module Module1 
+		Sub Main() 
+			Dim oFactualDriver As New Factual("oAuthKey", "oAuthSecret") 
+			Dim result As New String(oFactualDriver.FetchRow("places", "03c26917-5d66-4de9-96bc-b13066173c65")) 
+			Console.WriteLine(result) 
+		End Sub 
+	End Module 
+
 # More Examples
 
 For more code examples:
