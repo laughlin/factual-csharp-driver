@@ -604,7 +604,7 @@ Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>S
 
 You can also en-queue monetize with <tt>Factual.QueueFetchMonetize(Query query)</tt>
 
-### Setting cusom query keys
+### Setting custom query keys
 By default driver prepends query keys with a "q" and then the number of the query. You can also specify your own multi key so that response data objects will have queries returned with you own prepended key.
 To do that you would need to set Factual.MultiQuery.Key property before calling QueueFetch methods.
 
