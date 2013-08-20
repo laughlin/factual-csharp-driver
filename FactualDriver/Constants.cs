@@ -3,7 +3,7 @@
     /// <summary>
     /// Helper class that keeps all factual related constant strings.
     /// </summary>
-    public class Constants
+    public static class Constants
     {
         // Circle
 	    public const string CIRCLE = "$circle";

@@ -666,47 +666,45 @@ namespace FactualDriver
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    using (var stream = response.GetResponseStream())
+                    var stream = response.GetResponseStream();
+
+                    if (stream == null)
+                        throw new FactualException("Did not receive a response stream from factual");
+
+                    using (var reader = new StreamReader(stream))
                     {
-                        if (stream == null)
-                            throw new FactualException("Did not receive a response stream from factual");
+                        jsonResult = reader.ReadToEnd();
+                        if (string.IsNullOrEmpty(jsonResult))
+                            throw new FactualException("No data received from factual");
 
-                        using (var reader = new StreamReader(stream))
+                        if (Debug)
                         {
-                            jsonResult = reader.ReadToEnd();
-                            if (string.IsNullOrEmpty(jsonResult))
-                                throw new FactualException("No data received from factual");
-
-                            if (Debug)
-                            {
-                                System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
-                                System.Diagnostics.Debug.WriteLine(jsonResult);
-                            }
+                            System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
+                            System.Diagnostics.Debug.WriteLine(jsonResult);
                         }
                     }
-
                 }
             }
             catch (WebException ex)
             {
-                var response = ((HttpWebResponse)ex.Response);
-                using (var stream = response.GetResponseStream())
+                var response = ((HttpWebResponse) ex.Response);
+                var stream = response.GetResponseStream();
+
+                if (stream == null)
+                    throw new FactualApiException(response.StatusCode, string.Empty, completePathWithQuery);
+
+                using (var reader = new StreamReader(stream))
                 {
-                    if (stream == null)
-                        throw new FactualApiException(response.StatusCode, string.Empty, completePathWithQuery);
+                    var text = reader.ReadToEnd();
 
-                    using (var reader = new StreamReader(stream))
+                    if (Debug)
                     {
-                        var text = reader.ReadToEnd();
-
-                        if (Debug)
-                        {
-                            System.Diagnostics.Debug.WriteLine("==== Factual API Error ====");
-                            System.Diagnostics.Debug.WriteLine(text);
-                        }
-
-                        throw new FactualApiException(response.StatusCode, text, HttpUtility.UrlDecode(completePathWithQuery));
+                        System.Diagnostics.Debug.WriteLine("==== Factual API Error ====");
+                        System.Diagnostics.Debug.WriteLine(text);
                     }
+
+                    throw new FactualApiException(response.StatusCode, text,
+                                                  HttpUtility.UrlDecode(completePathWithQuery));
                 }
             }
             return jsonResult;

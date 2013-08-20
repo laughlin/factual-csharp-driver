@@ -17,7 +17,7 @@ namespace FactualDriver.Filters
         /// </summary>
         public string Name { get; set; }
 
-        public Dictionary<string,object> Pairs { get; set; }
+        public Dictionary<string,object> Pairs { get; private set; }
 
         public KeyValueFilter(string name, Dictionary<string,object> pairs)
         {

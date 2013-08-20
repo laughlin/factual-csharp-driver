@@ -31,7 +31,7 @@ namespace FactualDriver.Filters
         /// <summary>
         /// A collection of row filters under FilterGroup.
         /// </summary>
-        public List<IFilter> RowFilters { get; set; }
+        public List<IFilter> RowFilters { get; private set; }
 
         /// <summary>
         /// Creates a set of filters grouped by condition

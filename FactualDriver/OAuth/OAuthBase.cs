@@ -581,7 +581,7 @@ namespace FactualDriver.OAuth
             if (s == null)
                 return null;
 
-            if (s == "")
+            if (string.IsNullOrEmpty(s))
                 return "";
 
             bool needEncode = false;

@@ -26,8 +26,8 @@ namespace FactualDriver.OAuth
     /// </summary>
     public class OAuthParameters
     {
-        public readonly SortedDictionary<string, string> BaseProperties = new SortedDictionary<string, string>();
-        public readonly Dictionary<string, string> ExtraProperties = new Dictionary<string, string>();
+        public SortedDictionary<string, string> BaseProperties = new SortedDictionary<string, string>();
+        public Dictionary<string, string> ExtraProperties = new Dictionary<string, string>();
 
         public string Callback
         {

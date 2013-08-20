@@ -20,7 +20,7 @@ namespace FactualDriver.Filters
         /// <summary>
         /// List of filters
         /// </summary>
-        public List<IFilter> Data { get; set; }
+        public List<IFilter> Data { get; private set; }
 
         /// <summary>
         /// Parameterless constructor which creates an empty array of filters.

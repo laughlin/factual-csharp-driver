@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.Serialization;
 
 namespace FactualDriver.Exceptions
 {
     /// <summary>
     /// Factaul api exception class, represent an error received from the Factual API.
     /// </summary>
+    [Serializable]
     public class FactualApiException : Exception 
     {
         /// <summary>
@@ -32,6 +34,11 @@ namespace FactualDriver.Exceptions
             StatusCode = statusCode;
             Response = response;
             Url = url;
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
     }
 }

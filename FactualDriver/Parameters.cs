@@ -126,7 +126,8 @@ namespace FactualDriver
             var filterCount = queries.Count();
             var filterGroup = new FilterGroup(operation);
             var filterList = GetRowFilterList();
-            filterGroup.RowFilters = filterList.Skip(Math.Max(0, filterList.Count - filterCount)).Take(filterCount).ToList();
+            filterGroup.RowFilters.Clear();
+            filterGroup.RowFilters.AddRange(filterList.Skip(Math.Max(0, filterList.Count - filterCount)).Take(filterCount).ToList());
 
             if (filterCount > filterList.Count)
                 filterCount = filterList.Count();
