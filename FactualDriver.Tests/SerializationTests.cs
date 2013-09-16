@@ -11,49 +11,49 @@ namespace FactualDriver.Tests
         [Test]
         public void RowFilterSerializationWithArray()
         {
-            //Arrange
+            // Arrange
             var filter = new RowFilter("locality", "$nin", new[] {"Los Angeles", "Northridge"});
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("{\"locality\":{\"$nin\":[\"Los Angeles\",\"Northridge\"]}}", result);
         }
 
         [Test]
         public void RowFilterSerializationNumeric()
         {
-            //Arrange
+            // Arrange
             var filter = new RowFilter("rating", "$gte", 7.5);
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("{\"rating\":{\"$gte\":7.5}}", result);
         }
 
         [Test]
         public void OperatorWithTwoRowFiltersTest()
         {
-            //Arrange
+            // Arrange
             var filter = new FilterGroup(new List<IFilter>
                                                       {
                                                           new RowFilter("last_name", "$eq", "Smith"),
                                                           new RowFilter("first_name", "$eq", "John")
                                                       });
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("{\"$and\":[{\"last_name\":{\"$eq\":\"Smith\"}},{\"first_name\":{\"$eq\":\"John\"}}]}", result);
         }
 
         [Test]
         public void CombinedOperatorsTest()
         {
-            //Arrange
+            // Arrange
             var filter = new Dictionary<string, object>
                              {
                                  {
@@ -75,49 +75,49 @@ namespace FactualDriver.Tests
                                      }
                              };
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("{\"$and\":[{\"first_name\":\"Suzy\"},{\"$or\":[{\"last_name\":\"Q\"},{\"last_name\":{\"$blank\":true}}]}]}", result);
         }
 
         [Test]
         public void GetFilterSerializationTest()
         {
-            //Arrange
+            // Arrange
             var filter = new GeoFilter(34.06021, -118.41828,5000);
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("{\"$circle\":{\"$center\":[34.06021,-118.41828],\"$meters\":5000}}", result);
         }
 
         [Test]
         public void SimpleFilterIntegerValueSerializationTest()
         {
-            //Arrange 
+            // Arrange 
             var filter = new Filter("limit", 24);
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("24", result);
         }
 
         [Test]
         public void SimpleFilterStringValueSerializationTest()
         {
-            //Arrange 
+            // Arrange 
             var filter = new Filter("search", "Sushi Santa Monica");
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("Sushi Santa Monica", result);
         }
 

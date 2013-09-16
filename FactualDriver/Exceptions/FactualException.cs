@@ -3,7 +3,7 @@
 namespace FactualDriver.Exceptions
 {
     /// <summary>
-    ///A generic Factual exception class
+    /// A generic Factual exception class
     /// </summary>
     [Serializable]
     public class FactualException : Exception

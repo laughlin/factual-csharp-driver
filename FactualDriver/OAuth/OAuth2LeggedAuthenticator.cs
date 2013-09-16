@@ -13,7 +13,7 @@ namespace FactualDriver.OAuth
         private string _constumerSecret;
 
         /// <summary>
-        ///Authenticator constructor.
+        /// Authenticator constructor.
         /// </summary>
         /// <param name="consumerKey">oAuth consumer key.</param>
         /// <param name="consumerSecret">oAuth consumer secret key.</param>
@@ -24,7 +24,7 @@ namespace FactualDriver.OAuth
         }
 
         /// <summary>
-        ///Adds authentication headers to the HttpWebRequest
+        /// Adds authentication headers to the HttpWebRequest
         /// </summary>
         /// <param name="request">HttpWebRequest to add authentication headers.</param>
         public void ApplyAuthenticationToRequest(HttpWebRequest request)

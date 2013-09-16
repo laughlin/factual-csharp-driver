@@ -7,7 +7,7 @@ namespace FactualDriver.Filters
 {
 
     /// <summary>
-    ///A generic filter which serialises results into json key value pairs
+    /// A generic filter which serialises results into json key value pairs
     /// </summary>
     [JsonConverter(typeof(KeyValueFilterConverter))]
     public class KeyValueFilter : IFilter

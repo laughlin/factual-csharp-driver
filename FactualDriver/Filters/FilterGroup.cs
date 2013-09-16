@@ -29,7 +29,7 @@ namespace FactualDriver.Filters
         /// </summary>
         public string Operator { get; set; }
         /// <summary>
-        ///A collection of row filters under FilterGroup.
+        /// A collection of row filters under FilterGroup.
         /// </summary>
         public List<IFilter> RowFilters { get; private set; }
 

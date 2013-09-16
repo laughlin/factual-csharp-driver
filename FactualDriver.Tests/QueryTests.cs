@@ -23,11 +23,11 @@ namespace FactualDriver.Tests
         [Test]
         public void OnlyTests()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Only("*");
             var multipleSelect = new Query().Only("name", "tel", "category");
 
-            //Assert
+            // Assert
             AreEqualQueries("select=*",query);
             AreEqualQueries("select=name,tel,category", multipleSelect);
         }
@@ -35,19 +35,19 @@ namespace FactualDriver.Tests
         [Test]
         public void GeoCirlceTest()
         {
-            //Arrange
+            // Arrange
             var query = new Query().WithIn(new Circle(34.06021, -118.41828, 5000));
-            //Assert
+            // Assert
             AreEqualQueries("geo={\"$circle\":{\"$center\":[34.06021,-118.41828],\"$meters\":5000}}", query);
         }
 
         [Test]
         public void TestCommaSeparatedQueries()
         {
-            //Arrange
+            // Arrange
             var query = new Query().SortAsc("name");
 
-            //Assert
+            // Assert
             AreEqualQueries("sort=name:asc", query);
             AreEqualQueries("sort=name:asc,country:desc", query.SortDesc("country")); 
         }
@@ -55,24 +55,24 @@ namespace FactualDriver.Tests
         [Test]
         public void LimitPlusSortAscTest()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Limit(10).SortAsc("name");
 
-            //Assert
+            // Assert
             AreEqualQueries("limit=10&sort=name:asc", query);
         }
 
         [Test]
         public void Find20RandomEntitiesSortedAcsByRegionThenByLocalityThenByName()
         {
-            //Arrange
+            // Arrange
             var query = new Query()
                 .Limit(20)
                 .SortAsc("region")
                 .SortAsc("locality")
                 .SortDesc("name");
 
-            //Assert
+            // Assert
             AreEqualQueries("limit=20&sort=region:asc,locality:asc,name:desc", query);
         }
 
@@ -85,87 +85,87 @@ namespace FactualDriver.Tests
         [Test]
         public void LimitAndOffsetPagingTest()
         {
-            //Arrange
+            // Arrange
             AreEqualQueries("limit=10&offset=150", new Query().Limit(10).Offset(150));
         }
 
         [Test]
         public void IncludeRowCount()
         {
-            //Arrange
+            // Arrange
             var query = new Query().IncludeRowCount(true);
 
-            //Assert
+            // Assert
             AreEqualQueries("include_count=true",query);
         }
 
         [Test]
         public void FieldRegionEqualsToCalifornia()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("region").Equal("CA");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"region\":{\"$eq\":\"CA\"}}", query);
         }
 
         [Test]
         public void FeildRegionNotEqualsToCalifornia()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("region").NotEqual("CA");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"region\":{\"$neq\":\"CA\"}}", query);
         }
 
         [Test]
         public void FieldRegionEqualsToAny()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("region").In("MA","VT","NH","RI","CT");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"region\":{\"$in\":[\"MA\",\"VT\",\"NH\",\"RI\",\"CT\"]}}", query);
         }
 
         [Test]
         public void FieldLocalityDoesNotEqualToAny()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("locality").NotIn("Los Angeles","Santa Monica");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"locality\":{\"$nin\":[\"Los Angeles\",\"Santa Monica\"]}}", query);
         }
 
         [Test]
         public void FieldNameBeginsWithTest()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("name").BeginsWith("Starbucks");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"name\":{\"$bw\":\"Starbucks\"}}", query);
         }
 
         [Test]
         public void FieldNameDoesNotBeginWithMr()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("name").NotBeginsWith("Mr.");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"name\":{\"$nbw\":\"Mr.\"}}", query);
         }
 
         [Test]
         public void FieldNameBeginsWithAny()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("name").BeginsWithAny("lt","sg","cpt");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"name\":{\"$bwin\":[\"lt\",\"sg\",\"cpt\"]}}", query);
         }
 
@@ -173,80 +173,80 @@ namespace FactualDriver.Tests
         [Test]
         public void FieldClassDoesNotBeginWithAny()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("class").NotBeginsWithAny("beginner", "intermediate");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"class\":{\"$nbwin\":[\"beginner\",\"intermediate\"]}}", query);
         }
 
         [Test]
         public void TestFindRowsWithMissingTelephoneNumbers()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("tel").Blank();
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"tel\":{\"$blank\":true}}", query);
         }
 
         [Test]
         public void TestFindRowsWithNonBlankTelephoneNumbers()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("tel").NotBlank();
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"tel\":{\"$blank\":false}}", query);
         }
 
         [Test]
         public void FieldRatingGreaterThan7Point5()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("rating").GreaterThan(7.5);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"rating\":{\"$gt\":7.5}}", query);
         }
 
         [Test]
         public void FieldRatingGreaterThanOrEqualThan7Point5()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("rating").GreaterThanOrEqual(7.5);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"rating\":{\"$gte\":7.5}}", query);
         }
 
         [Test]
         public void FieldAgeIsLessThan50()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("age").LessThan(50);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"age\":{\"$lt\":50}}", query);
         }
 
         [Test]
         public void FieldAgeIsLessThanOrEqualTo50()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("age").LessThanOrEqual(50);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"age\":{\"$lte\":50}}", query);
         }
 
         [Test]
         public void FullTestSearchCharlesOnFieldName()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("name").Search("Charles");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"name\":{\"$search\":\"Charles\"}}", query);
         }
 
@@ -255,24 +255,24 @@ namespace FactualDriver.Tests
         [Test]
         public void QueryToFindEntriesWhereNameBeginsWithCoffeeANDTelephoneIsBlank()
         {
-            //Arrange
+            // Arrange
             var query = new Query();
             query.And(query.Field("name").BeginsWith("Coffee"), query.Field("tel").Blank());
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"$and\":[{\"name\":{\"$bw\":\"Coffee\"}},{\"tel\":{\"$blank\":true}}]}", query);
         }
 
         [Test]
         public void TestShortHandAddingFilters()
         {
-            //Arrange
+            // Arrange
             Query query = new Query()
                 .Field("first_name").Equal("Bradley")
                 .Field("region").Equal("CA")
                 .Field("locality").Equal("Los Angeles");
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"$and\":[{\"first_name\":{\"$eq\":\"Bradley\"}},{\"region\":{\"$eq\":\"CA\"}},{\"locality\":{\"$eq\":\"Los Angeles\"}}]}",
             query);
         }
@@ -285,14 +285,14 @@ namespace FactualDriver.Tests
                 query.Field("first_name").Equal("Chun"),
                 query.Field("last_name").Equal("Kok")
             );
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"$and\":[{\"region\":{\"$in\":[\"MA\",\"VT\",\"NH\"]}},{\"$or\":[{\"first_name\":{\"$eq\":\"Chun\"}},{\"last_name\":{\"$eq\":\"Kok\"}}]}]}", query);
         }
 
         [Test]
         public void TestNestedFilters()
         {
-            //Arrange
+            // Arrange
             Query query = new Query();
             query.Or(
                 query.And(
@@ -305,7 +305,7 @@ namespace FactualDriver.Tests
                 )
             );
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"$or\":[{\"$and\":[{\"city\":{\"$eq\":\"Los Angeles\"}},{\"score\":{\"$eq\":\"38\"}}]},{\"$or\":[{\"last_name\":{\"$eq\":\"Kok\"}},{\"first_name\":{\"$eq\":\"Chun\"}}]}]}",query);
         }
 
@@ -327,10 +327,10 @@ namespace FactualDriver.Tests
         [Test]
         public void FieldCategoryIDsIncludes10()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("category_ids").Includes(10);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"category_ids\":{\"$includes\":10}}", query);
         }
 
@@ -338,10 +338,10 @@ namespace FactualDriver.Tests
        [Test]
         public void FieldCategoryIDsIncludesAny10100()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("category_ids").IncludesAny(10, 100);
 
-            //Assert
+            // Assert
             AreEqualQueries("filters={\"category_ids\":{\"$includes_any\":[10,100]}}", query);
         }
     }

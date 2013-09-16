@@ -30,7 +30,7 @@ namespace FactualDriver
         /// <summary>
         /// Sets a full text search query. Factual will use this value to perform a
         /// full text search against various attributes of the underlying table, such
-        ///As entity name, address, etc.
+        /// as entity name, address, etc.
         /// </summary>
         /// <param name="term">the text for which to perform a full text search.</param>
         /// <returns>this Query</returns>
@@ -41,7 +41,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a filter so that results can only be (roughly) within the specified
+        /// Adds a filter so that results can only be (roughly) within the specified
         /// geographic circle.
         /// </summary>
         /// <param name="circle">The circle within which to bound the results.</param>
@@ -151,7 +151,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds filter to this Query.
+        /// Adds filter to this Query.
         /// </summary>
         /// <param name="filter"></param>
         public void Add(IFilter filter)

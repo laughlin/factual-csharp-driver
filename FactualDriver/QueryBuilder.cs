@@ -24,7 +24,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a new Row filter for specified field in the constructor.
+        /// Adds a new Row filter for specified field in the constructor.
         /// </summary>
         /// <param name="compareOperator">Row filter operator.</param>
         /// <param name="compareValue">Row filter value.</param>
@@ -34,7 +34,7 @@ namespace FactualDriver
         }
         
         /// <summary>
-        ///Adds a generic search filter.
+        /// Adds a generic search filter.
         /// </summary>
         /// <param name="searchValue">Search value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -45,7 +45,7 @@ namespace FactualDriver
         	}
 
         /// <summary>
-        ///Adds a generic equal filter.
+        /// Adds a generic equal filter.
         /// </summary>
         /// <param name="value">Value of the filter.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -56,7 +56,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic not equal filter.
+        /// Adds a generic not equal filter.
         /// </summary>
         /// <param name="value">Not equal value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -67,7 +67,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic "in" filter
+        /// Adds a generic "in" filter
         /// </summary>
         /// <param name="values">Parameter array of in values.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -79,7 +79,7 @@ namespace FactualDriver
 
 
         /// <summary>
-        ///Adds a generic not equals to any filter.
+        /// Adds a generic not equals to any filter.
         /// </summary>
         /// <param name="values">Parameter array of values.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -89,7 +89,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic begins with filter.
+        /// Adds a generic begins with filter.
         /// </summary>
         /// <param name="value">Begins with value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -99,7 +99,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic not begins with filter.
+        /// Adds a generic not begins with filter.
         /// </summary>
         /// <param name="value">Not begins with value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -110,7 +110,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic begins with any filter.
+        /// Adds a generic begins with any filter.
         /// </summary>
         /// <param name="values">Begins with any value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -120,7 +120,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a generic filter that does not begins with any specified values.
+        /// Adds a generic filter that does not begins with any specified values.
         /// </summary>
         /// <param name="values">Parameter array of values.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -131,7 +131,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a blank filter.
+        /// Adds a blank filter.
         /// </summary>
         /// <returns>Generic QueryBuilder</returns>
         public T Blank() {
@@ -140,7 +140,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a not blank filter.
+        /// Adds a not blank filter.
         /// </summary>
         /// <returns>Generic QueryBuilder</returns>
         public T NotBlank() {
@@ -149,7 +149,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a greater than filter.
+        /// Adds a greater than filter.
         /// </summary>
         /// <param name="value">Greater than value.</param>
         /// <returns>Generic QueryBuilder</returns>
@@ -160,7 +160,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a greater than or equal filter.
+        /// Adds a greater than or equal filter.
         /// </summary>
         /// <param name="value">Value of the filter.</param>
         /// <returns>Generic QueryBuilder.</returns>
@@ -171,7 +171,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a less than filter.
+        /// Adds a less than filter.
         /// </summary>
         /// <param name="value">Value of the filter.</param>
         /// <returns>Generic QueryBuilder.</returns>
@@ -182,7 +182,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds a less than or equal filter.
+        /// Adds a less than or equal filter.
         /// </summary>
         /// <param name="value">Filter value.</param>
         /// <returns>Generic QueryBuilder.</returns>
@@ -193,7 +193,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds an includes filter.
+        /// Adds an includes filter.
         /// </summary>
         /// <param name="value">Value of the filter.</param>
         /// <returns>Generic QueryBuilder.</returns>
@@ -204,7 +204,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        ///Adds an includes any filter.
+        /// Adds an includes any filter.
         /// </summary>
         /// <param name="values">Values of the filter.</param>
         /// <returns>Generic QueryBuilder.</returns>

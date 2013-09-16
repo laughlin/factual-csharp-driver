@@ -122,7 +122,7 @@ namespace FactualDriver.OAuth
                         {
                             string[] temp = s.Split('=');
                             // now temp[1], the value, might contain encoded data, that would be double encoded later.
-                            //Also it MIGHT contain encoding of the lowercase kind, which throws OAUTH off
+                            // also it MIGHT contain encoding of the lowercase kind, which throws OAUTH off
                             // the same is true for the name
                             string name = UrlDecode(temp[0]);
                             string value = UrlDecode(temp[1]);
@@ -147,7 +147,7 @@ namespace FactualDriver.OAuth
         }
 
         /// <summary>
-        ///All parameter names and values are escaped using the [RFC3986]
+        /// All parameter names and values are escaped using the [RFC3986]
         /// percent-encoding (%xx) mechanism. Characters not in the unreserved character
         /// MUST be encoded. Characters in the unreserved character set MUST NOT be encoded.
         /// Hexadecimal characters in encodings MUST be upper case. Text names and values MUST be
@@ -602,7 +602,7 @@ namespace FactualDriver.OAuth
             if (!needEncode)
                 return s;
 
-            //Avoided GetByteCount call
+            // avoided GetByteCount call
             byte[] bytes = new byte[Enc.GetMaxByteCount(s.Length)];
             int realLen = Enc.GetBytes(s, 0, s.Length, bytes, 0);
             return Encoding.ASCII.GetString(UrlEncodeToBytes(bytes, 0, realLen));

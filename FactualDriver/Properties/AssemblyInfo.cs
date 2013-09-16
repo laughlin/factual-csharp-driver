@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
-//Associated with an assembly.
+// associated with an assembly.
 [assembly: AssemblyTitle("FactualDriver")]
 [assembly: AssemblyDescription(".NET Client Library for Factual API")]
 [assembly: AssemblyConfiguration("")]

@@ -10,7 +10,7 @@ namespace FactualDriver.Tests
             var query = new RowQuery()
                 .Only("name", "address", "region", "postcode");
 
-            //Assert
+            // Assert
             AreEqualQueries("select=name,address,region,postcode", query);
         }
 

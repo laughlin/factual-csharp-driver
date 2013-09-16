@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace FactualDriver.Filters
 {
     /// <summary>
-    ///A generic filter which gets serialized into key=value.
+    /// A generic filter which gets serialized into key=value.
     /// </summary>
     [JsonConverter(typeof(FilterConverter))]
     public class Filter: IFilter

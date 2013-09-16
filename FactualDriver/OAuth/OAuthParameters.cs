@@ -162,7 +162,7 @@ namespace FactualDriver.OAuth
         }
 
         /// <summary>
-        ///Adds a new key-value pair to the dictionary or updates the value if the key is already present
+        /// Adds a new key-value pair to the dictionary or updates the value if the key is already present
         /// </summary>
         protected void addOrUpdate(IDictionary<string, string> dictionary, string key, string value)
         {
