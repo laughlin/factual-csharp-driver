@@ -8,7 +8,7 @@ namespace FactualDriver
     public interface IQuery
     {
         /// <summary>
-        /// Add filter to the query
+        ///Add filter to the query
         /// </summary>
         /// <param name="filter">Filter to add</param>
         void Add(IFilter filter);

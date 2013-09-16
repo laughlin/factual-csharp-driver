@@ -9,7 +9,7 @@ using Newtonsoft.Json.Converters;
 namespace FactualDriver
 {
     /// <summary>
-    /// A class holder of multiple filters, responsible for logic associated with filters collections.
+    ///A class holder of multiple filters, responsible for logic associated with filters collections.
     /// </summary>
     public class Parameters
     {
@@ -23,7 +23,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Adds filter to collection
+        ///Adds filter to collection
         /// </summary>
         /// <param name="filterName">Name of the filter</param>
         /// <param name="value">Filter's value</param>
@@ -33,7 +33,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Adds filter to collection
+        ///Adds filter to collection
         /// </summary>
         /// <param name="filter">Filter object</param>
         public void Add(IFilter filter)
@@ -59,7 +59,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Adds a json filter parameter.
+        ///Adds a json filter parameter.
         /// </summary>
         /// <param name="name">Name of the filter</param>
         /// <param name="keyValuePairs">key value pairs to be serialized</param>
@@ -69,7 +69,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Adds a pair of values to the specified Key Value Filter.
+        ///Adds a pair of values to the specified Key Value Filter.
         /// </summary> 
         /// <param name="filterName">Filter name to add a pair</param>
         /// <param name="field">Field or a key in the pair</param>
@@ -89,7 +89,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Adds a filter, if filter already exists then it would comma separate values
+        ///Adds a filter, if filter already exists then it would comma separate values
         /// </summary>
         /// <param name="filterName">Filter's name</param>
         /// <param name="value">value to add or comma separate</param>

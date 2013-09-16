@@ -23,7 +23,7 @@
         }
 
         /// <summary>
-        /// Add a single field for this clear request.
+        ///Add a single field for this clear request.
         /// </summary>
         /// <param name="field">the field name</param>
         /// <returns>this Clear</returns>

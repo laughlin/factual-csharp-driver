@@ -26,7 +26,7 @@ namespace FactualDriver
 
         /// <summary>
         /// Set the value for a single field in this submit request.
-        /// Added to a JSON hash of field names and values to be added to a Factual table.
+        ///Added to a JSON hash of field names and values to be added to a Factual table.
         /// </summary>
         /// <param name="field">the field name</param>
         /// <param name="value">the value for the specified field</param>

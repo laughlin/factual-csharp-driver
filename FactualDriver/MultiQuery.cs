@@ -26,7 +26,7 @@ namespace FactualDriver
             set { _key = value; }
         }
         /// <summary>
-        /// Add a a query to the multiquery collection
+        ///Add a a query to the multiquery collection
         /// </summary>
         /// <param name="path"></param>
         /// <param name="query"></param>

@@ -15,13 +15,13 @@ namespace FactualDriver
 {
     /// <summary>
     /// Main point of entry for the driver. Supports running queries against Factual
-    /// and inspecting the response. Supports the same levels of authentication
+    ///And inspecting the response. Supports the same levels of authentication
     /// supported by Factual's API.
     /// </summary>
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.4";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.5";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -80,7 +80,7 @@ namespace FactualDriver
         /// <returns></returns>
         public HttpWebRequest CreateWebRequest(string httpMethod, string query)
         {
-            string factualApiUrl = string.IsNullOrEmpty(FactualApiUrlOverride) ? "http://api.v3.factual.com" : FactualApiUrlOverride;
+            string factualApiUrl = string.IsNullOrEmpty(FactualApiUrlOverride) ? "http://Api.v3.factual.com" : FactualApiUrlOverride;
             var requestUrl = new Uri(new Uri(factualApiUrl), query);
             var request = _factualAuthenticator.CreateHttpWebRequest(httpMethod, requestUrl);
             request.Headers.Add("X-Factual-Lib", DriverHeaderTag);
@@ -101,7 +101,7 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Ask Factual to match the entity for the attributes specified by MatchQuery
+        ///Ask Factual to match the entity for the attributes specified by MatchQuery
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="query"></param>
@@ -128,12 +128,12 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Asks Factual to resolve the entity for the attributes specified by
+        ///Asks Factual to resolve the entity for the attributes specified by
         /// query, within the table called tableName.
         /// Returns the read response from a Factual Resolve request, which includes
-        /// all records that are potential matches.
+        ///All records that are potential matches.
         /// Each result record will include a confidence score ("similarity"),
-        /// and a flag indicating whether Factual decided the entity is the correct
+        ///And a flag indicating whether Factual decided the entity is the correct
         /// resolved match with a high degree of accuracy ("resolved").
         /// There will be 0 or 1 entities returned with "resolved"=true. If there was a
         /// full match, it is guaranteed to be the first record in the response.
@@ -722,8 +722,8 @@ namespace FactualDriver
                     urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
             }
             if (urlForRaw.Length > 0)
-                urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1);
-            return urlForRaw;
+				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d");
+			return urlForRaw;
         }
     }
 }
