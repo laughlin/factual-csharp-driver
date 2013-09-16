@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.4";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.5";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -722,8 +722,8 @@ namespace FactualDriver
                     urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
             }
             if (urlForRaw.Length > 0)
-                urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1);
-            return urlForRaw;
+				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d");
+			return urlForRaw;
         }
     }
 }

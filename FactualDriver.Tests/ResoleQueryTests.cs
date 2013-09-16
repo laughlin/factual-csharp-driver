@@ -13,7 +13,7 @@ namespace FactualDriver.Tests
                 .Add("region", "CA")
                 .Add("postcode","90025");
 
-            //Assert
+            // Assert
             AreEqualQueries("values={\"name\":\"McDonalds\",\"address\":\"10451 Santa Monica Blvd\",\"region\":\"CA\",\"postcode\":\"90025\"}",
                 query);
         }
@@ -26,7 +26,7 @@ namespace FactualDriver.Tests
                 .Add("latitude", 34.06)
                 .Add("longitude", -118.40);
 
-            //Assert
+            // Assert
             AreEqualQueries("values={\"name\":\"Buena Vista\",\"latitude\":\"34.06\",\"longitude\":\"-118.40\"}",query);
         }
 

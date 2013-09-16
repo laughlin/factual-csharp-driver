@@ -8,33 +8,33 @@ namespace FactualDriver.Tests
         [Test]
         public void FacetQuerySelectCountryAndSearchForStarbucks()
         {
-            //Arrange
+            // Arrange
             var query = new FacetQuery("country").Search("starbucks");
 
-            //Assert
+            // Assert
             AreEqualQueries("select=country&q=starbucks", query);
         }
 
         [Test]
         public void CountStarbucksInTheUSByCityAndState()
         {
-            //Arrange
+            // Arrange
             var query = new FacetQuery("locality", "region")
                 .Search("starbucks")
                 .Field("country").Equal("US");
 
-            //Assert
+            // Assert
             AreEqualQueries("select=locality,region&q=starbucks&filters={\"country\":{\"$eq\":\"US\"}}", query);
         }
 
         [Test]
         public void CountBusinessesByCategory5KmAroundFactual()
         {
-            //Arrange
+            // Arrange
             var query = new FacetQuery("category")
                 .Within(new Circle(34.06018, -118.41835, 5000));
 
-            //Assert
+            // Assert
             AreEqualQueries("select=category&geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}", query);
         }
     }

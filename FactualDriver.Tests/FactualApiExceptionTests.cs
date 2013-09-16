@@ -9,10 +9,10 @@ namespace FactualDriver.Tests
         [Test]
         public void BadAuthenticatedRequest()
         {
-            //Arrange
+            // Arrange
             var factual = new Factual("badkey", "badsecret");
 
-            //Assert
+            // Assert
             var exception = Assert.Throws<FactualApiException>(
                 () => factual.Fetch("places",new Query().Field("region").Equal("CA")));
 
@@ -22,10 +22,10 @@ namespace FactualDriver.Tests
         [Test]
         public void BadSelectField()
         {
-            //Arrange
+            // Arrange
             var query = new Query().Field("country").Equal("US").Only("hours");
 
-            //Assert
+            // Assert
             var exception = Assert.Throws<FactualApiException>(
                 () => Factual.Fetch("places", query));
 

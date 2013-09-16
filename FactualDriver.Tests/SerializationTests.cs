@@ -98,26 +98,26 @@ namespace FactualDriver.Tests
         [Test]
         public void SimpleFilterIntegerValueSerializationTest()
         {
-            //Arrange 
+            // Arrange 
             var filter = new Filter("limit", 24);
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("24", result);
         }
 
         [Test]
         public void SimpleFilterStringValueSerializationTest()
         {
-            //Arrange 
+            // Arrange 
             var filter = new Filter("search", "Sushi Santa Monica");
 
-            //Act
+            // Act
             var result = JsonConvert.SerializeObject(filter);
 
-            //Assert
+            // Assert
             Assert.AreEqual("Sushi Santa Monica", result);
         }
 
