@@ -13,7 +13,7 @@ In the package manager console window: <tt>Install-Package FactualDriver</tt>, o
 manage packages, search for factual and install. Project uses nuget automatic package restore feature, please keep in mind
 if you don't have automatic restore enabled you would need to enable it in. In Visual Studio, enable "Allow NuGet to download
 missing packages during build". This setting lives under Options -> Package Manager -> General.
-![Enable package restore](http://docs.nuget.org/docs/workflows/images/allow-package-restore-configuration.png)
+![Enable package restore](https://f.cloud.github.com/assets/2625292/1150750/41a9f6ee-1eef-11e3-82d7-f27dc42c5e94.png)
 
 ## Non Nuget
 
