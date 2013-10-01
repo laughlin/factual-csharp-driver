@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.5";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.6";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -276,17 +276,6 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Runs a monetize query against the specified Factual table.
-        /// </summary>
-        /// <param name="query">the query to run against monetize.</param>
-        /// <returns>the response of running query against Factual API.</returns>
-        public string Monetize(Query query)
-        {
-            return RawQuery(UrlForMonetize(), query.ToUrlQuery());
-        }
-
-
-        /// <summary>
         /// Queue a raw read request for inclusion in the next multi request.
         /// </summary>
         /// <param name="path">the path to run the request against</param>
@@ -342,15 +331,6 @@ namespace FactualDriver
         public void QueueFetch(Geopulse point)
         {
             MultiQuery.AddQuery(UrlForGeopulse(), point.ToUrlQuery());
-        }
-
-        /// <summary>
-        /// Queue a monetize query for inclusing in the next multi request.
-        /// </summary>
-        /// <param name="query"></param>
-        public void QueueFetchMonetize(Query query)
-        {
-            MultiQuery.AddQuery(UrlForMonetize(), query.ToUrlQuery());
         }
 
         /// <summary>
@@ -410,11 +390,6 @@ namespace FactualDriver
         protected static string UrlForMulti()
         {
             return "multi";
-        }
-
-        protected static string UrlForMonetize()
-        {
-            return "places/monetize";
         }
 
         protected static string UrlForFlag(string tableName, string factualId)
