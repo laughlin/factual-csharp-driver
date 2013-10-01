@@ -966,3 +966,7 @@ If you think you've identified a specific bug in this driver, please file an iss
   * Detailed stack trace and/or line numbers
 
 If you are having any other kind of issue, such as unexpected data or strange behaviour from Factual's API (or you're just not sure WHAT'S going on), please contact us through [GetSatisfaction](http://support.factual.com/factual).
+
+# Changelog
+
+09-30-13 Removed support for Monetize
