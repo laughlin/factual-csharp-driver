@@ -55,7 +55,7 @@ You can optionally override the default Factual API URL. Default value is http:/
 	// Set the base URL back to default http://api.v3.factual.com
 	factual.FactualApiUrlOverride = null;
 
-# Optional tests setup
+# Optional Tests Setup
 
 If you are going to clone or download the repository you will have access to integration tests which can also
 be used as documentation. To setup your tests you would need to add your factual key and factual secret key to the FactualDriver.Tests\app.config.	
@@ -424,25 +424,6 @@ A Raw GET request can be used to make just about any kind of query against Factu
 			});
 		dynamic json = JsonConvert.DeserializeObject(result);
 
-	//GET first 5 deals in Los Angeles area:
-	//http://api.v3.factual.com/places/monetize?filters={"place_locality":"Los Angeles"}
-
-		string result = Factual.RawQuery("places/monetize", new Dictionary<string, object>
-			{
-				{
-					"filters", new Dictionary<string, object>
-					{
-						{
-							"place_locality", "Los Angeles"
-						}
-					}
-				},
-				{
-					"limit", 5
-				}
-			});
-		dynamic json = JsonConvert.DeserializeObject(result);
-
 Note that the above examples demonstrate the ability to construct read queries using the raw read feature.  However, in practice, the recommendation is to always use the convenience classes for features which are supported.
 
 # Raw GET (Self Encoded URL)
@@ -602,8 +583,6 @@ Queue responses using <tt>QueueFetch</tt>, and send all queued reads using <tt>S
 	factual.QueueFetch("places", new Query().Limit(1)); 
 	var multiResponse = factual.SendQueueRequests();
 
-You can also en-queue monetize with <tt>Factual.QueueFetchMonetize(Query query)</tt>
-
 ### Setting custom query keys
 By default driver prepends query keys with a "q" and then the number of the query. You can also specify your own multi key so that response data objects will have queries returned with you own prepended key.
 To do that you would need to set Factual.MultiQuery.Key property before calling QueueFetch methods.
@@ -672,16 +651,6 @@ The <tt>ReverseGeocode</tt> method fetches results based on the given point:
 
 	var response = factual.ReverseGeocode(new Point(latitude, longitude));	
 
-# Monetize
-
-The driver fully supports Factual's Monetize feature, which enables you to find deals for places in Factual's Global Places database.  Use the Query object to specify filters on which to run the monetize request.
-
-## Simple Monetize Example
-
-The <tt>monetize</tt> method fetches deals based on a specified query:
-
-    var response = Factual.Monetize(new Query().Field("place_locality").Equal("Los Angeles"));	
-	
 ## All Top Level Reverse Geocoder Parameters
 
 <table>

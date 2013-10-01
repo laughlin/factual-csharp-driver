@@ -84,24 +84,6 @@ namespace FactualDriver.Tests
         }
 
         [Test]
-        public void TestMultiQueryWithMonetize()
-        {
-            // Arrange
-            Factual.QueueFetch("places", new Query().Field("region").Equal("CA"));
-            Factual.QueueFetch("places", new Query().Limit(1));
-            Factual.QueueFetchMonetize(new Query().Field("place_locality").Equal("Los Angeles"));
-
-            // Act
-            var result = Factual.SendQueueRequests();
-
-            // Assert
-            dynamic json = JsonConvert.DeserializeObject(result);
-            Assert.AreEqual("ok", (string)json.q0.status);
-            Assert.AreEqual("ok", (string)json.q1.status);
-            Assert.AreEqual("ok", (string)json.q2.status);
-        }
-
-        [Test]
         public void TestMultiComplex()
         {
             // Arrange
@@ -189,26 +171,6 @@ namespace FactualDriver.Tests
             Assert.AreEqual((int)json.q1.response.included_rows, 5);
             Assert.AreEqual((string)json.q2.response.data[0].locality, "München");
             Assert.AreEqual((int)json.q2.response.included_rows, 5);
-        }
-
-        [Test]
-        public void TestMonetize()
-        {
-            // Arrange
-            var response = Factual.Monetize(new Query().Field("place_locality").Equal("Los Angeles"));
-
-            // Assert
-            AssertReceivedOkResponse(response);
-        }
-
-        [Test]
-        public void TestMonetizeByBusiness()
-        {
-            // Arrange
-            var response = Factual.Monetize(new Query().Field("place_factual_id").Equal("3226fac0-2f85-49d7-bc67-288fb2fc52ee"));
-
-            // Assert
-            AssertReceivedOkResponse(response);
         }
 
         [Test]
@@ -1110,7 +1072,7 @@ namespace FactualDriver.Tests
         }
 
         [Test]
-		[ExpectedException(typeof(FactualDriver.Exceptions.FactualException))]
+        [ExpectedException(typeof(System.NullReferenceException))]
         public void TestApiUrlOverride2()
         {
             // Arrange & Act
@@ -1198,32 +1160,6 @@ namespace FactualDriver.Tests
 			AssertReceivedOkResponse(raw);
 			Assert.AreEqual(result, raw);
 		}
-
-        [Test]
-        public void TestNewRawGetMonetize()
-        {
-            // Arrange & Act
-            //var response = Factual.RawQuery("places/monetize", "filters={\"place_locality\":\"Los Angeles\"}&limit=5");
-            var raw = Factual.RawQuery("places/monetize", new Dictionary<string, object>
-                {
-                    {
-                        "filters", new Dictionary<string, object>
-                        {
-                            {
-                                "place_locality", "Los Angeles"
-                            }
-                        }
-                    },
-                    {
-                        "limit", 5
-                    }
-                });
-
-            // Assert
-            // AssertReceivedOkResponse(response);
-            AssertReceivedOkResponse(raw);
-            // Assert.AreEqual(response, raw);
-        }
 
         [Test]
         public void TestNewRawPostSubmit()
