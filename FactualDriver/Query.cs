@@ -41,6 +41,20 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Sets a exact text search query. Factual will use this value to perform a
+        /// exact text search against various attributes of the underlying table, such
+        /// as entity name, address, etc.
+        /// </summary>
+        /// <param name="term">the text for which to perform a full text search.</param>
+        /// <returns>this Query</returns>
+        public Query SearchExact(string term)
+        {
+            string newTerm = string.Format("{0}{1}{2}", Constants.QUOTES, term, Constants.QUOTES);
+            Add(new Filter(Constants.SEARCH, newTerm));
+            return this;
+        }
+
+        /// <summary>
         /// Adds a filter so that results can only be (roughly) within the specified
         /// geographic circle.
         /// </summary>

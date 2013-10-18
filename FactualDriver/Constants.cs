@@ -60,6 +60,7 @@
 	    // Common query
 	    public const string INCLUDE_COUNT = "include_count";
 	    public const string SEARCH = "q";
+        public const string QUOTES = "\"";
 	
 	    // Query
 	    public const string QUERY_LIMIT = "limit";

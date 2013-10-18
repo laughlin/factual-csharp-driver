@@ -324,7 +324,6 @@ namespace FactualDriver.Tests
             // Assert
             AssertReceivedOkResponse(response);
             Assert.AreEqual(response, raw);
-
         }
 
         /// <summary>
@@ -343,7 +342,6 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             Assert.AreEqual(test2, raw);
             Assert.AreEqual(response, raw);
-            
         }
 
         /// <summary>
@@ -1235,6 +1233,18 @@ namespace FactualDriver.Tests
             dynamic json = JsonConvert.DeserializeObject(response);
             Assert.AreEqual((string)json.response.data[0].locality, "München");
             Assert.AreEqual((int)json.response.included_rows, 5);
+        }
+
+        [Test]
+        public void TestSearchExact()
+        {
+            // Arrange & Act
+            var response = Factual.Fetch("places", new Query().SearchExact("a b c"));
+            var raw = Factual.RawQuery("t/places", "q=\"a b c\"");
+
+            // Assert
+            AssertReceivedOkResponse(response);
+            Assert.AreEqual(response, raw);
         }
 
         //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
