@@ -21,6 +21,12 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void SearchExactTest()
+        {
+            AreEqualQueries("q=\"Sushi's man Santa Monica\"", new Query().SearchExact("Sushi's man Santa Monica"));
+        }
+
+        [Test]
         public void OnlyTests()
         {
             // Arrange
