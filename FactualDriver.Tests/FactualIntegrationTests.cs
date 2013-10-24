@@ -1089,11 +1089,11 @@ namespace FactualDriver.Tests
         public void TestNewRawGetSimple()
         {
             // Arrange & Act
-            var response = Factual.RawQuery("t/places", "select=name,category_labels&include_count=True");
+            var response = Factual.RawQuery("t/places", "select=name,category_labels&include_count=true");
             var raw = Factual.RawQuery("t/places", new Dictionary<string, object>
                 {
                     {"select", "name,category_labels"},
-                    {"include_count", true}
+                    {"include_count", "true"}
                 });
 
             // Assert
@@ -1130,7 +1130,7 @@ namespace FactualDriver.Tests
 						"offset", Offset
 					},
 					{
-						"include_count", Offset == 0
+						"include_count", (Offset == 0).ToString().ToLower()
 					},
 					{
 						"geo", new Dictionary<string, object>
@@ -1151,7 +1151,7 @@ namespace FactualDriver.Tests
 				}
 			);
 
-			var raw = Factual.RawQuery("t/places", "filters={\"category\":\"Food %26 Beverage\"}&limit=5&offset=0&include_count=True&geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}");
+			var raw = Factual.RawQuery("t/places", "filters={\"category\":\"Food %26 Beverage\"}&limit=5&offset=0&include_count=true&geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}");
 
 			// Assert
 			AssertReceivedOkResponse(result);
