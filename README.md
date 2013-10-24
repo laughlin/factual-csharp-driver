@@ -396,12 +396,12 @@ A Raw GET request can be used to make just about any kind of query against Factu
 ## Example Raw GET Queries
 
 	//GET only the name and category fields from places table, including the row count in the response: 
-	//http://api.v3.factual.com/t/places?select=name,category&include_count=True
+	//http://api.v3.factual.com/t/places?select=name,category&include_count=true
 
 		string result = Factual.RawQuery("t/places", new Dictionary<string, object>
 			{
 				{"select", "name,category"},
-				{"include_count", true}
+				{"include_count", "true"}
 			});
 		dynamic json = JsonConvert.DeserializeObject(result);
 
@@ -436,9 +436,9 @@ A Raw GET Encoded URL request can be used to make just about any kind of query a
 ## Example Raw GET Encoded Queries
 
 	//GET only the name and category fields from places table, including the row count in the response: 
-	//http://api.v3.factual.com/t/places?select=name,category&include_count=True
+	//http://api.v3.factual.com/t/places?select=name,category&include_count=true
 
-		string result = Factual.RawQuery("t/places", "select=name,category&include_count=True");
+		string result = Factual.RawQuery("t/places", "select=name,category&include_count=true");
 		dynamic json = JsonConvert.DeserializeObject(result);
 
 # Raw POST
