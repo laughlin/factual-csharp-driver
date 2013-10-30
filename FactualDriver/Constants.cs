@@ -60,6 +60,7 @@
 	    // Common query
 	    public const string INCLUDE_COUNT = "include_count";
 	    public const string SEARCH = "q";
+        public const string USER = "user";
         public const string QUOTES = "\"";
 	
 	    // Query
@@ -87,6 +88,9 @@
 	    public const string SUBMIT_VALUES = "values";
 	    public const string SUBMIT_FACTUAL_ID = "factual_id";
 	    public const string SUBMIT_NEW_ENTITY = "new_entity";
+
+        // Boost
+        public const string BOOST_FACTUAL_ID = "factual_id";
 
         // Clear
         public const string CLEAR_FIELDS = "fields";

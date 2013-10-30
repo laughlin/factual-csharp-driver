@@ -1247,6 +1247,46 @@ namespace FactualDriver.Tests
             Assert.AreEqual(response, raw);
         }
 
+        [Test]
+        public void TestBoost()
+        {
+            var response = Factual.Boost("us-sandbox", "03c26917-5d66-4de9-96bc-b13066173c65", "Local Business Data, Global", "test_driver_user");
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestBoostNoUser()
+        {
+            var response = Factual.Boost("us-sandbox", "03c26917-5d66-4de9-96bc-b13066173c65", "Local Business Data, Global");
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestBoostNoUserNoSearch()
+        {
+            var response = Factual.Boost("us-sandbox", "03c26917-5d66-4de9-96bc-b13066173c65");
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestBoostObject()
+        {
+            Boost boost = new Boost("03c26917-5d66-4de9-96bc-b13066173c65");
+            boost.Search("Local Business Data, Global");
+            boost.User("test_driver_user");
+            var response = Factual.Boost("us-sandbox", boost);
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestBoostExistingQuery()
+        {
+            Query query = new Query().Search("Local Business Data, Global");
+            Metadata metadata = new Metadata().User("test_driver_user");
+            var response = Factual.Boost("us-sandbox", "03c26917-5d66-4de9-96bc-b13066173c65", query, metadata);
+            AssertReceivedOkResponse(response);
+        }
+
         //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
         public void TestSubmitError()
         {
@@ -1256,7 +1296,7 @@ namespace FactualDriver.Tests
 
             var exception = Assert.Throws<FactualApiException>(
                 () => Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user")));
-            // Asert
+            // Assert
             Assert.IsNotNull(exception);
         }
 

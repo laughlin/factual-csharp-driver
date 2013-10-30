@@ -241,6 +241,31 @@ namespace FactualDriver
             return RequestPost(root, postData, "");
         }
 
+        public string Boost(string tableName, string factualId)
+        {
+            return Boost(tableName, new Boost(factualId));
+        }
+
+        public string Boost(string tableName, string factualId, string search)
+        {
+          return Boost(tableName, new Boost(factualId).Search(search));
+        }
+
+        public string Boost(string tableName, string factualId, string search, string user)
+        {
+          return Boost(tableName, new Boost(factualId).Search(search).User(user));
+        }
+
+        public string Boost(string tableName, string factualId, Query query, Metadata user)
+        {
+          return Boost(tableName, new Boost(factualId, query, user));
+        }
+
+        public string Boost(string tableName, Boost boost)
+        {
+            return RequestPost("t/" + tableName + "/boost", boost.ToUrlQuery(), "");
+        }
+
         /// <summary>
         /// Run a schema query against the specified Factual table.
         /// </summary>
@@ -589,7 +614,7 @@ namespace FactualDriver
         /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RequestPost(string path, string queryParameters, string postData)
         {
-            return RequestPost(string.Format("{0}?{1}", path, queryParameters), postData);
+            return RequestPost(string.Format("{0}{1}{2}", path, string.IsNullOrEmpty(queryParameters) ? "" : "?", queryParameters), postData);
         }
 
         /// <summary>
