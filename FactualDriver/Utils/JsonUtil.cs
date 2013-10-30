@@ -11,7 +11,7 @@ namespace FactualDriver.Utils
     /// </summary>
     public class JsonUtil
     {
-        
+
          /// <summary>
          /// Converts an array of filters into a uri encoded query string which can be sent to factual api.
          /// </summary>
