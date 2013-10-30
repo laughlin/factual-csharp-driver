@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Text;
-using FactualDriver.Filters;
+﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
 
 namespace FactualDriver

@@ -70,6 +70,22 @@ be used as documentation. To setup your tests you would need to add your factual
     // Entities that match a full text search for Sushi in Santa Monica:
     factual.Fetch("places", new Query().Search("Sushi Santa Monica"));
 
+# Exact Text Search
+
+    // Entities that match an exact text search for Sushi in Santa Monica:
+    factual.Fetch("places", new Query().SearchExact("Sushi Santa Monica"));
+
+# Full And Exact Text Search Combined
+
+	// To build a custom search with only a portion of exact text search use custom RawQuery(string, Dictionary<string, object>) method, escaping all extra quotes as follows \":
+	Factual.RawQuery("t/places", new Dictionary<string, object>
+		{
+			{
+				"q", "Sushi \"Santa Monica\""
+			}
+		}
+	);
+
 # Get Row Example
 
     // Entity from Factual's Places table with ID 03c26917-5d66-4de9-96bc-b13066173c65:

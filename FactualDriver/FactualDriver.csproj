@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Boost.cs" />
     <Compile Include="Clear.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DiffsQuery.cs" />
