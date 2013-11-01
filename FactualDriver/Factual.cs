@@ -242,6 +242,66 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Runs a boost post request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to boost attributes for an entity (e.g., "places").</param>
+        /// <param name="factualId">the factual id on which the boost is run.</param>
+        /// <returns>the response of running boost post request on a Factual entity.</returns>
+        public string Boost(string tableName, string factualId)
+        {
+            return Boost(tableName, new Boost(factualId));
+        }
+
+        /// <summary>
+        /// Runs a boost post request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to boost attributes for an entity (e.g., "places").</param>
+        /// <param name="factualId">the factual id on which the boost is run.</param>
+        /// <param name="search">the full text search string on which the boost is run.</param>
+        /// <returns>the response of running boost post request on a Factual entity.</returns>
+        public string Boost(string tableName, string factualId, string search)
+        {
+          return Boost(tableName, new Boost(factualId).Search(search));
+        }
+
+        /// <summary>
+        /// Runs a boost post request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to boost attributes for an entity (e.g., "places").</param>
+        /// <param name="factualId">the factual id on which the boost is run.</param>
+        /// <param name="search">the full text search string on which the boost is run.</param>
+        /// <param name="user">the user which executes the boost.</param>
+        /// <returns>the response of running boost post request on a Factual entity.</returns>
+        public string Boost(string tableName, string factualId, string search, string user)
+        {
+          return Boost(tableName, new Boost(factualId).Search(search).User(user));
+        }
+
+        /// <summary>
+        /// Runs a boost post request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to boost attributes for an entity (e.g., "places").</param>
+        /// <param name="factualId">the factual id on which the boost is run.</param>
+        /// <param name="query">the row query to run against table.</param>
+        /// <param name="user">the metadata which executes the boost.</param>
+        /// <returns>the response of running boost post request on a Factual entity.</returns>
+        public string Boost(string tableName, string factualId, Query query, Metadata user)
+        {
+          return Boost(tableName, new Boost(factualId, query, user));
+        }
+
+        /// <summary>
+        /// Runs a boost post request of existing attributes on a Factual entity.
+        /// </summary>
+        /// <param name="tableName">the name of the table in which to boost attributes for an entity (e.g., "places").</param>
+        /// <param name="boost">the boost to perform on a Factual entity.</param>
+        /// <returns>the response of running boost post request on a Factual entity.</returns>
+        public string Boost(string tableName, Boost boost)
+        {
+            return RequestPost("t/" + tableName + "/boost", boost.ToUrlQuery(), "");
+        }
+
+        /// <summary>
         /// Run a schema query against the specified Factual table.
         /// </summary>
         /// <param name="tableName">the name of the table you wish to query (e.g., "places")</param>
@@ -589,7 +649,7 @@ namespace FactualDriver
         /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RequestPost(string path, string queryParameters, string postData)
         {
-            return RequestPost(string.Format("{0}?{1}", path, queryParameters), postData);
+            return RequestPost(string.Format("{0}{1}{2}", path, string.IsNullOrEmpty(queryParameters) ? "" : "?", queryParameters), postData);
         }
 
         /// <summary>

@@ -70,6 +70,22 @@ be used as documentation. To setup your tests you would need to add your factual
     // Entities that match a full text search for Sushi in Santa Monica:
     factual.Fetch("places", new Query().Search("Sushi Santa Monica"));
 
+# Exact Text Search
+
+    // Entities that match an exact text search for Sushi in Santa Monica:
+    factual.Fetch("places", new Query().SearchExact("Sushi Santa Monica"));
+
+# Full And Exact Text Search Combined
+
+	// To build a custom search with only a portion of exact text search use custom RawQuery(string, Dictionary<string, object>) method, escaping all extra quotes as follows \":
+	Factual.RawQuery("t/places", new Dictionary<string, object>
+		{
+			{
+				"q", "Sushi \"Santa Monica\""
+			}
+		}
+	);
+
 # Get Row Example
 
     // Entity from Factual's Places table with ID 03c26917-5d66-4de9-96bc-b13066173c65:
@@ -838,6 +854,21 @@ Clear clear = new Clear("name", "address", "locality", "region");
 var response = Factual.Clear("us-sandbox", factualId, clear, new Metadata().User("test_driver_user"));
 ```
 
+#Boost
+You can use the Boost API to signal places/products that should show up more prominently in search results:
+
+	Factual factual = new Factual("YOUR_KEY", "YOUR_SECRET");
+	// create a full-text search
+	Query query = new Query().Search("Sushi Santa Monica");
+	// create a metadata object
+	Metadata metadata = new Metadata().User("test_driver_user");
+	// fetch query data
+	factual.Fetch("places-us", query);
+	// in the event that user "clicks" on one of the results fetched
+	factual.Boost("places-us", factualIdOfRowUserClickedOn, query, metadata);
+
+More details on the boost API can be found [here](http://developer.factual.com/api-docs/#Boost). Note that the boost API will not result in a real-time refinement of search results or a user-customized search experience. Boost simple enables longer term enhancement of overall search result quality through the Factual API.
+
 #Flag
 NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
 ---
@@ -970,3 +1001,5 @@ If you are having any other kind of issue, such as unexpected data or strange be
 # Change Log
 
   * 09-30-13 - Removed support for Monetize
+  * 10-17-13 - Add support for Exact Search
+  * 10-29-13 - Add support for Boost
