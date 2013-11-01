@@ -872,7 +872,7 @@ namespace FactualDriver.Tests
             
             // Act
             Metadata metadata = new Metadata().User("test_driver_user");
-            var response = Factual.Submit("us-sandbox", values, metadata); 
+            var response = Factual.Submit("us-sandbox", values, metadata);
 
             // Assert
             AssertReceivedOkResponse(response);
