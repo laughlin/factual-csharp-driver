@@ -1190,7 +1190,7 @@ namespace FactualDriver.Tests
                 new Dictionary<string, object>());
 
             // Assert
-            AssertReceivedWarningResponse(raw);
+            AssertReceivedOkResponse(raw);
         }
 
         [Test]
