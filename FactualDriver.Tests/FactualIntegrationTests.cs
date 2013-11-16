@@ -1306,17 +1306,28 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
         }
 
-        //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
+        [Test]
+        public void TestDeprecatedEntity()
+        {
+            // Arrange & Act
+            var response = Factual.FetchRow("places", "03c26917-5d66-4de9-96bc-b13066173c65");
+
+            // Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        [ExpectedException(typeof(FactualApiException))]
         public void TestSubmitError()
         {
             // Arrange
-            Submit submit = new Submit()
-                .RemoveValue("longitude");
+            Submit submit = new Submit().RemoveValue("longitude");
 
-            var exception = Assert.Throws<FactualApiException>(
-                () => Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user")));
+            // Act
+            var response = Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user"));
+
             // Assert
-            Assert.IsNotNull(exception);
+            AssertReceivedOkResponse(response);
         }
 
         private void AssertAll(string response, string key, string valueToCheck)

@@ -63,16 +63,6 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Create a new Factual HTTP GET WebRequest for granual control  
-        /// </summary>
-        /// <param name="fullQuery">Relative path string with factual query parameters</param>
-        /// <returns></returns>
-        public HttpWebRequest CreateWebRequest(string fullQuery)
-        {
-            return CreateWebRequest("GET", fullQuery);
-        }
-
-        /// <summary>
         /// Create a new Factual WebRequest for granual control  
         /// </summary>
         /// <param name="httpMethod">Http method name, GET, POST, etc</param>
@@ -598,7 +588,7 @@ namespace FactualDriver
         /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RawQuery(string completePathWithQuery)
         {
-            var request = CreateWebRequest(completePathWithQuery);
+            var request = CreateWebRequest("GET", completePathWithQuery);
             if (Debug)
             {
                 System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
@@ -701,6 +691,9 @@ namespace FactualDriver
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
+                    System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
+
                     var stream = response.GetResponseStream();
 
                     if (stream == null)
@@ -723,6 +716,10 @@ namespace FactualDriver
             catch (WebException ex)
             {
                 var response = ((HttpWebResponse) ex.Response);
+
+                System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                System.Diagnostics.Debug.WriteLine(response.StatusCode);
+
                 var stream = response.GetResponseStream();
 
                 if (stream == null)
