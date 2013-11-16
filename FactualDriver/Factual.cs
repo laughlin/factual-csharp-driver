@@ -757,7 +757,7 @@ namespace FactualDriver
                     urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
             }
             if (urlForRaw.Length > 0)
-				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d");
+				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d").Replace("=False", "=false").Replace("=True", "=true");
 			return urlForRaw;
         }
     }

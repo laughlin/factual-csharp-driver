@@ -1130,7 +1130,7 @@ namespace FactualDriver.Tests
 						"offset", Offset
 					},
 					{
-						"include_count", (Offset == 0).ToString().ToLower()
+						"include_count", (Offset == 0).ToString()
 					},
 					{
 						"geo", new Dictionary<string, object>
