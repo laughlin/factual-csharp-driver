@@ -1000,6 +1000,8 @@ If you are having any other kind of issue, such as unexpected data or strange be
 
 # Change Log
 
-  * 09-30-13 - Removed support for Monetize
-  * 10-17-13 - Add support for Exact Search
-  * 10-29-13 - Add support for Boost
+  * 09-30-13 - v1.5.6 - Removed support for Monetize
+  * 10-17-13 - v1.5.7 - Add support for Exact Search
+  * 10-29-13 - v1.5.7 - Add support for Boost
+  * 11-10-13 - v1.5.8 - Update dependencies
+  * 11-10-13 - v1.5.8 - Update to .NET 4.5.1
