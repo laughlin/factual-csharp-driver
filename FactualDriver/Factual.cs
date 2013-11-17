@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.8";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.6.0";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -60,16 +60,6 @@ namespace FactualDriver
         {
             _factualAuthenticator = new OAuth2LeggedAuthenticator(oAuthKey, oAuthSecret);
             Debug = debug;
-        }
-
-        /// <summary>
-        /// Create a new Factual HTTP GET WebRequest for granual control  
-        /// </summary>
-        /// <param name="fullQuery">Relative path string with factual query parameters</param>
-        /// <returns></returns>
-        public HttpWebRequest CreateWebRequest(string fullQuery)
-        {
-            return CreateWebRequest("GET", fullQuery);
         }
 
         /// <summary>
@@ -598,7 +588,7 @@ namespace FactualDriver
         /// <exception cref="FactualApiException">If something goes wrong</exception>
         public string RawQuery(string completePathWithQuery)
         {
-            var request = CreateWebRequest(completePathWithQuery);
+            var request = CreateWebRequest("GET", completePathWithQuery);
             if (Debug)
             {
                 System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
@@ -701,6 +691,9 @@ namespace FactualDriver
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
+                    System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
+
                     var stream = response.GetResponseStream();
 
                     if (stream == null)
@@ -718,11 +711,20 @@ namespace FactualDriver
                             System.Diagnostics.Debug.WriteLine(jsonResult);
                         }
                     }
+
+                    if (response.StatusCode == (HttpStatusCode)301)
+                    {
+                        return RawQuery(FixUrlForRedirect(completePathWithQuery, jsonResult));
+                    }
                 }
             }
             catch (WebException ex)
             {
                 var response = ((HttpWebResponse) ex.Response);
+
+                System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                System.Diagnostics.Debug.WriteLine(response.StatusCode);
+
                 var stream = response.GetResponseStream();
 
                 if (stream == null)
@@ -757,8 +759,16 @@ namespace FactualDriver
                     urlForRaw += HttpUtility.UrlEncode(pair.Key) + "=" + HttpUtility.UrlEncode(pair.Value.ToString()) + "&";
             }
             if (urlForRaw.Length > 0)
-				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d");
+				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d").Replace("=False", "=false").Replace("=True", "=true");
 			return urlForRaw;
+        }
+
+        private string FixUrlForRedirect(string completePathWithQuery, string jsonResult)
+        {
+            dynamic json = JsonConvert.DeserializeObject(jsonResult);
+            string oldId = (string) json.deprecated_id;
+            string newId = (string) json.current_id;
+            return completePathWithQuery.Replace(oldId, newId);
         }
     }
 }

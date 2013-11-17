@@ -1130,7 +1130,7 @@ namespace FactualDriver.Tests
 						"offset", Offset
 					},
 					{
-						"include_count", (Offset == 0).ToString().ToLower()
+						"include_count", (Offset == 0).ToString()
 					},
 					{
 						"geo", new Dictionary<string, object>
@@ -1306,17 +1306,28 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
         }
 
-        //[Test] per Aaron: Factual doesn't check if id already exists, so it does not result in an error.
+        [Test]
+        public void TestDeprecatedEntity()
+        {
+            // Arrange & Act
+            var response = Factual.FetchRow("places", "15442594-6f41-4ba3-9c02-b4ca6e663fcd");
+
+            // Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        [ExpectedException(typeof(FactualApiException))]
         public void TestSubmitError()
         {
             // Arrange
-            Submit submit = new Submit()
-                .RemoveValue("longitude");
+            Submit submit = new Submit().RemoveValue("longitude");
 
-            var exception = Assert.Throws<FactualApiException>(
-                () => Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user")));
+            // Act
+            var response = Factual.Submit("us-sandbox", "randomwrongid", submit, new Metadata().User("test_driver_user"));
+
             // Assert
-            Assert.IsNotNull(exception);
+            AssertReceivedOkResponse(response);
         }
 
         private void AssertAll(string response, string key, string valueToCheck)
