@@ -1310,7 +1310,7 @@ namespace FactualDriver.Tests
         public void TestDeprecatedEntity()
         {
             // Arrange & Act
-            var response = Factual.FetchRow("places", "03c26917-5d66-4de9-96bc-b13066173c65");
+            var response = Factual.FetchRow("places", "15442594-6f41-4ba3-9c02-b4ca6e663fcd");
 
             // Assert
             AssertReceivedOkResponse(response);

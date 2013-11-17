@@ -1005,3 +1005,4 @@ If you are having any other kind of issue, such as unexpected data or strange be
   * 10-29-13 - v1.5.7 - Add support for Boost
   * 11-10-13 - v1.5.8 - Update dependencies
   * 11-10-13 - v1.5.8 - Update to .NET 4.5.1
+  * 11-16-13 - v1.6.0 - Add logic for 301 redirect
