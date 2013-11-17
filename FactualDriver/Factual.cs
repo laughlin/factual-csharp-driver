@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.5.8";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.6.0";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -711,6 +711,11 @@ namespace FactualDriver
                             System.Diagnostics.Debug.WriteLine(jsonResult);
                         }
                     }
+
+                    if (response.StatusCode == (HttpStatusCode)301)
+                    {
+                        return RawQuery(FixUrlForRedirect(completePathWithQuery, jsonResult));
+                    }
                 }
             }
             catch (WebException ex)
@@ -756,6 +761,14 @@ namespace FactualDriver
             if (urlForRaw.Length > 0)
 				urlForRaw = urlForRaw.Remove(urlForRaw.Length - 1).Replace("%22%5b", "%5b").Replace("%5d%22", "%5d").Replace("=False", "=false").Replace("=True", "=true");
 			return urlForRaw;
+        }
+
+        private string FixUrlForRedirect(string completePathWithQuery, string jsonResult)
+        {
+            dynamic json = JsonConvert.DeserializeObject(jsonResult);
+            string oldId = (string) json.deprecated_id;
+            string newId = (string) json.current_id;
+            return completePathWithQuery.Replace(oldId, newId);
         }
     }
 }
