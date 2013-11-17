@@ -691,8 +691,11 @@ namespace FactualDriver
             {
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    System.Diagnostics.Debug.WriteLine("==== Status Code ====");
-                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                    if (Debug)
+                    {
+                        System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                        System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                    }
 
                     var stream = response.GetResponseStream();
 
@@ -722,8 +725,11 @@ namespace FactualDriver
             {
                 var response = ((HttpWebResponse) ex.Response);
 
-                System.Diagnostics.Debug.WriteLine("==== Status Code ====");
-                System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                if (Debug)
+                {
+                    System.Diagnostics.Debug.WriteLine("==== Status Code ====");
+                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                }
 
                 var stream = response.GetResponseStream();
 
