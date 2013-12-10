@@ -21,7 +21,7 @@ namespace FactualDriver
     public class Factual
     {
         private readonly OAuth2LeggedAuthenticator _factualAuthenticator;
-        private const string DriverHeaderTag = "factual-csharp-driver-v1.6.1";
+        private const string DriverHeaderTag = "factual-csharp-driver-v1.6.2";
         private MultiQuery _multiQuery;
         public int? ConnectionTimeout { get; set; }
         public int? ReadTimeout { get; set; }
@@ -591,14 +591,18 @@ namespace FactualDriver
             var request = CreateWebRequest("GET", completePathWithQuery);
             if (Debug)
             {
+                System.Diagnostics.Debug.WriteLine("==== Driver Version ====");
+                System.Diagnostics.Debug.WriteLine(DriverHeaderTag);
                 System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine(request.Timeout);
                 System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout);
+                System.Diagnostics.Debug.WriteLine("\n\n==== Request Headers ====");
+                System.Diagnostics.Debug.WriteLine(request.Headers);
+                System.Diagnostics.Debug.WriteLine("==== Request Method ====");
+                System.Diagnostics.Debug.WriteLine(request.Method);
                 System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
-                System.Diagnostics.Debug.WriteLine("==== Headers ====");
-                System.Diagnostics.Debug.WriteLine(request.Headers);
             }
             return ReadRequest(completePathWithQuery, request);
         }
@@ -661,14 +665,18 @@ namespace FactualDriver
             var request = CreateWebRequest("POST", completePathWithQuery);
             if (Debug)
             {
+                System.Diagnostics.Debug.WriteLine("==== Driver Version ====");
+                System.Diagnostics.Debug.WriteLine(DriverHeaderTag);
                 System.Diagnostics.Debug.WriteLine("==== Connection Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.Timeout.ToString());
+                System.Diagnostics.Debug.WriteLine(request.Timeout);
                 System.Diagnostics.Debug.WriteLine("==== Read/Write Timeout ====");
-                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout.ToString());
+                System.Diagnostics.Debug.WriteLine(request.ReadWriteTimeout);
+                System.Diagnostics.Debug.WriteLine("\n\n==== Request Headers ====");
+                System.Diagnostics.Debug.WriteLine(request.Headers);
+                System.Diagnostics.Debug.WriteLine("==== Request Method ====");
+                System.Diagnostics.Debug.WriteLine(request.Method);
                 System.Diagnostics.Debug.WriteLine("==== Request Url ====");
                 System.Diagnostics.Debug.WriteLine(request.RequestUri);
-                System.Diagnostics.Debug.WriteLine("==== Headers ====");
-                System.Diagnostics.Debug.WriteLine(request.Headers);
             }
             
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -693,8 +701,12 @@ namespace FactualDriver
                 {
                     if (Debug)
                     {
-                        System.Diagnostics.Debug.WriteLine("==== Status Code ====");
-                        System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                        System.Diagnostics.Debug.WriteLine("\n\n==== Response Header ====");
+                        System.Diagnostics.Debug.WriteLine(response.Headers);
+                        System.Diagnostics.Debug.WriteLine("==== Response Status Code ====");
+                        System.Diagnostics.Debug.WriteLine((int)response.StatusCode);
+                        System.Diagnostics.Debug.WriteLine("==== Response Status Message ====");
+                        System.Diagnostics.Debug.WriteLine(response.StatusDescription);
                     }
 
                     var stream = response.GetResponseStream();
@@ -710,8 +722,11 @@ namespace FactualDriver
 
                         if (Debug)
                         {
-                            System.Diagnostics.Debug.WriteLine("==== Factual Response ====");
+                            System.Diagnostics.Debug.WriteLine("==== Response Type ====");
+                            System.Diagnostics.Debug.WriteLine(response.ContentType);
+                            System.Diagnostics.Debug.WriteLine("==== Response Body ====");
                             System.Diagnostics.Debug.WriteLine(jsonResult);
+                            System.Diagnostics.Debug.WriteLine("\n================================================================================================================================================================\n\n");
                         }
                     }
 
@@ -727,8 +742,12 @@ namespace FactualDriver
 
                 if (Debug)
                 {
-                    System.Diagnostics.Debug.WriteLine("==== Status Code ====");
-                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
+                    System.Diagnostics.Debug.WriteLine("\n\n==== Response Header ====");
+                    System.Diagnostics.Debug.WriteLine(response.Headers);
+                    System.Diagnostics.Debug.WriteLine("==== Response Status Code ====");
+                    System.Diagnostics.Debug.WriteLine((int)response.StatusCode);
+                    System.Diagnostics.Debug.WriteLine("==== Response Status Message ====");
+                    System.Diagnostics.Debug.WriteLine(response.StatusDescription);
                 }
 
                 var stream = response.GetResponseStream();
