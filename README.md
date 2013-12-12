@@ -189,6 +189,9 @@ The driver supports various row filter logic. Examples:
     // Build a query to find places whose name field starts with "Starbucks"
     new Query().Field("name").BeginsWith("Starbucks");
 
+    // Build a query to find places in 90067 zip code
+    new Query().Field("postcode").Equal("90067");
+
     // Build a query to find places with a blank telephone number
     new Query().Field("tel").Blank();
 
