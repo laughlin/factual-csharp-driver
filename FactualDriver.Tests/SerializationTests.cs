@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using FactualDriver.Filters;
-using NUnit.Framework;
+﻿using FactualDriver.Filters;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace FactualDriver.Tests
 {

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using FactualDriver.JsonConverters;
+﻿using FactualDriver.JsonConverters;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FactualDriver.Filters
 {

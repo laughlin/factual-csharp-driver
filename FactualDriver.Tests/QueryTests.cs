@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Linq;
-using FactualDriver.Filters;
+﻿using FactualDriver.Filters;
 using NUnit.Framework;
 
 namespace FactualDriver.Tests

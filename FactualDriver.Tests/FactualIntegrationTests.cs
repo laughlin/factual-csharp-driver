@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Web;
-using FactualDriver.Exceptions;
+﻿using FactualDriver.Exceptions;
 using FactualDriver.Filters;
-using FactualDriver.Utils;
-using NUnit.Framework;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace FactualDriver.Tests
 {

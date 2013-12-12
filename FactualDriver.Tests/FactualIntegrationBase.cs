@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System.Configuration;
 
 namespace FactualDriver.Tests
 {
