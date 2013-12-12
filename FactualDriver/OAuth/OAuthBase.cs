@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Collections.Generic;
-using System.Text;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FactualDriver.OAuth
 {
@@ -303,8 +302,8 @@ namespace FactualDriver.OAuth
             StringBuilder signatureBase = new StringBuilder();
             signatureBase.AppendFormat(CultureInfo.InvariantCulture, "{0}&", httpMethod.ToUpper());
             signatureBase.AppendFormat(CultureInfo.InvariantCulture, "{0}&", EncodingPerRFC3986(normalizedUrl));
-            Debug.WriteLine("==== OAuth Signature Base parameters ====");
-            Debug.WriteLine(EncodingPerRFC3986(normalizedRequestParameters));
+            System.Diagnostics.Trace.WriteLine("==== OAuth Signature Base parameters ====");
+            System.Diagnostics.Trace.WriteLine(EncodingPerRFC3986(normalizedRequestParameters));
             signatureBase.AppendFormat(CultureInfo.InvariantCulture, "{0}", EncodingPerRFC3986(normalizedRequestParameters));
 
             return signatureBase.ToString();

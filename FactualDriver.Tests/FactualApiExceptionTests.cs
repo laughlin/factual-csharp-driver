@@ -1,6 +1,6 @@
-﻿using System.Net;
-using FactualDriver.Exceptions;
+﻿using FactualDriver.Exceptions;
 using NUnit.Framework;
+using System.Net;
 
 namespace FactualDriver.Tests
 {

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using FactualDriver.Filters;
+using FactualDriver.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FactualDriver.Filters;
-using FactualDriver.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace FactualDriver
 {
