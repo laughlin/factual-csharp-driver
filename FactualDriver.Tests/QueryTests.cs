@@ -81,6 +81,18 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void BlendedSortTest()
+        {
+            // Arrange
+            var query = new Query()
+                .SortBlendRankAndDistance(100, 50)
+                .Search("Sushi");
+
+            // Assert
+            AreEqualQueries("sort={\"placerank\":100,\"distance\":50}&q=Sushi", query);
+        }
+
+        [Test]
         public void OffsetTest()
         {
             AreEqualQueries("offset=20",new Query().Offset(20));

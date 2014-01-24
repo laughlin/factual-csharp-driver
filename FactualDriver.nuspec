@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FactualDriver</id>
-        <version>1.6.3</version>
+        <version>1.6.4</version>
         <authors>Denis Pavlov,Sergey Maskalik</authors>
         <owners>Factual</owners>
         <projectUrl>https://github.com/Factual/factual-csharp-driver</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>.NET client library for Factual API. Please refer to https://github.com/Factual/factual-csharp-driver for documentation.</description>
         <summary>.NET driver for Factual API. Provides a library to setup and receive data from factual in two lines of code. Most of the design is ported from Java Factual Driver.</summary>
-        <releaseNotes>Fix debug output.</releaseNotes>
+        <releaseNotes>Add blended sort support.</releaseNotes>
         <dependencies>
             <dependency id="Newtonsoft.Json" version="5.0.8" />
         </dependencies>
