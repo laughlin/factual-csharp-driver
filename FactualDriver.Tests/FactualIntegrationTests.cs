@@ -417,6 +417,22 @@ namespace FactualDriver.Tests
             Assert.AreEqual(response, raw);
         }
 
+        [Test]
+        public void TestBlendedSort()
+        {
+            // Arrange & Act
+            var response = Factual.Fetch("places", new Query()
+                                                       .WithIn(new Circle(Latitude, Longitude, Meters))
+                                                       .SortBlendRankAndDistance(100, 50));
+
+            AssertReceivedOkResponse(response);
+            AssertNotEmpty(response);
+
+            var raw = Factual.RawQuery("t/places", "geo={\"$circle\":{\"$center\":[34.06018,-118.41835],\"$meters\":5000}}&sort={\"placerank\":100,\"distance\":50}");
+
+            // Assert
+            Assert.AreEqual(response, raw);
+        }
 
         [Test]
         public void TestRowFiltersTwoBeginsWith()

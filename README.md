@@ -104,15 +104,22 @@ You can have Factual sort your query results for you, on a field by field basis.
 
     // Build a Query to find 10 random entities and sort them by name, ascending:
     new Query().Limit(10).SortAsc("name");
-    
+
 You can specify more than one sort, and the results will be sorted with the first sort as primary, the second sort or secondary, and so on:
 
     // Build a Query to find 20 random entities, sorted ascending primarily by region, then by locality, then by name:
     var q = new Query()
-      .Limit(20)
-      .SortAsc("region")
-      .SortAsc("locality")
-      .SortDesc("name");
+        .Limit(20)
+        .SortAsc("region")
+        .SortAsc("locality")
+        .SortDesc("name");
+
+There are however times when what you want is a blending of your sort parameters. For example, Instead of sorting places by how close they are to you (and thus only returning the 20 closest businesses to you) you might want the 20 closest popular businesses near you. Factual’s API allows you to blend distance and placerank.
+
+    // Build a Query for a specified geographic location weighing placerank 2 to 1 against distance:
+    var q = new Query()
+        .WithIn(new Circle(34.06018, -118.41835, 5000))
+        .SortBlendRankAndDistance(100, 50));
 
 # Limit and Offset
 
@@ -177,7 +184,7 @@ By default your queries will return all fields in the table. You can use the onl
   </tr>
   <tr>
     <td>sort</td>
-    <td>The field (or secondary fields) to sort data on, as well as the direction of sort.  Supports $distance as a sort option if a geo-filter is specified.  Supports $relevance as a sort option if a full text search is specified either using the q parameter or using the $search operator in the filter parameter.  By default, any query with a full text search will be sorted by relevance.  Any query with a geo filter will be sorted by distance from the reference point.  If both a geo filter and full text search are present, the default will be relevance followed by distance.</td>
+    <td>The field (or secondary fields) to sort data on, as well as the direction of sort. Alternately, a JSON map of blended sorting coefficients. Supports $distance as a sort option if a geo-filter is specified.  Supports $relevance as a sort option if a full text search is specified either using the q parameter or using the $search operator in the filter parameter.  By default, any query with a full text search will be sorted by relevance.  Any query with a geo filter will be sorted by distance from the reference point.  If both a geo filter and full text search are present, the default will be relevance followed by distance.</td>
     <td><tt>q.SortAsc("name").SortDesc("$distance")</tt></td>
   </tr>
 </table>  

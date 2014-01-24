@@ -87,6 +87,19 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Sets this Query to perform a blended sort on rank and distance with the specified weights.
+        /// This will only have an effect if a geo filter is used with this query.
+        /// </summary>
+        /// <param name="rankWeight">weight for placerank.</param>
+        /// <param name="distanceWeight">weight for distance.</param>
+        /// <returns>this Query</returns>
+        public Query SortBlendRankAndDistance(int rankWeight, int distanceWeight)
+        {
+            _parameters.AddCommaSeparatedFilter(Constants.QUERY_SORT, "{\"placerank\":" + rankWeight + ",\"distance\":" + distanceWeight + "}");
+            return this;
+        }
+
+        /// <summary>
         /// Sets the fields to select. This is optional; default behaviour is generally
         /// to select all fields in the schema.
         /// </summary>
