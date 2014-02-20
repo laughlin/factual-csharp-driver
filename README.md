@@ -1017,3 +1017,5 @@ If you are having any other kind of issue, such as unexpected data or strange be
   * 11-10-13 - v1.5.8 - Update to .NET 4.5.1
   * 11-16-13 - v1.6.0 - Add logic for 301 redirect
   * 11-25-13 - v1.6.1 - Rollback to .NET 4.5
+  * 01-24-14 - v1.6.4 - Add blended sort support
+  * 02-20-14 - v1.6.5 - Update to Newtonsoft.Json 6.0.1
