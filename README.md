@@ -114,7 +114,7 @@ You can specify more than one sort, and the results will be sorted with the firs
         .SortAsc("locality")
         .SortDesc("name");
 
-There are however times when what you want is a blending of your sort parameters. For example, Instead of sorting places by how close they are to you (and thus only returning the 20 closest businesses to you) you might want the 20 closest popular businesses near you. Factual’s API allows you to blend distance and placerank.
+There are however times when what you want is a blending of your sort parameters. For example, Instead of sorting places by how close they are to you (and thus only returning the 20 closest businesses to you) you might want the 20 closest popular businesses near you. Factualï¿½s API allows you to blend distance and placerank.
 
     // Build a Query for a specified geographic location weighing placerank 2 to 1 against distance:
     var q = new Query()
@@ -1019,3 +1019,4 @@ If you are having any other kind of issue, such as unexpected data or strange be
   * 11-25-13 - v1.6.1 - Rollback to .NET 4.5
   * 01-24-14 - v1.6.4 - Add blended sort support
   * 02-20-14 - v1.6.5 - Update to Newtonsoft.Json 6.0.1
+  * 06-27-14 - v1.6.6 - Update to Newtonsoft.Json 6.0.3
