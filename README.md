@@ -695,9 +695,6 @@ The <tt>ReverseGeocode</tt> method fetches results based on the given point:
 
 #Submit
 
-NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
----
-
 ## Introduction
 
 Submit allows you to add a record to Factual, or update an existing record.  To delete a record, see [Flag](https://github.com/Factual/factual-java-driver/wiki/Flag).
@@ -800,9 +797,6 @@ factual.Submit("us-sandbox",
 
 #Clear
 
-NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
----
-
 ## Introduction
 
 Clear allows you to clear one or more attributes from a Factual record.
@@ -880,8 +874,6 @@ You can use the Boost API to signal places/products that should show up more pro
 More details on the boost API can be found [here](http://developer.factual.com/api-docs/#Boost). Note that the boost API will not result in a real-time refinement of search results or a user-customized search experience. Boost simple enables longer term enhancement of overall search result quality through the Factual API.
 
 #Flag
-NOTICE: At the current time, this API call is ONLY compatible with places-v3. Please see the [the migration page](http://developer.factual.com/display/docs/Places+API+-+v3+Migration) for more details.
----
 
 ## Introduction
 
