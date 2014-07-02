@@ -23,7 +23,7 @@ namespace FactualDriver.Tests
         public void BadSelectField()
         {
             // Arrange
-            var query = new Query().Field("country").Equal("US").Only("hours");
+            var query = new Query().Field("country").Equal("US").Only("hamlet");
 
             // Assert
             var exception = Assert.Throws<FactualApiException>(
