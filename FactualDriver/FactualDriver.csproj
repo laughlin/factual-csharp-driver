@@ -76,7 +76,6 @@
     <Compile Include="Filters\FilterList.cs" />
     <Compile Include="Filters\KeyValueFilter.cs" />
     <Compile Include="Filters\Point.cs" />
-    <Compile Include="Geopulse.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="JsonConverters\FilterGroupConverter.cs" />
     <Compile Include="Filters\Filter.cs" />

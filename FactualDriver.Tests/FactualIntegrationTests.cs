@@ -715,7 +715,7 @@ namespace FactualDriver.Tests
         public void TestFlagDuplicate()
         {
             // Arrange
-            var response = Factual.FlagDuplicate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagDuplicate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", null, new Metadata().User("test_driver_user"));
            
             // Assert
             AssertReceivedOkResponse(response);
@@ -725,7 +725,7 @@ namespace FactualDriver.Tests
         public void TestFlagInaccurate()
         {
             // Arrange
-            var response = Factual.FlagInaccurate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagInaccurate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", null, new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
@@ -734,7 +734,7 @@ namespace FactualDriver.Tests
         public void TestFlagInappropriate()
         {
             // Arrange
-            var response = Factual.FlagInappropriate("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagInappropriate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
@@ -743,7 +743,7 @@ namespace FactualDriver.Tests
         public void TestFlagNonExistent()
         {
             // Arrange
-            var response = Factual.FlagNonExistent("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagNonExistent("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
@@ -752,7 +752,7 @@ namespace FactualDriver.Tests
         public void TestFlagSpam()
         {
             // Arrange
-            var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagSpam("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
@@ -761,7 +761,7 @@ namespace FactualDriver.Tests
         public void TestFlagClosed()
         {
             // Arrange
-            var response = Factual.FlagSpam("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagSpam("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
@@ -770,7 +770,7 @@ namespace FactualDriver.Tests
         public void TestFlagOther()
         {
             // Arrange
-            var response = Factual.FlagOther("us-sandbox", "2ca7228a-a77c-448e-a96f-3e1731573fff", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagOther("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
