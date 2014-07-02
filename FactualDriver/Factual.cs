@@ -301,18 +301,6 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Run a Geopulse query against the Factual API.
-        /// <para name="Example"> This example shows common usage: </para>
-        /// <c>new Geopulse(new Point(34.06021, -118.41828)).Only("commercial_density")</c>
-        /// </summary>
-        /// <param name="geopulse">Geopulse query to run</param>
-        /// <returns>the response of running query against Factual.</returns>
-        public string Geopulse(Geopulse geopulse)
-        {
-            return RawQuery(UrlForGeopulse(), geopulse.ToUrlQuery());
-        }
-
-        /// <summary>
         /// Run a Geocode query against the Factual API.
         /// <para name="Example"> This example shows common usage: </para>
         /// <c>new Point(34.06021, -118.41828)</c>
@@ -374,15 +362,6 @@ namespace FactualDriver
         }
 
         /// <summary>
-        /// Queue a Geopulse for inclusion in the next multi request.
-        /// </summary>
-        /// <param name="point">Geopulse query parameter</param>
-        public void QueueFetch(Geopulse point)
-        {
-            MultiQuery.AddQuery(UrlForGeopulse(), point.ToUrlQuery());
-        }
-
-        /// <summary>
         /// Send all milti query requests which were queued up.
         /// </summary>
         /// <returns></returns>
@@ -424,11 +403,6 @@ namespace FactualDriver
         protected static string UrlForGeocode()
         {
             return "places/geocode";
-        }
-
-        protected static string UrlForGeopulse()
-        {
-            return "geopulse/context";
         }
 
         protected static string UrlForSchema(string tableName)

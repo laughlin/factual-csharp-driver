@@ -28,18 +28,6 @@ namespace FactualDriver.Tests
         }
 
         [Test]
-        public void GeopulseTest()
-        {
-            // Arrange
-            var result =
-                Factual.Geopulse(new Geopulse(new Point(34.06021, -118.41828)).Only("income",
-                                                                                    "housing"));
-            dynamic json = JsonConvert.DeserializeObject(result);
-            // Assert
-            Assert.AreEqual("ok", (string)json.status);
-        }
-
-        [Test]
         public void TestReverseGeocode()
         {
             // Arrange
@@ -113,38 +101,6 @@ namespace FactualDriver.Tests
             // Assert
             dynamic json = JsonConvert.DeserializeObject(response);
             Assert.AreEqual("ok", (string)json.q0.status);
-        }
-
-        [Test]
-        public void TestMiltiGeopulseWithNearestAddress()
-        {
-            // Arrange
-            Factual.QueueFetch(new Point(Latitude,Longitude));
-            Factual.QueueFetch(new Geopulse(new Point(Latitude,Longitude)));
-            // Act
-            var response = Factual.SendQueueRequests();
-            // Assert
-            dynamic json = JsonConvert.DeserializeObject(response);
-            var results = (ICollection<JToken>) json;
-            Assert.AreEqual(2,results.Count);
-            Assert.AreEqual("ok", (string)json.q0.status);
-            Assert.AreEqual("ok", (string)json.q1.status);
-        }
-
-        [Test]
-        public void TestMultiGeopulseWithNearestPlace()
-        {
-            // Arrange
-            Factual.QueueFetch("global", new Query().WithIn(new Circle(Latitude, Longitude, Meters)));
-            Factual.QueueFetch(new Geopulse(new Point(Latitude, Longitude)));
-            // Act
-            var response = Factual.SendQueueRequests();
-            // Assert
-            dynamic json = JsonConvert.DeserializeObject(response);
-            var results = (ICollection<JToken>)json;
-            Assert.AreEqual(2, results.Count);
-            Assert.AreEqual("ok", (string)json.q0.status);
-            Assert.AreEqual("ok", (string)json.q1.status);
         }
 
         [Test]
@@ -721,20 +677,6 @@ namespace FactualDriver.Tests
             AssertReceivedOkResponse(response);
             dynamic json = JsonConvert.DeserializeObject(response);
             Assert.IsTrue(((ICollection<JToken>)json.response.data.category_labels).Count > 0);
-        }
-
-        [Test]
-        public void TestGeopulse()
-        {
-            // Arrange
-            var response = Factual.Geopulse(new Geopulse(new Point(Latitude, Longitude))
-                .Only("income", "area_statistics"));
-            dynamic json = JsonConvert.DeserializeObject(response);
-            var pulse = json.response.data.demographics;
-            // Assert
-            AssertReceivedOkResponse(response);
-            Assert.IsTrue(pulse["income"] != null);
-            Assert.IsTrue(pulse["area_statistics"] != null);
         }
 
         [Test]
