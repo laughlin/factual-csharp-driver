@@ -714,9 +714,16 @@ namespace FactualDriver.Tests
         public void TestFlagDuplicate()
         {
             // Arrange
-            var response = Factual.FlagDuplicate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagDuplicate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", null, new Metadata().User("test_driver_user"));
            
             // Assert
+            AssertReceivedOkResponse(response);
+        }
+
+        [Test]
+        public void TestFlagRelocated() {
+            var response = Factual.FlagRelocated("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", "21EC2020-3AEA-1069-A2DD-08002B30309D", new Metadata().User("test_driver_user"));
+
             AssertReceivedOkResponse(response);
         }
 
@@ -724,7 +731,8 @@ namespace FactualDriver.Tests
         public void TestFlagInaccurate()
         {
             // Arrange
-            var response = Factual.FlagInaccurate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagInaccurate("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new List<String> {"name","hours"}, new Metadata().User("test_driver_user"));
+
             // Assert
             AssertReceivedOkResponse(response);
         }

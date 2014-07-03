@@ -427,9 +427,38 @@ namespace FactualDriver
         /// <param name="factualId">the factual id that is the duplicate</param>
         /// <param name="metadata">the metadata to send with information on this request</param>
         /// <returns>the response from flagging a duplicate row.</returns>
+        [Obsolete("Deprecated method for flagging a duplicate. Please use the newer method which takes a 'preferredFactualId' instead")]
         public string FlagDuplicate(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "duplicate", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "duplicate", null, null, metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as a duplicate in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="preferredFactualId">the factual id that is preferred of the two duplicates to persist</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagDuplicate(string tableName, string factualId, String preferredFactualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "duplicate", preferredFactualId, null, metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as having been relocated, where its new location is an existing record,
+        /// identified by preferredFactualid. If there is no record corresponding to the relocated
+        /// business, use the submit API to update the record's address instead.
+        /// </summary>
+        /// <param name="tablename">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">>the factual id that is the relocated</param>
+        /// <param name="preferredFactualId">the factual id that is preferred.</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns></returns>
+        public String FlagRelocated(string tablename, string factualId, String preferredFactualId, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tablename, factualId), "relocated", preferredFactualId, null, metadata);
         }
 
         /// <summary>
@@ -439,9 +468,25 @@ namespace FactualDriver
         /// <param name="factualId">the factual id that is the duplicate</param>
         /// <param name="metadata">the metadata to send with information on this request</param>
         /// <returns>the response from flagging a duplicate row.</returns>
+        [Obsolete("Deprecated method for flagging a row as inaccurate. Please use the newer method which takes a List of inaccurate field names instead.")]
         public string FlagInaccurate(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "inaccurate", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "inaccurate", null, null, metadata);
+        }
+
+        /// <summary>
+        /// Flags a row as inaccurate in the specified Factual table.
+        /// </summary>
+        /// <param name="tableName">the name of the table you wish to flag a duplicate for (e.g., "places")</param>
+        /// <param name="factualId">the factual id that is the duplicate</param>
+        /// <param name="fields">A List of fields(by name) which you know to contain inaccurate data,
+        /// however for which you don't actually have the proper corrections. If you have actual corrections,
+        /// please use the submit API to update the row.</param>
+        /// <param name="metadata">the metadata to send with information on this request</param>
+        /// <returns>the response from flagging a duplicate row.</returns>
+        public string FlagInaccurate(string tableName, string factualId, List<String> fields, Metadata metadata)
+        {
+            return FlagCustom(UrlForFlag(tableName, factualId), "inaccurate", null, fields, metadata);
         }
 
         /// <summary>
@@ -453,7 +498,7 @@ namespace FactualDriver
         /// <returns>the response from flagging a duplicate row.</returns>
         public string FlagInappropriate(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "inappropriate", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "inappropriate", null, null, metadata);
         }
 
         /// <summary>
@@ -465,7 +510,7 @@ namespace FactualDriver
         /// <returns>the response from flagging a duplicate row.</returns>
         public string FlagNonExistent(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "nonexistent", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "nonexistent", null, null, metadata);
         }
 
         /// <summary>
@@ -477,7 +522,7 @@ namespace FactualDriver
         /// <returns>the response from flagging a duplicate row.</returns>
         public string FlagSpam(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "spam", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "spam", null, null, metadata);
         }
 
         /// <summary>
@@ -489,7 +534,7 @@ namespace FactualDriver
         /// <returns>the response from flagging an item as closed.</returns>
         public string FlagClosed(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "closed", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "closed", null, null, metadata);
         }
 
         /// <summary>
@@ -501,12 +546,23 @@ namespace FactualDriver
         /// <returns>the response from flagging a duplicate row.</returns>
         public string FlagOther(string tableName, string factualId, Metadata metadata)
         {
-            return FlagCustom(UrlForFlag(tableName, factualId), "other", metadata);
+            return FlagCustom(UrlForFlag(tableName, factualId), "other", null, null, metadata);
         }
 
-        private string FlagCustom(string root, string flagType, Metadata metadata)
+        private string FlagCustom(string root, string flagType, String preferredFactualId, List<String> fields, Metadata metadata)
         {
             var postData = "problem=" + flagType + "&" + metadata.ToUrlQuery();
+
+            if (preferredFactualId != null)
+            {
+                postData += "&preferred=" + preferredFactualId;
+            }
+
+            if (fields != null && fields.Count > 0)
+            {
+                postData += "&fields=" + HttpUtility.UrlEncode(JsonConvert.SerializeObject(fields));
+            }
+
             return RequestPost(root, postData, "");
         }
 
