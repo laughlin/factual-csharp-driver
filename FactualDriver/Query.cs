@@ -156,6 +156,20 @@ namespace FactualDriver
         }
 
         /// <summary>
+        ///  Chooses an existence threshold. For on the latest enumuration of values
+        ///  that can be passed into the threshold value, please see the Read API
+        ///  documentation: http://developer.factual.com/api-docs/#Read, in particular
+        ///  the threshold parameter.
+        /// </summary>
+        /// <param name="threshold">See Read API documentation for potential values</param>
+        /// <returns></returns>
+        public Query Threshold(string threshold)
+        {
+            _parameters.Add(Constants.QUERY_THRESHOLD, threshold);
+            return this;
+        }
+
+        /// <summary>
         /// Begins construction of a new row filter for this Query.
         /// </summary>
         /// <param name="fieldName">the name of the field on which to filter.</param>

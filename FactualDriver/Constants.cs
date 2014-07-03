@@ -66,8 +66,9 @@
 	    // Query
 	    public const string QUERY_LIMIT = "limit";
 	    public const string QUERY_OFFSET = "offset";
-	    public const string QUERY_SORT = "sort";
-	    public const string QUERY_SELECT = "select";
+        public const string QUERY_SORT = "sort";
+        public const string QUERY_SELECT = "select";
+        public const string QUERY_THRESHOLD = "threshold";
 	
 	    public const string QUERY_DATA = "data";
 	
