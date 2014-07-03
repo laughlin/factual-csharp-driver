@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FactualDriver</id>
-        <version>1.6.6</version>
-        <authors>Denis Pavlov,Sergey Maskalik</authors>
+        <version>1.6.7</version>
+        <authors>Sevada Abraamyan, Denis Pavlov,Sergey Maskalik</authors>
         <owners>Factual</owners>
         <projectUrl>https://github.com/Factual/factual-csharp-driver</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
