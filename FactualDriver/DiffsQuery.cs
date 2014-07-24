@@ -63,9 +63,10 @@
         /// </summary>
         /// <param name="key"> the field name of the parameter to add</param>
         /// <param name="value">the field value that will be serialized using value.toString()</param>
-        private void AddParam(string key, object value)
+        private DiffsQuery AddParam(string key, object value)
         {
             _queryParameters.Add(key,value);
+            return this;
         }
 
         /// <summary>

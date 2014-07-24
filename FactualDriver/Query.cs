@@ -1,5 +1,6 @@
 ﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
+using System;
 
 namespace FactualDriver
 {
@@ -21,7 +22,7 @@ namespace FactualDriver
         /// <returns>this Query</returns>
         public Query Limit(long limit)
         {
-            Add(new Filter(Constants.QUERY_LIMIT, limit));
+            AddFilter(new Filter(Constants.QUERY_LIMIT, limit));
             return this;
         }
 
@@ -34,7 +35,7 @@ namespace FactualDriver
         /// <returns>this Query</returns>
         public Query Search(string term)
         {
-            Add(new Filter(Constants.SEARCH, term));
+            AddFilter(new Filter(Constants.SEARCH, term));
             return this;
         }
 
@@ -48,7 +49,7 @@ namespace FactualDriver
         public Query SearchExact(string term)
         {
             string newTerm = string.Format("{0}{1}{2}", Constants.QUOTES, term, Constants.QUOTES);
-            Add(new Filter(Constants.SEARCH, newTerm));
+            AddFilter(new Filter(Constants.SEARCH, newTerm));
             return this;
         }
 
@@ -60,7 +61,7 @@ namespace FactualDriver
         /// <returns>this Query.</returns>
         public Query WithIn(Circle circle)
         {
-            Add(circle.GetFilter());
+            AddFilter(circle.GetFilter());
             return this;
         }
 
@@ -193,9 +194,20 @@ namespace FactualDriver
         /// Adds filter to this Query.
         /// </summary>
         /// <param name="filter"></param>
+        [Obsolete("please use AddFilter() instead")]
         public void Add(IFilter filter)
         {
+            AddFilter(filter);
+        }
+
+        /// <summary>
+        /// Adds filter to this Query.
+        /// </summary>
+        /// <param name="filter"></param>
+        public Query AddFilter(IFilter filter)
+        {
             _parameters.Add(filter);
+            return this;
         }
 
         /// <summary>

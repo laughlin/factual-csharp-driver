@@ -30,10 +30,11 @@ namespace FactualDriver
         /// </summary>
         /// <param name="path"></param>
         /// <param name="query"></param>
-        public void AddQuery(string path, string query)
+        public MultiQuery AddQuery(string path, string query)
         {
             _queries.Add(Key + _queryCount, string.Format("{0}?{1}", path, query));
             _queryCount++;
+            return this;
         }
 
         /// <summary>

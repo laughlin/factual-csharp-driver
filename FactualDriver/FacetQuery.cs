@@ -1,5 +1,6 @@
 ﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
+using System;
 
 namespace FactualDriver
 {
@@ -42,7 +43,7 @@ namespace FactualDriver
         /// <returns>FacetQuery</returns>
         public FacetQuery Search(string term)
         {
-            Add(new Filter(Constants.SEARCH, term));
+            AddFilter(new Filter(Constants.SEARCH, term));
             return this;
         }
 
@@ -50,9 +51,16 @@ namespace FactualDriver
         /// Add query to this filter.
         /// </summary>
         /// <param name="filter"></param>
+        [Obsolete("please use AddFilter() instead")]
         public void Add(IFilter filter)
         {
+            AddFilter(filter);
+        }
+
+        public FacetQuery AddFilter(IFilter filter)
+        {
             _parameters.Add(filter);
+            return this;
         }
 
         /// <summary>
@@ -82,7 +90,7 @@ namespace FactualDriver
         /// <returns>FacetQuery</returns>
         public FacetQuery Within(Circle circle)
         {
-            Add(circle.GetFilter());
+            AddFilter(circle.GetFilter());
             return this;
         }
 
@@ -145,7 +153,7 @@ namespace FactualDriver
         /// <returns>FacetQuery</returns>
         public FacetQuery MinCountPerFacetValue(long minCount)
         {
-            Add(new Filter(Constants.FACET_MIN_COUNT_PER_FACET_VALUE, minCount));
+            AddFilter(new Filter(Constants.FACET_MIN_COUNT_PER_FACET_VALUE, minCount));
             return this;
         }
 
@@ -156,7 +164,7 @@ namespace FactualDriver
         /// <returns>FacetQuery</returns>
         public FacetQuery MaxValuesPerFacet(long maxValuesPerFacet)
         {
-            Add(new Filter(Constants.FACET_MAX_VALUES_PER_FACET, maxValuesPerFacet));
+            AddFilter(new Filter(Constants.FACET_MAX_VALUES_PER_FACET, maxValuesPerFacet));
             return this;
         }
 
