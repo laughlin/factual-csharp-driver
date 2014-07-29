@@ -768,7 +768,7 @@ namespace FactualDriver.Tests
         public void TestFlagClosed()
         {
             // Arrange
-            var response = Factual.FlagSpam("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
+            var response = Factual.FlagClosed("us-sandbox", "4e4a14fe-988c-4f03-a8e7-0efc806d0a7f", new Metadata().User("test_driver_user"));
             // Assert
             AssertReceivedOkResponse(response);
         }
