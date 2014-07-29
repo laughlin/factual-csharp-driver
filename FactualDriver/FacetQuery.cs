@@ -1,6 +1,7 @@
 ﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace FactualDriver
 {
@@ -17,7 +18,9 @@ namespace FactualDriver
         /// Constructor.
         /// </summary>
         /// <param name="fields">fields for which facets will be generated</param>
-        public FacetQuery(params string[] fields)
+        public FacetQuery(params string[] fields) : this((IEnumerable<String>)fields) { }
+
+        public FacetQuery(IEnumerable<String> fields)
         {
             Select(fields);
         }
@@ -27,6 +30,15 @@ namespace FactualDriver
         /// </summary>
         /// <param name="fields">fields the fields for which facets should be generated. The response will not be ordered identically to this list, nor will it reflect any nested relationships between fields.</param>
         private void Select(params string[] fields)
+        {
+            Select((IEnumerable<String>)fields);
+        }
+
+        /// <summary>
+        /// The fields for which facets should be generated. The response will not be ordered identically to this list, nor will it reflect any nested relationships between fields.
+        /// </summary>
+        /// <param name="fields">fields the fields for which facets should be generated. The response will not be ordered identically to this list, nor will it reflect any nested relationships between fields.</param>
+        private void Select(IEnumerable<String> fields)
         {
             foreach (var field in fields)
             {
@@ -101,6 +113,16 @@ namespace FactualDriver
         /// <returns></returns>
         public FacetQuery And(params FacetQuery[] queries)
         {
+            return And((IEnumerable<FacetQuery>)queries);
+        }
+
+        /// <summary>
+        /// Used to nest AND'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
+        public FacetQuery And(IEnumerable<FacetQuery> queries)
+        {
             _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
             return this;
         }
@@ -111,6 +133,16 @@ namespace FactualDriver
         /// <param name="queries"></param>
         /// <returns></returns>
         public FacetQuery Or(params FacetQuery[] queries)
+        {
+            return Or((IEnumerable<FacetQuery>)queries);
+        }
+
+        /// <summary>
+        /// Used to nest OR'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
+        public FacetQuery Or(IEnumerable<FacetQuery> queries)
         {
             _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_OR, queries);
             return this;

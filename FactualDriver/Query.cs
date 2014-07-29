@@ -1,6 +1,7 @@
 ﻿using FactualDriver.Filters;
 using FactualDriver.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace FactualDriver
 {
@@ -106,13 +107,25 @@ namespace FactualDriver
         /// </summary>
         /// <param name="fields">the fields to select.</param>
         /// <returns>this Query</returns>
-        public Query Only(params string[] fields)
+        public Query Only(IEnumerable<string> fields)
         {
             foreach (var field in fields)
             {
                 _parameters.AddCommaSeparatedFilter(Constants.QUERY_SELECT, field);
             }
             return this;
+        }
+
+
+        /// <summary>
+        /// Sets the fields to select. This is optional; default behaviour is generally
+        /// to select all fields in the schema.
+        /// </summary>
+        /// <param name="fields">the fields to select.</param>
+        /// <returns>this Query</returns>
+        public Query Only(params string[] fields)
+        {
+            return Only((IEnumerable<string>)fields);
         }
 
         /// <summary>
@@ -215,9 +228,30 @@ namespace FactualDriver
         /// </summary>
         /// <param name="queries"></param>
         /// <returns></returns>
-        public Query And(params Query[] queries)
+        public Query And(IEnumerable<Query> queries)
         {
             _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_AND, queries);
+            return this;
+        }
+
+        /// <summary>
+        /// Used to nest AND'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
+        public Query And(params Query[] queries)
+        {
+            return And((IEnumerable<Query>)queries);
+        }
+
+        /// <summary>
+        /// Used to nest OR'ed predicates.
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
+        public Query Or(IEnumerable<Query> queries)
+        {
+            _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_OR, queries);
             return this;
         }
 
@@ -228,8 +262,7 @@ namespace FactualDriver
         /// <returns></returns>
         public Query Or(params Query[] queries)
         {
-            _parameters.PopRowFiltersIntoNewGroup(Constants.FILTER_OR, queries);
-            return this;
+            return Or((IEnumerable<Query>)queries);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FactualDriver.Utils;
+using System.Collections.Generic;
 
 namespace FactualDriver
 {
@@ -19,13 +20,24 @@ namespace FactualDriver
         /// </summary>
         /// <param name="fields">the fields to select.</param>
         /// <returns>this Query</returns>
-        public RowQuery Only(params string[] fields)
+        public RowQuery Only(IEnumerable<string> fields)
         {
             foreach (var field in fields)
             {
                 _parameters.AddCommaSeparatedFilter(Constants.QUERY_SELECT, field);
             }
             return this;
+        }
+
+        /// <summary>
+        /// Sets the fields to select. This is optional; default behaviour is generally
+        /// to select all fields in the schema.
+        /// </summary>
+        /// <param name="fields">the fields to select.</param>
+        /// <returns>this Query</returns>
+        public RowQuery Only(params string[] fields)
+        {
+            return Only((IEnumerable<string>)fields);
         }
 
         /// <summary>

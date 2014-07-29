@@ -84,9 +84,20 @@ namespace FactualDriver
         /// <param name="query">Api address of the request</param>
         /// <param name="filters">List of parameter filters against the api</param>
         /// <returns></returns>
-        public string Query(string query, params IFilter[] filters)
+        public string Query(string query, IEnumerable<IFilter> filters)
         {
             return RawQuery(query, JsonUtil.ToQueryString(filters));
+        }
+
+        /// <summary>
+        /// Execute a path against a factual api with Filter Parameters and return a json string
+        /// </summary>
+        /// <param name="query">Api address of the request</param>
+        /// <param name="filters">List of parameter filters against the api</param>
+        /// <returns></returns>
+        public string Query(string query, params IFilter[] filters)
+        {
+            return Query(query, (IEnumerable<IFilter>)filters);
         }
 
         /// <summary>

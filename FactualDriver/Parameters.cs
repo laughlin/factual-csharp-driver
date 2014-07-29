@@ -119,7 +119,7 @@ namespace FactualDriver
         /// </summary>
         /// <param name="operation">Conditional operations</param>
         /// <param name="queries">Queries to group</param>
-        public void PopRowFiltersIntoNewGroup(string operation, IQuery[] queries)
+        public void PopRowFiltersIntoNewGroup(string operation, IEnumerable<IQuery> queries)
         {
             var filterCount = queries.Count();
             var filterGroup = new FilterGroup(operation);

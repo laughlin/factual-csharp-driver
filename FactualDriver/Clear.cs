@@ -1,4 +1,6 @@
-﻿namespace FactualDriver
+﻿using System.Collections.Generic;
+
+namespace FactualDriver
 {
     /// <summary>
     /// Represents a clear request of existing attributes on a Factual entity.
@@ -16,9 +18,11 @@
         /// Constructor for a clear with fields passed as unknown number of strings.
         /// </summary>
         /// <param name="fields">fields this clear is initialized with</param>
-        public Clear(params string[] fields)
+        public Clear(params string[] fields) : this((IEnumerable<string>)fields) { }
+
+        public Clear(IEnumerable<string> fields)
         {
-           foreach(var field in fields)
+            foreach (var field in fields)
                 _parameters.AddCommaSeparatedFilter(Constants.CLEAR_FIELDS, field);
         }
 

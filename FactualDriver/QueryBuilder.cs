@@ -1,4 +1,7 @@
 ﻿using FactualDriver.Filters;
+using System.Collections;
+using System.Collections.Generic;
+using System;
 
 namespace FactualDriver
 {
@@ -38,11 +41,11 @@ namespace FactualDriver
         /// </summary>
         /// <param name="searchValue">Search value.</param>
         /// <returns>Generic QueryBuilder</returns>
-        	public T Search(object searchValue)
-        	{
+        public T Search(object searchValue)
+        {
             AddFilter(Constants.OPERATOR_SEARCH, searchValue);
-        	    return _query;
-        	}
+            return _query;
+        }
 
         /// <summary>
         /// Adds a generic equal filter.
@@ -73,6 +76,14 @@ namespace FactualDriver
         /// <returns>Generic QueryBuilder</returns>
         public T In(params string[] values)
         {
+            return In((IEnumerable<string>)values);
+        }
+
+        /// <summary>
+        /// Adds a generic "in" filter
+        /// </summary>
+        public T In(IEnumerable<string> values)
+        {
             AddFilter(Constants.OPERATOR_EQUALS_ANY, values);
             return _query;
         }
@@ -84,6 +95,14 @@ namespace FactualDriver
         /// <param name="values">Parameter array of values.</param>
         /// <returns>Generic QueryBuilder</returns>
         public T NotIn(params string[] values) {
+            return NotIn((IEnumerable<string>)values);
+        }
+
+        /// <summary>
+        /// Adds a generic not equals to any filter.
+        /// </summary>
+        public T NotIn(IEnumerable<string> values)
+        {
             AddFilter(Constants.OPERATOR_NOT_EQUALS_ANY, values);
             return _query;
         }
@@ -115,7 +134,15 @@ namespace FactualDriver
         /// <param name="values">Begins with any value.</param>
         /// <returns>Generic QueryBuilder</returns>
         public T BeginsWithAny(params string[] values) {
-            AddFilter(Constants.OPERATOR_BEGINS_WITH_ANY,values);
+            return BeginsWithAny((IEnumerable<String>)values);
+        }
+
+        /// <summary>
+        /// Adds a generic begins with any filter.
+        /// </summary>
+        public T BeginsWithAny(IEnumerable<string> values)
+        {
+            AddFilter(Constants.OPERATOR_BEGINS_WITH_ANY, values);
             return _query;
         }
 
@@ -125,6 +152,14 @@ namespace FactualDriver
         /// <param name="values">Parameter array of values.</param>
         /// <returns>Generic QueryBuilder</returns>
         public T NotBeginsWithAny(params string[] values)
+        {
+            return NotBeginsWithAny((IEnumerable<String>)values);
+        }
+
+        /// <summary>
+        /// Adds a generic filter that does not begins with any specified values.
+        /// </summary>
+        public T NotBeginsWithAny(IEnumerable<string> values)
         {
             AddFilter(Constants.OPERATOR_NOT_BEGINS_WITH_ANY, values);
             return _query;
@@ -209,6 +244,15 @@ namespace FactualDriver
         /// <param name="values">Values of the filter.</param>
         /// <returns>Generic QueryBuilder.</returns>
         public T IncludesAny(params object[] values)
+        {
+            return IncludesAny((IEnumerable)values);
+        }
+
+        /// <summary>
+        /// Adds an includes any filter.
+        /// </summary>
+        /// <param name="values">Values of the filter.</param>
+        public T IncludesAny(IEnumerable values)
         {
             AddFilter(Constants.OPERATOR_INCLUDES_ANY, values);
             return _query;
