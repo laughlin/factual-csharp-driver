@@ -10,6 +10,10 @@
 	    public const string CENTER = "$center";
 	    public const string METERS = "$meters";
 
+        // Rect
+        public const string WITHIN = "$within";
+        public const string RECT = "$rect";
+
         // PointKey
         public const string POINT = "$point";
 

@@ -67,6 +67,18 @@ namespace FactualDriver
         }
 
         /// <summary>
+        /// Adds a filter so that results can only be (roughly) within the specified
+        /// geographic rectangle.
+        /// </summary>
+        /// <param name="circle">The circle within which to bound the results.</param>
+        /// <returns>this Query.</returns>
+        public Query WithIn(Rect rect)
+        {
+            AddFilter(rect);
+            return this;
+        }
+
+        /// <summary>
         /// Sets this Query to sort field in ascending order.
         /// </summary>
         /// <param name="field">the field to sort in ascending order.</param>
