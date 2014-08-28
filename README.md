@@ -13,6 +13,16 @@ Factual factual = new Factual("MY_KEY", "MY_SECRET");
 
 If you don't have a Factual API key yet, [it's free and easy to get one](https://www.factual.com/api-keys/request).
 
+## Schema
+
+Use the schema API call to determine which fields are available, the datatypes of those fields, and which operations (sorting, searching, writing, facetting) can be performed on each field.
+
+Full documentation: http://developer.factual.com/api-docs/#Schema
+
+```csharp
+var result = Factual.Schema("restaurants");
+```
+
 ## Read
 Use the read API to query data in Factual tables with any combination of full-text search, parametric filtering, and geo-location filtering.
 
