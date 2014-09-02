@@ -5,26 +5,26 @@ using Newtonsoft.Json;
 namespace FactualDriver.Filters
 {
     /// <summary>
-    /// Rectangle filter class, used to serilize geo envelope data for GeoFilters. 
+    /// Rectangle filter class, used to serilize geo envelope data for GeoFilters.
     /// </summary>
-    [JsonConverter(typeof(RectConverter))]
-    public class Rect : IFilter
+    [JsonConverter(typeof(RectangleConverter))]
+    public class Rectangle : IFilter
     {
         /// <summary>
         /// Rectangle's top left latitude.
         /// </summary>
         public double TopLeftLatitude { get; set; }
-        
+
         /// <summary>
         /// Rectangle's top left longitude.
         /// </summary>
         public double TopLeftLLongitude { get; set; }
-        
+
         /// <summary>
         /// Rectangle's bottom right latitude.
         /// </summary>
         public double BottonRightLatitude { get; set; }
-        
+
         /// <summary>
         /// Rectangle's bottom right longitude.
         /// </summary>
@@ -46,7 +46,7 @@ namespace FactualDriver.Filters
         /// <param name="topLeftLong">Rectangle's top left longitude.</param>
         /// <param name="bottomRightLat">Rectangle's bottom right latitude.</param>
         /// <param name="bottomRightLong">Rectangle's bottom right longitude.</param>
-        public Rect(double topLeftLat, double topLeftLong, double bottomRightLat, double bottomRightLong)
+        public Rectangle(double topLeftLat, double topLeftLong, double bottomRightLat, double bottomRightLong)
         {
             TopLeftLatitude = topLeftLat;
             TopLeftLLongitude = topLeftLong;

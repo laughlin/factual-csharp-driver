@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FactualDriver</id>
-        <version>1.6.8</version>
+        <version>1.6.9</version>
         <authors>Sevada Abraamyan, Denis Pavlov,Sergey Maskalik</authors>
         <owners>Factual</owners>
         <projectUrl>https://github.com/Factual/factual-csharp-driver</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>.NET client library for Factual API. Please refer to https://github.com/Factual/factual-csharp-driver for documentation.</description>
         <summary>.NET driver for Factual API. Provides a library to setup and receive data from factual in two lines of code. Most of the design is ported from Java Factual Driver.</summary>
-        <releaseNotes>1) Updates to provide a more consistent Fluent interface. 2) Minor bug fix to add support for IEnumerable method arugments addition to current design which uses variable arguments. </releaseNotes>
+        <releaseNotes>Added rectangle geo filter</releaseNotes>
         <dependencies>
             <dependency id="Newtonsoft.Json" version="6.0.3" />
         </dependencies>

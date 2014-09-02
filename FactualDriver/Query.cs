@@ -70,9 +70,9 @@ namespace FactualDriver
         /// Adds a filter so that results can only be (roughly) within the specified
         /// geographic rectangle.
         /// </summary>
-        /// <param name="circle">The circle within which to bound the results.</param>
+        /// <param name="rect">The rectangle within which to bound the results.</param>
         /// <returns>this Query.</returns>
-        public Query WithIn(Rect rect)
+        public Query WithIn(Rectangle rect)
         {
             AddFilter(rect);
             return this;

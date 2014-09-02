@@ -46,6 +46,13 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void GeoRectangleTest()
+        {
+            var query = new Query().WithIn(new Rectangle(34.06021, -118.41828, 33.06021, -117.41828));
+            AreEqualQueries("geo={\"$within\":{\"$rect\":[[34.06021,-118.41828],[33.06021,-117.41828]]}}", query);
+        }
+
+        [Test]
         public void TestCommaSeparatedQueries()
         {
             // Arrange

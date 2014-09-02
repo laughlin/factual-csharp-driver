@@ -76,6 +76,7 @@
     <Compile Include="Filters\FilterList.cs" />
     <Compile Include="Filters\KeyValueFilter.cs" />
     <Compile Include="Filters\Point.cs" />
+    <Compile Include="Filters\Rectangle.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="JsonConverters\FilterGroupConverter.cs" />
     <Compile Include="Filters\Filter.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Filters\RowFilter.cs" />
     <Compile Include="JsonConverters\KeyValueFilterConverter.cs" />
     <Compile Include="JsonConverters\PointConverter.cs" />
+    <Compile Include="JsonConverters\RectangleConverter.cs" />
     <Compile Include="JsonConverters\RowFilterConverter.cs" />
     <Compile Include="Filters\SearchFilter.cs" />
     <Compile Include="MatchQuery.cs" />

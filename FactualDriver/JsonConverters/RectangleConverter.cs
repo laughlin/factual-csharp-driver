@@ -4,11 +4,11 @@ using System;
 
 namespace FactualDriver.JsonConverters
 {
-    class RectConverter:JsonConverter
+    class RectangleConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var filter = value as Rect;
+            var filter = value as Rectangle;
             if (filter == null) throw new InvalidOperationException("RectConverter attribute is not applied to Rect class");
 
             writer.WriteStartObject();
@@ -16,7 +16,7 @@ namespace FactualDriver.JsonConverters
 
             writer.WriteStartObject();
             writer.WritePropertyName(filter.RectKey);
-          
+            
             serializer.Serialize(writer, new[] { new[]{filter.TopLeftLatitude, filter.TopLeftLLongitude}, new[] {filter.BottonRightLatitude, filter.BottonRightLongitude} });
             writer.WriteEndObject();
         }

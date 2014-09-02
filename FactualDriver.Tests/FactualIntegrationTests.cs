@@ -185,6 +185,18 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void QueryWithRectangleFilter()
+        {
+            var filter = new Rectangle(47.622525, -122.353599, 47.618244, -122.340339);
+
+            String result = Factual.Query("t/places", filter);
+            dynamic json = JsonConvert.DeserializeObject(result);
+
+            Assert.AreEqual("ok", (string)json.status);
+            Assert.IsTrue(result.Contains("Space Needle"));
+        }
+
+        [Test]
         public void FullTextSearch()    
         {
             // Arrange
