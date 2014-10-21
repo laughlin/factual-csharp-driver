@@ -570,6 +570,44 @@ namespace FactualDriver.Tests
         }
 
         [Test]
+        public void TestResolveDebugModeDisabled()
+        {
+            // Arrange & Act
+            var response =
+                  Factual.Fetch("restaurants", new ResolveQuery()
+                  .Add("name", "McDonalds")
+                  .Add("address", "10451 Santa Monica Blvd")
+                  .Add("region", "CA")
+                  .Add("postcode", "90025")
+                  .EnableDebugMode(false));
+
+            dynamic json = JsonConvert.DeserializeObject(response);
+
+            // Assert
+            Assert.AreEqual((string) json.status, "ok");
+            Assert.AreEqual((int) json.response.included_rows, 1);
+        }
+
+        [Test]
+        public void TestResolveDebugModeEnabled()
+        {
+            // Arrange & Act
+            var response =
+                  Factual.Fetch("restaurants", new ResolveQuery()
+                  .Add("name", "McDonalds")
+                  .Add("address", "10451 Santa Monica Blvd")
+                  .Add("region", "CA")
+                  .Add("postcode", "90025")
+                  .EnableDebugMode(true));
+
+            dynamic json = JsonConvert.DeserializeObject(response);
+
+            // Assert
+            Assert.AreEqual((string)json.status, "ok");
+            Assert.IsTrue(((int)json.response.included_rows) > 1);
+        }
+
+        [Test]
         public void TestMatchFound()
         {
             // Arrange & Act

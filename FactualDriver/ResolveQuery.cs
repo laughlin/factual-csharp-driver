@@ -11,6 +11,7 @@ namespace FactualDriver
     public class ResolveQuery
     {
         private Dictionary<string, object> _parameters = new Dictionary<string, object>();
+        private bool isDebugModeEnabled = false;
 
         /// <summary>
         /// Adds key and value to the resolve query list
@@ -34,13 +35,29 @@ namespace FactualDriver
             return this;
         }
 
+
+        /// <summary>
+        /// When debug mode is turned on, Resolve will return all potential candidates for resolution
+        /// and meta-data regarding resolution quality. When debug is turned off (the default), Resolve
+        /// will return 0 results (meaning no match), or 1 result (meaning that was the unequivocal match).
+        /// </summary>
+        /// <param name="enableDebugMode"></param>
+        /// <returns></returns>
+        public ResolveQuery EnableDebugMode(bool enableDebugMode)
+        {
+            isDebugModeEnabled = enableDebugMode;
+            return this;
+        }
+
         /// <summary>
         /// Converts ResolveQuery object into url encoded string
         /// </summary>
         /// <returns></returns>
         public string ToUrlQuery()
         {
-            return string.Format("{0}={1}", Constants.RESOLVE_VALUES, HttpUtility.UrlEncode(JsonConvert.SerializeObject(_parameters)));
+            return string.Format("{0}={1}&debug={2}", Constants.RESOLVE_VALUES, 
+                HttpUtility.UrlEncode(JsonConvert.SerializeObject(_parameters)), 
+                isDebugModeEnabled ? "true" : "false");
         }
     }
 }
