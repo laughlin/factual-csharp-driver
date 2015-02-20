@@ -780,6 +780,11 @@ namespace FactualDriver
             {
                 var response = ((HttpWebResponse) ex.Response);
 
+                if (response == null)
+                {
+                    throw ex;
+                }
+
                 if (Debug)
                 {
                     System.Diagnostics.Trace.WriteLine("\n\n==== Response Header ====");
