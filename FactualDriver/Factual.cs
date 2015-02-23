@@ -782,7 +782,7 @@ namespace FactualDriver
 
                 if (response == null)
                 {
-                    throw ex;
+                    throw;
                 }
 
                 if (Debug)
