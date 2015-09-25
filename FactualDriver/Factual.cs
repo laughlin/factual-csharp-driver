@@ -8,6 +8,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
+using Newtonsoft.Json.Linq;
 using OAuth2LeggedAuthenticator = FactualDriver.OAuth.OAuth2LeggedAuthenticator;
 
 namespace FactualDriver
@@ -38,6 +39,11 @@ namespace FactualDriver
         /// Set the driver in or out of debug mode. True to display in the output window.
         /// </summary>
         public bool Debug { get; set; }
+
+        /// <summary>
+        /// True to add the X-Factual-Throttle-Allocation data to the result
+        /// </summary>
+        public bool ThrottleAllocation { get; set; }
 
         /// <summary>
         /// Create an instance of Factual .NET driver
@@ -749,6 +755,8 @@ namespace FactualDriver
                         System.Diagnostics.Trace.WriteLine(response.StatusDescription);
                     }
 
+                    var throttleAllocation = response.GetResponseHeader("X-Factual-Throttle-Allocation");
+
                     var stream = response.GetResponseStream();
 
                     if (stream == null)
@@ -757,6 +765,20 @@ namespace FactualDriver
                     using (var reader = new StreamReader(stream))
                     {
                         jsonResult = reader.ReadToEnd();
+
+                        if (ThrottleAllocation)
+                        {
+                            var mergeSettings = new JsonMergeSettings
+                            {
+                                MergeArrayHandling = MergeArrayHandling.Concat
+                            };
+                            var origValue = JObject.Parse(jsonResult);
+                            var headerValue = JObject.Parse(throttleAllocation);
+                            origValue.Merge(headerValue, mergeSettings);
+
+                            jsonResult = origValue.ToString();
+                        }
+
                         if (string.IsNullOrEmpty(jsonResult))
                             throw new FactualException("No data received from factual");
 
